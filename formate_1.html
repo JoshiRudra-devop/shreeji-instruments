@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shreeji Instruments Calibration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      justify-content: center;
+      align-items: center;
+      background-color: #f0f0f0;
+    }
+    nav {
+      background-color: #00796b;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+    }
+    nav ul li {
+      display: inline;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+    nav ul li a:hover {
+      color: #ffccbc;
+    }
+    .container {
+      padding: 20px;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+      margin: 20px;
+    }
+    h2.centered {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .title_input_pair {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
+    }
+    label {
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;  
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <h1 style="color: white;">Shreeji Instruments</h1>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="container">
+    <h2 class="centered">CALIBRATION CERTIFICATE</h2>
+    <form id="calibrationForm">
+      <div class="title_input_pair">
+        <label for="certificateNumber">Certificate No:</label>
+        <input type="text" id="certificateNumber" required>
+      </div>
+      <div class="title_input_pair">
+        <label for="calibrationDate">Calibration Date:</label>
+        <input type="date" id="calibrationDate" required>
+      </div>
+      <div class="title_input_pair">
+        <label for="partyName">Name of Party:</label>
+        <input type="text" id="partyName" required>
+      </div>
+      <div class="title_input_pair">
+        <label for="equipmentType">Type of Machine:</label>
+        <input type="text" id="equipmentType" required>
+      </div>
+      <div class="title_input_pair">
+        <label for="make">Make:</label>
+        <input type="text" id="make" required>
+      </div>  
+      <div class="title_input_pair">
+        <label for="serialNo">Serial No:</label>
+        <input type="text" id="serialNo" required>
+      </div>
+      <div class="title_input_pair">
+        <label for="capacity">Capacity:</label>
+        <input type="text" id="capacity" required>
+      </div>
+      <div class="title_input_pair">
+        <label for="siteLocation">Site Location:</label>
+        <input type="text" id="siteLocation" required>
+      </div>
+      <div class="title_input_pair">
+        <label for="nextCalibrationDate">Next Due Date:</label>
+        <input type="date" id="nextCalibrationDate" required>
+      </div>
+      <div class="title_input_pair">
+        <label for="personResponsible">Calibration By:</label>
+        <input type="text" id="personResponsible" required>
+      </div>
+      <button type="button" onclick="generatePDF()">Generate Certificate</button>
+    </form>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    async function generatePDF() {
+      if (!document.getElementById("calibrationForm").reportValidity()) {
+        return;
+      }
+      
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      
+      // Fetch input data
+      const certificateNumber = document.getElementById("certificateNumber").value;
+      const calibrationDate = document.getElementById("calibrationDate").value;
+      const siteLocation = document.getElementById("siteLocation").value;
+      const partyName = document.getElementById("partyName").value;
+      const equipmentType = document.getElementById("equipmentType").value;
+      const make = document.getElementById("make").value;
+      const serialNo = document.getElementById("serialNo").value;
+      const capacity = document.getElementById("capacity").value;
+      const nextCalibrationDate = document.getElementById("nextCalibrationDate").value;
+      const personResponsible = document.getElementById("personResponsible").value;
+
+      // Title and header
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(25);
+      doc.text("CALIBRATION CERTIFICATE", 40, 50);
+      doc.setFontSize(10);
+      doc.text(`SHREEJI INSTRUMENTS: Calibration laboratory certifies that the instrument has been inspected, tested,`, 12, 60);
+      doc.text(`and calibrated in accordance with documented procedures using measuring and test equipment traceable`, 12, 65);
+      doc.text(`to international standards.`, 12, 70);
+
+      doc.setFontSize(15);
+      // Certificate details
+      doc.text(`Date: ${calibrationDate}`, 140, 80);
+      doc.text(`Certificate No: ${certificateNumber}`, 14, 80);
+      doc.text(`Site Location: ${siteLocation}`, 14, 95);
+      doc.text(`Name of Party: ${partyName}`, 14, 110);
+      doc.text(`Instrument Name: ${equipmentType}`, 14, 125);
+      doc.text(`Make: ${make}`, 140, 140);
+      doc.text(`Serial No: ${serialNo}`, 14, 140);
+      doc.text(`Capacity: ${capacity}`, 14, 155);
+      doc.text(`Next Due Date: ${nextCalibrationDate}`, 14, 170);
+      doc.text(`Calibration By: ${personResponsible}`, 14, 185);  
+
+      // Footer
+      doc.text("FOR, Shreeji Instruments", 130, 210);
+
+      const footerImg = new Image();
+      footerImg.src = 'footer.jpeg';
+      footerImg.onload = () => doc.addImage(footerImg, 'PNG', 0, 245, 210, 27);
+
+      const stampImg = new Image();
+      stampImg.src = 'stamp.jpeg';
+      stampImg.onload = () => doc.addImage(stampImg, 'PNG', 70, 210, 40, 35);
+
+      const headerImg = new Image();
+      headerImg.src = 'header.jpeg';
+      headerImg.onload = () => doc.addImage(headerImg, 'PNG', 3, 3, 210, 30);
+
+      doc.text("Proprietor", 170, 225);
+
+      // Save the PDF
+      setTimeout(() => doc.save(`${certificateNumber}_Calibration_Certificate.pdf`), 500);
+    }
+  </script>
+</body>
+</html>
