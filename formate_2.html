@@ -46,12 +46,10 @@
       font-size: 24px;
       margin-bottom: 20px;
     }
-    .title_input_pair, .reading {
+    .title_input_pair {
       display: flex;
     }
-    div .reading input {
-      max-width: 7%;
-    }
+   
     label {
       display: block;
       margin-top: 10px;
@@ -134,30 +132,47 @@
         <label for="personResponsible">Calibration By:</label>
         <input type="text" id="personResponsible" required>
       </div>
-      <div class="reading">
-        <label for="input1">Load on 200 kn:</label>
-        <input type="text" id="input1" required>
-        <label for="input2">Load on 400 kn:</label>
-        <input type="text" id="input2" required>
-        <label for="input3">Load on 600 kn:</label>
-        <input type="text" id="input3" required>
-        <label for="input4">Load on 800 kn:</label>
-        <input type="text" id="input4" required>
-        <label for="input5">Load on 1000 kn:</label>
-        <input type="text" id="input5" required>
+      <div class="title_input_pair">
+          <label for="input1">Load on 200 kn:</label>
+          <input type="text" id="input1" required>
       </div>
-      <div class="reading">
-        <label for="input6">Load on 1200 kn:</label>
-        <input type="text" id="input6" required>
-        <label for="input7">Load on 1400 kn:</label>
-        <input type="text" id="input7" required>
-        <label for="input8">Load on 1600 kn:</label>
-        <input type="text" id="input8" required>
-        <label for="input9">Load on 1800 kn:</label>
-        <input type="text" id="input9" required>
-        <label for="input10">Load on 2000 kn:</label>
-        <input type="text" id="input10" required>
-      </div>
+        <div class="title_input_pair">
+          <label for="input2">Load on 400 kn:</label>
+          <input type="text" id="input2" required>
+        </div>
+        <div class="title_input_pair">
+          <label for="input3">Load on 600 kn:</label>
+          <input type="text" id="input3" required>
+        </div>
+        <div class="title_input_pair">
+          <label for="input4">Load on 800 kn:</label>
+          <input type="text" id="input4" required>
+        </div>
+        <div class="title_input_pair">
+          <label for="input5">Load on 1000 kn:</label>
+          <input type="text" id="input5" required>
+        </div>
+        <div class="title_input_pair">
+          <label for="input6">Load on 1200 kn:</label>
+          <input type="text" id="input6" required>
+        </div>
+        <div class="title_input_pair">
+          <label for="input7">Load on 1400 kn:</label>
+          <input type="text" id="input7" required>
+        </div>
+        <div class="title_input_pair">
+          <label for="input8">Load on 1600 kn:</label>
+          <input type="text" id="input8" required>
+        </div>
+        <div class="title_input_pair">
+          <label for="input9">Load on 1800 kn:</label>
+          <input type="text" id="input9" required>
+        </div>
+        <div class="title_input_pair">
+          <label for="input10">Load on 2000 kn:</label>
+          <input type="text" id="input10" required>
+        </div>
+      
       <button type="button" onclick="generatePDF()">Generate Certificate</button>
     </form>
   </div>
@@ -165,8 +180,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
     async function generatePDF() {
+      if (!document.getElementById("calibrationForm").reportValidity()) {
+        return;
+      }
+
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
+
+      
 
       const certificateNumber = document.getElementById("certificateNumber").value;
       const calibrationDateRaw = document.getElementById("calibrationDate").value;
@@ -193,14 +214,14 @@
 
       doc.setFont("helvetica", "bold");
       doc.setFontSize(12);
-      doc.text(`Date:-   ${calibrationDate}`, 140, 60);
-      doc.text(`Certificate No      :-  ${certificateNumber}`, 14, 60);
-      doc.text(`Name of Party      :-   ${partyName}`, 14, 70);
-      doc.text(`Instrument name :-   ${equipmentType}`, 14, 80);
-      doc.text(`Capacity  / MAKE  :-   ${capacity}  /  ${make}`, 14, 90);
-      doc.text(`Serial No         :-   ${serialNo}`, 14, 100);
-      doc.text(`Next Due Date:-   ${nextCalibrationDate}`, 140, 100);
-      doc.text(`Site Location       :-   ${siteLocation}`, 14, 110); 
+      doc.text(`Date:-    ${calibrationDate}`, 140, 60);
+      doc.text(`REF No      :-    ${certificateNumber}`, 14, 60);
+      doc.text(`Name of Party      :-    ${partyName}`, 14, 70);
+      doc.text(`Instrument name :-    ${equipmentType}`, 14, 80);
+      doc.text(`Capacity  / MAKE  :-    ${capacity}  /  ${make}`, 14, 90);
+      doc.text(`Serial No                :-    ${serialNo}`, 14, 100);
+      doc.text(`Next Due Date:-    ${nextCalibrationDate}`, 140, 100);
+      doc.text(`Site Location         :-    ${siteLocation}`, 14, 110); 
 
       doc.setFontSize(10);
       doc.setFont("helvetica", "bold");
@@ -208,42 +229,45 @@
       doc.text(`CALIBRATION INSTRUMENT 2000KN`, 14, 120);  
       doc.text(`PROVING RING NO:2000KN 094 IS 4169:2014`, 14, 125);  
       doc.text(`CALIBRATED BY : NATIONAL COUNCIL FOR CEMENT AND BUILDING MATERIALS`, 14, 130);  
-
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(11);
-      const startX = 13;
-      const startY = 142;
-      const cellWidth = 30;
-      const cellHeight = 7;
+doc.setFontSize(11);
+const startX = 13;
+const startY = 142;
+const cellWidth = 30;
+const cellHeight = 7;
 
-      doc.text(`Divisions`, 18, 141);
-      doc.text(`KN`, 174, 141);
+doc.text(`Divisions`, 18, 141);
+doc.text(`KN`, 174, 141);
 
-      const fixedTexts = ["Deflection In", "LOAD IN KN", "1st set in KN", "2nd set in KN", "3rd set in KN", "AVERAGE in"];
+const fixedTexts = ["Deflection In", "LOAD IN KN", "1st set in KN", "2nd set in KN", "3rd set in KN", "AVERAGE in"];
 
-      for (let k = 0; k < 6; k++) {
-        const x = startX + k * cellWidth;
-        doc.rect(x, 132, cellWidth, 10);
-        doc.text(fixedTexts[k], x + 2, 137);
-      }
+for (let k = 0; k < 6; k++) {
+  const x = startX + k * cellWidth;
+  doc.rect(x, 132, cellWidth, 10);
+  doc.text(fixedTexts[k], x + 2, 137);
+}
 
-      const fixedValuesColumn1 = ["84.1", "168.6", "254.7", "342.1", "429.1", "513.9", "600.9", "689.2", "776.7", "865.8"];
-      const fixedValuesColumn2 = ["200", "400", "600", "800", "1000", "1200", "1400", "1600", "1800", "2000"];
+const fixedValuesColumn1 = ["84.1", "168.6", "254.7", "342.1", "429.1", "513.9", "600.9", "689.2", "776.7", "865.8"];
+const fixedValuesColumn2 = ["200", "400", "600", "800", "1000", "1200", "1400", "1600", "1800", "2000"];
 
-      for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < 6; j++) {
-          const x = startX + j * cellWidth;
-          const y = startY + i * cellHeight;
-          doc.rect(x, y, cellWidth, cellHeight);
+for (let i = 0; i < 10; i++) {
+  for (let j = 0; j < 6; j++) {
+    const x = startX + j * cellWidth;
+    const y = startY + i * cellHeight;
+    doc.rect(x, y, cellWidth, cellHeight);
 
-          let textValue = "";
-          if (j === 0) textValue = fixedValuesColumn1[i];
-          else if (j === 1) textValue = fixedValuesColumn2[i];
-          else textValue = inputs[i];
+    let textValue = "";
+    if (j === 0) textValue = fixedValuesColumn1[i];
+    else if (j === 1) textValue = fixedValuesColumn2[i];
+    else textValue = inputs[i];
 
-          doc.text(textValue, x + 2, y + 6);
-        }
-      }
+    // Centering the text horizontally within the cell
+    const textWidth = doc.getTextWidth(textValue); // Get the width of the text
+    const centeredX = x + (cellWidth - textWidth) / 2; // Calculate centered X position
+    doc.text(textValue, centeredX, y + 6); // Draw the text centered
+  }
+}
+
 
       doc.text(`Calibration By      :-   ${personResponsible}`, 14, 225); 
       doc.text("FOR, Shreeji Instruments", 150, 225);
@@ -271,3 +295,4 @@
   </script>
 </body>
 </html>
+
