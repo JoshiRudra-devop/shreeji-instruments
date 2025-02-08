@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home page </title>
+  <meta name="description" content="Welcome to Shreeji Instruments - Create Calibration Certificates Easily.">
+  <title>Home Page - Shreeji Instruments</title>
   <style>
     * {
       margin: 0;
@@ -14,6 +15,7 @@
       font-family: 'Arial', sans-serif;
       background-color: white;
       color: black;
+      margin: 0 10px;
     }
     nav {
       background-color: #00796b;
@@ -45,23 +47,29 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: black;
+      color: white;
       text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
       font-size: 32px;
       font-weight: bold;
+      text-align: center;
+    }
+    @media (max-width: 600px) {
+      header {
+        font-size: 20px;
+      }
     }
     .container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
-      padding: 40px;
+      padding: 40px 10px;
     }
     .card {
       background: white;
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
       text-align: center;
-      padding: px;
+      padding: 20px;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     .card:hover {
@@ -77,6 +85,7 @@
       display: block;
       font-size: 20px;
       font-weight: bold;
+      margin-top: 15px;
     }
     .card a:hover {
       background-color: #004d40;
@@ -92,25 +101,25 @@
       <li><a href="#">Contact</a></li>
     </ul>
   </nav>
-  <header>We are here to Create Calibration Certificats Easily</header>
+  <header>We are here to Create Calibration Certificates Easily</header>
   <div class="container">
     <div class="card">
       <a href="formate_1.html">Formate 1</a>
     </div>
     <div class="card">
-      <a href="formate_2.html">Cube Testing Machine </a>
+      <a href="fCube Testing Machine">Formate 2</a>
     </div>
     <div class="card">
-      <a href="page3.html">Formate 3 </a>
+      <a href="fromate_3.html">Formate 3</a>
     </div>
     <div class="card">
-      <a href="fromate_4.html">Auto Level & Total Station</a>
+      <a href="Auto Level & Total Station">Formate 4</a>
     </div>
     <div class="card">
-      <a href="page5.html">Formate 5 </a>
+      <a href="/try2.html">Formate 5</a>
     </div>
     <div class="card">
-      <a href="page6.html">Formate 6 </a>
+      <a href="try.html">Formate 6</a>
     </div>
   </div>
 </body>
