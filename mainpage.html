@@ -1,0 +1,818 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab calibration report</title>
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    }
+    body {
+    font-family: 'Arial', sans-serif;
+    background-color: white;
+    color: black;
+    margin: 0 10px;
+    }
+    nav {
+    background-color: #00796b;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    }
+    nav ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    }
+    nav ul li {
+    display: inline;
+    }
+    nav ul li a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    }
+    nav ul li a:hover {
+    color: #ffccbc;
+    }
+    header {
+    background: url('https://via.placeholder.com/1200x400') no-repeat center center/cover;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+    }
+    @media (max-width: 600px) {
+    header {
+        font-size: 20px;
+    }
+    }
+    .container {
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    margin: 20px;
+    }
+    h2.centered {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    }
+    .title_input_pair {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    }
+    label {
+    font-weight: bold;
+    }
+    input, textarea {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    }
+    button {
+    width: 100%;
+    padding: 12px;
+    margin: 1%;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    }
+    button:hover {
+    background-color: #45a049;
+    } 
+    .level-input-container {
+    display: none;
+    margin-top: 10px;
+    }
+    .level-input-container input {
+    display: block;
+    margin: 8px 0;
+    padding: 8px;
+    width: 100%;
+    max-width: 300px;
+    }
+    .slumcone-input-container {
+    display: none;
+    margin-top: 10px;
+    }
+    .slumcone-input-container input {
+    display: block;
+    margin: 8px 0;
+    padding: 8px;
+    width: 100%;
+    max-width: 300px;
+    }
+    .TS-input-container {
+    display: none;
+    margin-top: 10px;
+    }
+    .TS-input-container input {
+    display: block;
+    margin: 8px 0;
+    padding: 8px;
+    width: 100%;
+    max-width: 300px;
+    }
+    .ctm-input-container {
+    display: none;
+    margin-top: 10px;
+    }
+    .ctm-input-container input {
+    display: block;
+    margin: 8px 0;
+    padding: 8px;
+    width: 100%;
+    max-width: 300px;
+    }
+
+
+    </style>
+    </head>
+    <body>
+
+    <nav>
+        <h1 style="color: white;">Shreeji Instruments</h1>
+        <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+    <header>GENERATE FULL LEB CERTIFICATES AT A SAME TIME </header>        
+
+    <div class="container">
+        <h2 class="centered">COMPNAY DETAILS </h2>
+        <form id="calibrationForm">
+            <div class="compnaydetails">
+                <div class="title_input_pair">
+                    <label for="partyName">Name of COMPANY:</label>
+                    <input type="text" id="partyName" required>
+                </div>
+                <div class="title_input_pair">
+                    <label for="calibrationDate"> DATE OF CALIBRATION:</label>
+                    <input type="date" id="calibrationDate" required>
+                </div>
+                <div class="title_input_pair">
+                    <label for="siteLocation">Site Location:</label>
+                    <input type="text" id="siteLocation" required>
+                </div>
+                <div class="title_input_pair">
+                    <label for="nextCalibrationDate">NEXT SUGESTED DATE:</label>
+                    <input type="date" id="nextCalibrationDate" required>
+                </div>
+                <div class="title_input_pair">
+                    <label for="personResponsible">CALIBRATION BY:</label>
+                    <input type="text" id="personResponsible" required>
+                </div>
+            </div>
+            <div class="instrumentsinfo">
+
+                <div class="autolevel">     
+                    <div class="title_input_pair">
+                    <label><input type="checkbox" id="Autolevel" class="Autolevel"> Auto level </label>
+                    </div>
+                    <div id="LevelinputContainer" class="level-input-container">
+                        <div class="title_input_pair">
+                            <label for="serial no">SERIAL NO:</label>
+                            <input type="text" id="levelserialno" required>
+                        </div>
+                        <div class="title_input_pair">
+                            <label for="make">MAKE:</label>
+                            <input type="text" id="levelmake" required>
+                        </div>
+                        <div class="title_input_pair">
+                            <label for="MODEL">MODEL:</label>
+                            <input type="text" id="levelmodel" required>
+                        </div> 
+                        <button type="button" onclick="levelpreview()">OK</button>        
+                    </div>
+                </div> 
+                <div class="ctm">
+                    <div class="title_input_pair">
+                    <label><input type="checkbox" id="CTM" class="CTM"> CUBE TESTING MACHINE </label>
+                    </div>
+                    <div id="ctminputContainer" class="ctm-input-container">
+                        <div class="title_input_pair">
+                            <label for="serial no">SERIAL NO:</label>
+                            <input type="text" id="ctmserialno" required>
+                        </div>
+                        <div class="title_input_pair">
+                            <label for="make">MAKE:</label>
+                            <input type="text" id="ctmmake" required>
+                        </div>
+                        <div class="title_input_pair">
+                            <label for="Capacity">CAPICITY:</label>
+                            <input type="text" id="ctmcapacity" required>
+                        </div>
+                        <div class="title_input_pair">
+                            <label for="input1">Load on 200 kn:</label>
+                            <input type="text" id="input1" required>
+                        </div>
+                        <div class="title_input_pair">
+                            <label for="input2">Load on 400 kn:</label>
+                            <input type="text" id="input2" required>
+                        </div>
+                        <div class="title_input_pair">
+                            <label for="input3">Load on 600 kn:</label>
+                            <input type="text" id="input3" required>
+                        </div>
+                        <div class="title_input_pair">
+                            <label for="input4">Load on 800 kn:</label>
+                            <input type="text" id="input4" required>
+                        </div>
+                        <div class="title_input_pair">
+                            <label for="input5">Load on 1000 kn:</label>
+                            <input type="text" id="input5" required>
+                        </div>
+                        <div class="title_input_pair">
+                            <label for="input6">Load on 1200 kn:</label>
+                            <input type="text" id="input6" required>
+                        </div>
+                        <div class="title_input_pair">
+                            <label for="input7">Load on 1400 kn:</label>
+                            <input type="text" id="input7" required>
+                        </div>
+                        <div class="title_input_pair">
+                            <label for="input8">Load on 1600 kn:</label>
+                            <input type="text" id="input8" required>
+                        </div>
+                        <div class="title_input_pair">
+                            <label for="input9">Load on 1800 kn:</label>
+                            <input type="text" id="input9" required>
+                        </div>
+                        <div class="title_input_pair">
+                            <label for="input10">Load on 2000 kn:</label>
+                            <input type="text" id="input10" required>
+                        </div>     
+                        <button type="button" onclick="ctm()">OK</button>
+
+                    </div>
+                </div>
+                <div class="totalStation">    
+                    <div class="title_input_pair">
+                    <label>
+                        <input type="checkbox" id="totalStation" class="totalStation"> TOTAL STATION 
+                    </label>
+                    </div> 
+                    <div id="TSinputContainer" class="TS-input-container">
+                        <div class="title_input_pair">
+                            <label for="serial no">SERIAL NO:</label>
+                            <input type="text" id="ts_serialno" required>
+                        </div>
+                        <div class="title_input_pair">
+                            <label for="make">MAKE:</label>
+                            <input type="text" id="tsmake" required>
+                        </div>
+                        <div class="title_input_pair">
+                            <label for="MODEL">MODEL:</label>
+                            <input type="text" id="tsmodle" required>
+                        </div>  
+                                
+                    </div>
+                </div>
+                <div class="slumcone">
+                    <div class="title_input_pair">
+                    <label>
+                        <input type="checkbox" id="slumcone" class="slumcone"> SLUMCONE 
+                    </label>
+                    </div>
+                    
+                    <div id="slumconeinputContainer" class="slumcone-input-container">
+                        <div class="title_input_pair">
+                            <label for="serial no">SERIAL NO:</label>
+                            <input type="text" id="slumcone_serialno" required>
+                        </div>
+                        <div class="title_input_pair">
+                            <label for="make">MAKE:</label>
+                            <input type="text" id="slumcone_make" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <button type="button" onclick="preview()">Preview Calibration Certificate</button>
+        <button type="button" onclick="generatePDF()">Download Certificate with Letterhead</button>
+        <button type="button" onclick="generatePDFblankpg()">Download Certificate without Letterhead</button>
+        </form>
+    </div>
+    <script>
+        const checkbox1 = document.getElementById('Autolevel');
+        const LevelinputContainer = document.getElementById('LevelinputContainer');
+
+        checkbox1.addEventListener('change', function() {
+        if (checkbox1.checked) {
+            LevelinputContainer.style.display = 'block';
+        } else {
+            LevelinputContainer.style.display = 'none';
+        }
+        });
+
+        const checkbox2 = document.getElementById('CTM');
+        const ctmlinputContainer = document.getElementById('ctminputContainer');
+
+        checkbox2.addEventListener('change', function() {
+        if (checkbox2.checked) {
+            ctminputContainer.style.display = 'block';
+        } else {
+            ctminputContainer.style.display = 'none';
+        }
+        });
+
+        const checkbox3 = document.getElementById('totalStation');
+        const TSinputContainer = document.getElementById('TSinputContainer');
+
+        checkbox3.addEventListener('change', function() {
+        if (checkbox3.checked) {
+            TSinputContainer.style.display = 'block';
+        } else {
+            TSinputContainer.style.display = 'none';
+        }
+        });
+        
+        const checkbox4 = document.getElementById('slumcone');
+        const slumconeinputContainer = document.getElementById('slumconeinputContainer');
+
+        checkbox4.addEventListener('change', function() {
+        if (checkbox4.checked) {
+            slumconeinputContainer.style.display = 'block';
+        } else {
+            slumconeinputContainer.style.display = 'none';
+        }
+        });
+    </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+            // Function to fetch form details
+
+            // function level()
+            // {
+            //     getlevelDetails();
+            //     getCompanyDetails();
+            //     addCertificateDetails(doc, details);
+            //     levelpreview();
+            //     generatelevelPDFblankpg();
+            //     generatelevelPDF();
+            // }
+            // function ctm(){
+            //     getCompanyDetails();
+            //     ctmpreview();
+            //     generatectmPDF();
+            //     ctmPDFWithout();
+
+            // }
+
+            function getCompanyDetails()
+            {
+                return {
+                    calibrationDate: document.getElementById("calibrationDate").value.split("-").reverse().join("/"),
+                    partyName: document.getElementById("partyName").value,
+                    nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/"),
+                    personResponsible: document.getElementById("personResponsible").value,
+                };
+            }
+            // Function to add common certificate images
+            function addImg(doc, details)
+            {
+                const img = new Image();
+                img.src = 'images/footer.jpeg';
+                doc.addImage(img, 'PNG', 0, 255, 210, 27);
+
+                const img3 = new Image();
+                img3.src = 'images/sign.jpeg';
+                doc.addImage(img3, 'PNG', 160, 210, 40, 10);
+
+                const img1 = new Image();
+                img1.src = 'images/stamp.jpeg';
+                doc.addImage(img1, 'PNG', 90, 207, 40, 40);
+
+                const img2 = new Image();
+                img2.src = 'images/header.jpeg';
+                doc.addImage(img2, 'PNG', 3, 3, 210, 30);
+            }
+            function getlevelDetails() {
+                return {
+                make: document.getElementById("levelmake").value,
+                serialNo: document.getElementById("levelserialno").value,
+                modelNo: document.getElementById("levelmodel").value,
+                };
+            }
+            // Function to add certificate details
+            function addlevelDetails(doc, details)
+            {
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(25);
+                doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, 60, { align: 'center' });
+                
+                doc.setFontSize(15);
+                doc.setFont("helvetica", "simple");   
+                doc.text(`DATE:${details.calibrationDate}`, 155, 45);
+                doc.text(`REF No:${details.certificateNumber}`, 10, 45)
+
+
+                
+                doc.text(`FOR , ${details.make}  AUTO LEVEL`, doc.internal.pageSize.getWidth() / 2, 65, {  align: 'center' });
+                doc.text(`MODLE : ${details.modelNo}  ,SR NO:- ${details.serialNo}`, doc.internal.pageSize. getWidth() / 2,70, { align: 'center' });
+                // Certificate Details
+                
+
+
+            
+                doc.text(`NAME OF PARTY         :     ${details.partyName}`, 14, 85);
+                doc.text(`EQUIPMENT NAME      :     AUTO LEVEL`, 14, 95);
+                doc.text(`SERIAL NO                   :     ${details.serialNo}`, 14, 105);
+                doc.text(`MAKE                            :     ${details.make}`, 14, 115);
+                doc.text(`MODEL NO                   :     ${details.modelNo} `, 14, 125);
+                doc.text(`NEXT DUE DATE         :     ${details.nextCalibrationDate}`, 14, 135);
+                doc.text(`DATE                             :     ${details.calibrationDate}`, 14, 145);
+
+                doc.setFontSize(12);
+                doc.text(`This is to certify that ${details.make} Automatic Level-${details.modelNo} Serial No ${details.serialNo} Been Checked `, 14, 155);
+                doc.text(` By us as under One year warranty.`, 14, 160);
+                doc.text(`1. Level was kept At a distance of 20 meter from staff-A and 30 meter from Staff-B, Which `, 14, 170);
+                doc.text(`were ).Pre-fixed at same level in our workshop (permanent bench-mark of same elevation).`, 14, 175);
+                doc.text(`2. Reading of Staff-A was taken as 1,600`, 14, 180);
+                doc.text(`3. Reading of Staff-B was taken as 1,600 .`, 14, 185);
+                doc.text(`Hence error is NIL (Within the tolerance Level). Therefore, instrument is found free from  `, 14, 195);
+                doc.text(`collimation error as of Date.`, 14, 200);
+
+                // Footer
+                doc.text("FOR, Shreeji Instruments", 140, 208);
+
+                // Images and Signature (same as before)
+                
+                doc.text("Proprietor", 170, 225);
+            }
+            // Preview the generated certificate of level
+                function levelpreview() {
+                if (!document.getElementById("calibrationForm").reportValidity()) return;
+
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                // Fetch form details
+                const details = getlevelDetails();
+
+                // Add certificate details using the reusable function
+                addlevelDetails(doc, details);
+
+                addImg(doc, details);
+
+                // Generate preview
+                const pdfBlob = doc.output('blob');
+                const pdfURL = URL.createObjectURL(pdfBlob);
+                const previewFrame = document.createElement('iframe');
+                previewFrame.style.width = "100%";
+                previewFrame.style.height = "600px";
+                previewFrame.src = pdfURL;
+
+                // Clear previous preview and add new one
+                const container = document.querySelector('.container');
+                const existingPreview = document.querySelector('iframe');
+                if (existingPreview) container.removeChild(existingPreview);
+                container.appendChild(previewFrame);
+            }
+            // // Generate  level certificat PDF with letterhead
+            // async function generatelevelPDF() {
+            //     if (!document.getElementById("calibrationForm").reportValidity()) return;
+
+            //     const { jsPDF } = window.jspdf;
+            //     const doc = new jsPDF();
+
+            //     // Fetch form details
+            //     const details = getFormDetails();
+
+            //     // Add certificate details using the reusable function
+            //     addCertificateDetails(doc, details);
+
+            //     addImg(doc, details);
+            //     // Save PDF
+            //     setTimeout(() => doc.save(`${details.certificateNumber}_Calibration_Certificate.pdf`), 500);
+            // }
+            // // Generate level certificat PDF without letterhead
+            // async function generatelevelPDFblankpg() {
+            //     if (!document.getElementById("calibrationForm").reportValidity()) return;
+
+            //     const { jsPDF } = window.jspdf;
+            //     const doc = new jsPDF();
+
+            //     // Fetch form details
+            //     const details = getFormDetails();
+
+            //     // Add certificate details using the reusable function
+            //     addCertificateDetails(doc, details);
+
+            //     // Save PDF without letterhead/footer
+            //     setTimeout(() => doc.save(`${details.certificateNumber}_Calibration_Certificate_Without_Letterhead.pdf`), 500);
+            // }
+
+
+            // async function ctmpreview() {
+            //     if (!document.getElementById("calibrationForm").reportValidity()) {
+            //     return;
+            //     }
+
+            //     const { jsPDF } = window.jspdf;
+            //     const doc = new jsPDF();
+
+                
+
+            //     const calibrationDate= document.getElementById("calibrationDate").value.split("-").reverse().join("/");
+            //     const siteLocation = document.getElementById("siteLocation").value;
+            //     const partyName = document.getElementById("partyName").value;
+            //     const make = document.getElementById("ctmmake").value;
+            //     const serialNo = document.getElementById("ctmserialno").value;
+            //     const capacity = document.getElementById("ctmcapacity").value;
+            //     const nextCalibrationDate= document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/");
+            //     const personResponsible = document.getElementById("personResponsible").value;
+
+            //     const inputs = [];
+            //     for (let i = 1; i <= 10; i++) {
+            //     inputs.push(document.getElementById(`input${i}`).value);
+            //     }
+
+            //     doc.setFont("Cloister Black Font", "bold");
+            //     doc.setFontSize(25);
+            //     doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, 50, { align: "center" });
+            //     doc.setFontSize(10);
+
+            //     doc.setFont("helvetica", "bold");
+            //     doc.setFontSize(12);
+            //     doc.text(`Date:-    ${calibrationDate}`, 140, 60);
+            //     doc.text(`REF No      :-    ${certificateNumber}`, 14, 60);
+            //     doc.text(`Name of Party      :-    ${partyName}`, 14, 70);
+            //     doc.text(`Instrument name :-    CUBE TESTING MACHINE`, 14, 80);
+            //     doc.text(`Capacity  / MAKE  :-    ${capacity}  /  ${make}`, 14, 90);
+            //     doc.text(`Serial No                :-    ${serialNo}`, 14, 100);
+            //     doc.text(`Next Due Date:-    ${nextCalibrationDate}`, 140, 100);
+            //     doc.text(`Site Location         :-    ${siteLocation}`, 14, 110); 
+
+            //     doc.setFontSize(10);
+            //     doc.setFont("helvetica", "bold");
+
+            //     doc.text(`CALIBRATION INSTRUMENT 2000KN`, 14, 120);  
+            //     doc.text(`PROVING RING NO:2000KN 094 IS 4169:2014`, 14, 125);  
+            //     doc.text(`CALIBRATED BY : NATIONAL COUNCIL FOR CEMENT AND BUILDING MATERIALS`, 14, 130);  
+            //     doc.setFont("helvetica", "bold");
+            //     doc.setFontSize(11);
+            //     const startX = 13;
+            //     const startY = 142;
+            //     const cellWidth = 30;
+            //     const cellHeight = 7;
+
+            //     doc.text(`Divisions`, 18, 141);
+            //     doc.text(`KN`, 174, 141);
+
+            //     const fixedTexts = ["Deflection In", "LOAD IN KN", "1st set in KN", "2nd set in KN", "3rd set in KN", "AVERAGE in"];
+
+            //     for (let k = 0; k < 6; k++) {
+            //     const x = startX + k * cellWidth;
+            //     doc.rect(x, 132, cellWidth, 10);
+            //     doc.text(fixedTexts[k], x + 2, 137);
+            //     }
+
+            //     const fixedValuesColumn1 = ["84.1", "168.6", "254.7", "342.1", "429.1", "513.9", "600.9", "689.2", "776.7", "865.8"];
+            //     const fixedValuesColumn2 = ["200", "400", "600", "800", "1000", "1200", "1400", "1600", "1800", "2000"];
+
+            //     for (let i = 0; i < 10; i++) {
+            //     for (let j = 0; j < 6; j++) {
+            //     const x = startX + j * cellWidth;
+            //     const y = startY + i * cellHeight;
+            //     doc.rect(x, y, cellWidth, cellHeight);
+
+            //     let textValue = "";
+            //     if (j === 0) textValue = fixedValuesColumn1[i];
+            //     else if (j === 1) textValue = fixedValuesColumn2[i];
+            //     else textValue = inputs[i];
+
+            //     // Centering the text horizontally within the cell
+            //     const textWidth = doc.getTextWidth(textValue); // Get the width of the text
+            //     const centeredX = x + (cellWidth - textWidth) / 2; // Calculate centered X position
+            //     doc.text(textValue, centeredX, y + 6); // Draw the text centered
+            //     }
+            // }
+            //     doc.text(`Calibration By      :-   ${personResponsible}`, 14, 225); 
+            //     doc.text("FOR, Shreeji Instruments", 150, 225);
+
+
+            //     doc.text("Proprietor", 174, 235);
+
+            //     // Generate preview
+            //     const pdfBlob = doc.output('blob');
+            //     const pdfURL = URL.createObjectURL(pdfBlob);
+            //     const previewFrame = document.createElement('iframe');
+            //     previewFrame.style.width = "100%";
+            //     previewFrame.style.height = "600px";
+            //     previewFrame.src = pdfURL;
+
+            //     // Clear previous preview and add new one
+            //     const container = document.querySelector('.container');
+            //     const existingPreview = document.querySelector('iframe');
+            //     if (existingPreview) container.removeChild(existingPreview);
+            //     container.appendChild(previewFrame);
+
+            // }
+            // async function ctmPDFWithout() {
+            // if (!document.getElementById("calibrationForm").reportValidity()) {
+            //     return;
+            // }
+
+            // const { jsPDF } = window.jspdf;
+            // const doc = new jsPDF();
+
+            
+
+            // const calibrationDate= document.getElementById("calibrationDate").value.split("-").reverse().join("/");
+            // const siteLocation = document.getElementById("siteLocation").value;
+            // const partyName = document.getElementById("partyName").value;
+            // const make = document.getElementById("ctmmake").value;
+            // const serialNo = document.getElementById("ctmserialno").value;
+            // const capacity = document.getElementById("ctmcapacity").value;
+            // const nextCalibrationDate= document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/");
+            // const personResponsible = document.getElementById("personResponsible").value;
+
+            // const inputs = [];
+            // for (let i = 1; i <= 10; i++) {
+            //     inputs.push(document.getElementById(`input${i}`).value);
+            // }
+
+            // doc.setFont("Cloister Black Font", "bold");
+            // doc.setFontSize(25);
+            // doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, 50, { align: "center" });
+            // doc.setFontSize(10);
+
+            // doc.setFont("helvetica", "bold");
+            // doc.setFontSize(12);
+            // doc.text(`Date:-    ${calibrationDate}`, 140, 60);
+            // doc.text(`REF No      :-    ${certificateNumber}`, 14, 60);
+            // doc.text(`Name of Party      :-    ${partyName}`, 14, 70);
+            // doc.text(`Instrument name :-    CUBE TESTING MACHINE`, 14, 80);
+            // doc.text(`Capacity  / MAKE  :-    ${capacity}  /  ${make}`, 14, 90);
+            // doc.text(`Serial No                :-    ${serialNo}`, 14, 100);
+            // doc.text(`Next Due Date:-    ${nextCalibrationDate}`, 140, 100);
+            // doc.text(`Site Location         :-    ${siteLocation}`, 14, 110); 
+
+            // doc.setFontSize(10);
+            // doc.setFont("helvetica", "bold");
+
+            // doc.text(`CALIBRATION INSTRUMENT 2000KN`, 14, 120);  
+            // doc.text(`PROVING RING NO:2000KN 094 IS 4169:2014`, 14, 125);  
+            // doc.text(`CALIBRATED BY : NATIONAL COUNCIL FOR CEMENT AND BUILDING MATERIALS`, 14, 130);  
+            // doc.setFont("helvetica", "bold");
+            // doc.setFontSize(11);
+            // const startX = 13;
+            // const startY = 142;
+            // const cellWidth = 30;
+            // const cellHeight = 7;
+
+            // doc.text(`Divisions`, 18, 141);
+            // doc.text(`KN`, 174, 141);
+
+            // const fixedTexts = ["Deflection In", "LOAD IN KN", "1st set in KN", "2nd set in KN", "3rd set in KN", "AVERAGE in"];
+
+            // for (let k = 0; k < 6; k++) {
+            // const x = startX + k * cellWidth;
+            // doc.rect(x, 132, cellWidth, 10);
+            // doc.text(fixedTexts[k], x + 2, 137);
+            // }
+
+            // const fixedValuesColumn1 = ["84.1", "168.6", "254.7", "342.1", "429.1", "513.9", "600.9", "689.2", "776.7", "865.8"];
+            // const fixedValuesColumn2 = ["200", "400", "600", "800", "1000", "1200", "1400", "1600", "1800", "2000"];
+
+            // for (let i = 0; i < 10; i++) {
+            // for (let j = 0; j < 6; j++) {
+            //     const x = startX + j * cellWidth;
+            //     const y = startY + i * cellHeight;
+            //     doc.rect(x, y, cellWidth, cellHeight);
+
+            //     let textValue = "";
+            //     if (j === 0) textValue = fixedValuesColumn1[i];
+            //     else if (j === 1) textValue = fixedValuesColumn2[i];
+            //     else textValue = inputs[i];
+
+            //     // Centering the text horizontally within the cell
+            //     const textWidth = doc.getTextWidth(textValue); // Get the width of the text
+            //     const centeredX = x + (cellWidth - textWidth) / 2; // Calculate centered X position
+            //     doc.text(textValue, centeredX, y + 6); // Draw the text centered
+            // }
+            // }
+            // doc.text(`Calibration By      :-   ${personResponsible}`, 14, 225); 
+            // doc.text("FOR, Shreeji Instruments", 150, 225);
+
+            // doc.text("Proprietor", 174, 235);
+
+            // doc.save(`${certificateNumber}_Calibration_Certificate.pdf`);
+            // }
+    //         async function generatectmPDF() {
+    //         if (!document.getElementById("calibrationForm").reportValidity()) {
+    //             return;
+    //         }
+
+    //         const { jsPDF } = window.jspdf;
+    //         const doc = new jsPDF();
+
+            
+
+    //         const calibrationDate= document.getElementById("calibrationDate").value.split("-").reverse().join("/");
+    //         const siteLocation = document.getElementById("siteLocation").value;
+    //         const partyName = document.getElementById("partyName").value;
+    //         const make = document.getElementById("ctmmake").value;
+    //         const serialNo = document.getElementById("ctmserialno").value;
+    //         const capacity = document.getElementById("ctmcapacity").value;
+    //         const nextCalibrationDate= document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/");
+    //         const personResponsible = document.getElementById("personResponsible").value;
+
+    //         const inputs = [];
+    //         for (let i = 1; i <= 10; i++) {
+    //             inputs.push(document.getElementById(`input${i}`).value);
+    //         }
+
+    //         doc.setFont("Cloister Black Font", "bold");
+    //         doc.setFontSize(25);
+    //         doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, 50, { align: "center" });
+    //         doc.setFontSize(10);
+
+    //         doc.setFont("helvetica", "bold");
+    //         doc.setFontSize(12);
+    //         doc.text(`Date:-    ${calibrationDate}`, 140, 60);
+    //         doc.text(`REF No      :-    ${certificateNumber}`, 14, 60);
+    //         doc.text(`Name of Party      :-    ${partyName}`, 14, 70);
+    //         doc.text(`Instrument name :-    CUBE TESTING MACHINE`, 14, 80);
+    //         doc.text(`Capacity  / MAKE  :-    ${capacity}  /  ${make}`, 14, 90);
+    //         doc.text(`Serial No                :-    ${serialNo}`, 14, 100);
+    //         doc.text(`Next Due Date:-    ${nextCalibrationDate}`, 140, 100);
+    //         doc.text(`Site Location         :-    ${siteLocation}`, 14, 110); 
+
+    //         doc.setFontSize(10);
+    //         doc.setFont("helvetica", "bold");
+
+    //         doc.text(`CALIBRATION INSTRUMENT 2000KN`, 14, 120);  
+    //         doc.text(`PROVING RING NO:2000KN 094 IS 4169:2014`, 14, 125);  
+    //         doc.text(`CALIBRATED BY : NATIONAL COUNCIL FOR CEMENT AND BUILDING MATERIALS`, 14, 130);  
+    //         doc.setFont("helvetica", "bold");
+    //         doc.setFontSize(11);
+    //         const startX = 13;
+    //         const startY = 142;
+    //         const cellWidth = 30;
+    //         const cellHeight = 7;
+
+    //         doc.text(`Divisions`, 18, 141);
+    //         doc.text(`KN`, 174, 141);
+
+    //         const fixedTexts = ["Deflection In", "LOAD IN KN", "1st set in KN", "2nd set in KN", "3rd set in KN", "AVERAGE in"];
+
+    //         for (let k = 0; k < 6; k++) {
+    //         const x = startX + k * cellWidth;
+    //         doc.rect(x, 132, cellWidth, 10);
+    //         doc.text(fixedTexts[k], x + 2, 137);
+    //         }
+
+    //         const fixedValuesColumn1 = ["84.1", "168.6", "254.7", "342.1", "429.1", "513.9", "600.9", "689.2", "776.7", "865.8"];
+    //         const fixedValuesColumn2 = ["200", "400", "600", "800", "1000", "1200", "1400", "1600", "1800", "2000"];
+
+    //         for (let i = 0; i < 10; i++) {
+    //         for (let j = 0; j < 6; j++) {
+    //             const x = startX + j * cellWidth;
+    //             const y = startY + i * cellHeight;
+    //             doc.rect(x, y, cellWidth, cellHeight);
+
+    //             let textValue = "";
+    //             if (j === 0) textValue = fixedValuesColumn1[i];
+    //             else if (j === 1) textValue = fixedValuesColumn2[i];
+    //             else textValue = inputs[i];
+
+    //             // Centering the text horizontally within the cell
+    //             const textWidth = doc.getTextWidth(textValue); // Get the width of the text
+    //             const centeredX = x + (cellWidth - textWidth) / 2; // Calculate centered X position
+    //             doc.text(textValue, centeredX, y + 6); // Draw the text centered
+    //         }
+    //         }
+    //         doc.text(`Calibration By      :-   ${personResponsible}`, 14, 225); 
+    //         doc.text("FOR, Shreeji Instruments", 150, 225);
+
+    //         addImg(doc, details); 
+
+    //         doc.text("Proprietor", 174, 235);
+
+    //         doc.save(`${certificateNumber}_Calibration_Certificate.pdf`);
+    //         }
+    // </script>
+    </body>
+    </html>
