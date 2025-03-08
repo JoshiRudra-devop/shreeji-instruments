@@ -6,23 +6,33 @@
   <link rel="icon" type="img/png" href="images/logo512.png" />
   <title>Shreeji Instruments Calibration</title>
   <style>
- body {
+    body {
       font-family: Arial, sans-serif;
-      justify-content: center;
-      align-items: center;
       background-color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
     }
     nav {
       background-color: #00796b;
+      width: 100%;
       padding: 10px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    nav h1 {
+      color: white;
+      margin: 0;
     }
     nav ul {
       list-style: none;
       display: flex;
       gap: 15px;
+      padding: 0;
+      margin: 0;
     }
     nav ul li {
       display: inline;
@@ -37,17 +47,29 @@
       color: #ffccbc;
     }
     .container {
+      background-color: white;
       padding: 20px;
-      border: 1px solid #ccc;
+      margin: 20px 0;
+      border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      background-color: #fff;
-      margin: 20px;
+      max-width: 800px;
+      width: 100%;
     }
     h2.centered {
       text-align: center;
       font-size: 24px;
       margin-bottom: 20px;
+      color: #00796b;
     }
+    .date{
+            display: inline-flex;
+            gap: 100px;
+        }
+        .date .title_input_pair{
+            display: inline;
+            
+        }
+
     .title_input_pair {
       display: flex;
       flex-direction: column;
@@ -55,18 +77,21 @@
     }
     label {
       font-weight: bold;
+      margin-bottom: 5px;
     }
-    input, textarea {
-      width: 100%;  
-      padding: 8px;
+    input, select, textarea {
+      width: 97%;
+      padding: 10px;
       border: 1px solid #ccc;
       border-radius: 4px;
+      font-size: 16px;
+      margin-bottom: 10px;
     }
     button {
-      width: 100%;
+      width: calc(50% - 10px);
       padding: 12px;
-      margin: 1%;
-      background-color: #4CAF50;
+      margin: 5px;
+      background-color: #00796b;
       color: white;
       border: none;
       cursor: pointer;
@@ -76,7 +101,13 @@
     }
     button:hover {
       background-color: #45a049;
-    }  </style>
+    }
+    .button-group {
+      display: flex;
+      /* flex-wrap: wrap; */
+      justify-content: space-between;
+    }
+  </style>
 </head>
 <body>
   <nav>
@@ -94,9 +125,15 @@
         <label for="certificateNumber">Certificate No:</label>
         <input type="text" id="certificateNumber" required>
       </div>
-      <div class="title_input_pair">
-        <label for="calibrationDate">Calibration Date:</label>
-        <input type="date" id="calibrationDate" required>
+      <div class="date">
+          <div class="title_input_pair">
+              <label for="calibrationDate">Date of Calibration:</label>
+              <input type="date" id="calibrationDate" required>
+          </div>
+          <div class="title_input_pair">
+              <label for="nextCalibrationDate">Next Suggested Date:</label>
+              <input type="date" id="nextCalibrationDate" required>
+          </div>
       </div>
       <div class="title_input_pair">
         <label for="partyName">Name of Party:</label>
@@ -122,16 +159,12 @@
         <label for="siteLocation">Site Location:</label>
         <input type="text" id="siteLocation" required>
       </div>
-      <div class="title_input_pair">
-        <label for="nextCalibrationDate">Next Due Date:</label>
-        <input type="date" id="nextCalibrationDate" required>
-      </div>
-      <div class="title_input_pair">
-        <label for="personResponsible">Calibration By:</label>
-        <input type="text" id="personResponsible" required>
-      </div>      <button type="button" onclick="preview()">Preview Calibration Certificate</button>
-      <button type="button" onclick="generatePDF()">Download Certificate with Letterhead</button>
-      <button type="button" onclick="generatePDFblankpg()">Download Certificate without Letterhead</button>
+      
+      <div class="button-group">
+        <button type="button" onclick="preview()">Preview Calibration Certificate</button>
+        <button type="button" onclick="generatePDF()">Download Certificate with Letterhead</button>
+        <button type="button" onclick="generatePDFblankpg()">Download Certificate without Letterhead</button>
+        </div>
     </form>
   </div>
 
@@ -149,7 +182,6 @@
         serialNo: document.getElementById("serialNo").value,
         capacity: document.getElementById("capacity").value,
         nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/"),
-        personResponsible: document.getElementById("personResponsible").value,
       };
     }
 
@@ -194,7 +226,7 @@
       doc.text(`Serial No / Make     :     ${details.serialNo} / ${details.make}`, 14, 140);
       doc.text(`Capacity                  :     ${details.capacity}`, 14, 155);
       doc.text(`Next Due Date         :     ${details.nextCalibrationDate}`, 14, 170);
-      doc.text(`Calibration By         :     ${details.personResponsible}`, 14, 185);
+      doc.text(`Calibration By         :     YOGESH BHAI`, 14, 185);
 
       // Footer
       doc.text("FOR, Shreeji Instruments", 130, 210);
