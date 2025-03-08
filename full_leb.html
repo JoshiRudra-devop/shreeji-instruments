@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="img/png" href="images/logo512.png" />
-    <title>Lab Calibration Report</title>
+    <title>FULL LEB Calibration Report</title>
     <style>
         * {
             margin: 0;
@@ -13,9 +13,9 @@
         }
         body {
             font-family: 'Arial', sans-serif;
-            background-color: white;
-            color: black;
-            margin: 0 10px;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
         }
         nav {
             background-color: #00796b;
@@ -23,6 +23,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        nav h1 {
+            color: white;
+            margin: 0;
         }
         nav ul {
             list-style: none;
@@ -63,56 +68,101 @@
             border: 1px solid #ccc;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             background-color: #fff;
-            margin: 20px;
+            margin: 20px auto;
+            max-width: 800px;
+            border-radius: 8px;
         }
         h2.centered {
             text-align: center;
             font-size: 24px;
             margin-bottom: 20px;
+            color: #00796b;
+        }
+        .date{
+            display: inline-flex;
+            gap: 100px;
+        }
+        .date .title_input_pair{
+            display: inline;
+            
         }
         .title_input_pair {
             display: flex;
             flex-direction: column;
             margin-bottom: 15px;
         }
+        .reading {
+            display: flex;
+            /* flex-wrap: wrap; */
+            gap: 15px;
+        }
+        .reading .title_input_pair {
+            flex: 1  1  calc(50% - 15px);
+        }
         label {
             font-weight: bold;
+            margin-bottom: 5px;
         }
         input, textarea {
-            padding: 8px;
+            padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            font-size: 16px;
+            width: 100%;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .toggle-button {
+            padding: 10px;
+            background-color: #00796b;
+            color: white;
+            border: none;
+            border-radius: 4PX;
+            cursor: pointer;
+            font-size: 14px;
+            width: fit-content;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+        .toggle-button.active {
+            background-color: #45a049;
         }
         button {
-            width: 100%;
             padding: 12px;
-            margin: 1%;
-            background-color: #4CAF50;
+            margin: 10px 0;
+            background-color: #00796b;
             color: white;
             border: none;
             cursor: pointer;
             font-size: 16px;
             border-radius: 4px;
             transition: background-color 0.3s ease;
+            width: 100%;
         }
         button:hover {
             background-color: #45a049;
         }
-        .level-input-container, .ctm-input-container, .TS-input-container, .slumcone-input-container ,.cylinder-input-container,.sandReplacement-input-container {
+
+        .level-input-container, .ctm-input-container, .TS-input-container, .slumcone-input-container, .cylinder-input-container, .sandReplacement-input-container {
             display: none;
             margin-top: 10px;
         }
         .level-input-container input,
         .ctm-input-container input,
         .TS-input-container input,
-        .slumcone-input-container,
-        .cylinder-input-container,
+        .slumcone-input-container input,
+        .cylinder-input-container input,
         .sandReplacement-input-container input {
             display: block;
             margin: 8px 0;
             padding: 8px;
             width: 100%;
-            max-width: 300px;
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -120,15 +170,13 @@
 <body>
 
     <nav>
-        <h1 style="color: white;">Shreeji Instruments</h1>
+        <h1>Shreeji Instruments</h1>
         <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="#">About</a></li>
             <li><a href="#">Contact</a></li>
         </ul>
     </nav>
-    <header>GENERATE FULL LEB CERTIFICATES AT THE SAME TIME</header>        
-
     <div class="container">
         <h2 class="centered">COMPANY DETAILS</h2>
         <form id="calibrationForm">
@@ -137,207 +185,177 @@
                     <label for="partyName">Name of COMPANY:</label>
                     <input type="text" id="partyName" required>
                 </div>
-                <div class="title_input_pair">
-                    <label for="calibrationDate">Date of Calibration:</label>
-                    <input type="date" id="calibrationDate" required>
+                <div class="date">
+                    <div class="title_input_pair">
+                        <label for="calibrationDate">Date of Calibration:</label>
+                        <input type="date" id="calibrationDate" required>
+                    </div>
+                    <div class="title_input_pair">
+                        <label for="nextCalibrationDate">Next Suggested Date:</label>
+                        <input type="date" id="nextCalibrationDate" required>
+                    </div>
                 </div>
                 <div class="title_input_pair">
-                    <label for="siteLocation">Site Location:</label>
-                    <input type="text" id="siteLocation" required>
-                </div>
-                <div class="title_input_pair">
-                    <label for="nextCalibrationDate">Next Suggested Date:</label>
-                    <input type="date" id="nextCalibrationDate" required>
-                </div>
-                <div class="title_input_pair">
-                    <label for="personResponsible">Calibration By:</label>
-                    <input type="text" id="personResponsible" required>
-                </div>
-                <div class="title_input_pair">
-                    <label for="certificateNumber">FIRST CERTIFICATE NUMBERE:</label>
-                    <input type="text" id="certificateNumber" required>
+                        <label for="siteLocation">Site Location:</label>
+                        <input type="text" id="siteLocation" required>
                 </div>
             </div>
             <div class="instrumentsinfo">
-
-                <div class="autolevel">     
+                <button type="button" id="AutolevelButton" class="toggle-button">AUTO LEVEL</button>
+                <div id="LevelinputContainer" class="level-input-container">
                     <div class="title_input_pair">
-                        <label><input type="checkbox" id="Autolevel"> Auto level</label>
+                        <label for="levelserialno">Serial No:</label>
+                        <input type="text" id="levelserialno">
                     </div>
-                    <div id="LevelinputContainer" class="level-input-container">
-                        <div class="title_input_pair">
-                            <label for="serial no">Serial No:</label>
-                            <input type="text" id="levelserialno" required>
-                        </div>
-                        <div class="title_input_pair">
-                            <label for="make">Make:</label>
-                            <input type="text" id="levelmake" required>
-                        </div>
-                        <div class="title_input_pair">
-                            <label for="model">Model:</label>
-                            <input type="text" id="levelmodel" required>
-                        </div> 
-                    </div>
-                </div> 
-
-                <div class="ctm">
                     <div class="title_input_pair">
-                        <label><input type="checkbox" id="CTM"> Cube Testing Machine</label>
+                        <label for="levelmake">Make:</label>
+                        <input type="text" id="levelmake">
                     </div>
-                    <div id="ctminputContainer" class="ctm-input-container">
-                        <div class="title_input_pair">
-                            <label for="serial no">SERIAL NO:</label>
-                            <input type="text" id="ctmserialno" required>
-                        </div>
-                        <div class="title_input_pair">
-                            <label for="make">MAKE:</label>
-                            <input type="text" id="ctmmake" required>
-                        </div>
-                        <div class="title_input_pair">
-                            <label for="Capacity">CAPICITY:</label>
-                            <input type="text" id="ctmcapacity" required>
-                        </div>
-                        <div class="title_input_pair">
-                            <label for="input1">Load on 200 kn:</label>
-                            <input type="text" id="input1" required>
-                        </div>
-                        <div class="title_input_pair">
-                            <label for="input2">Load on 400 kn:</label>
-                            <input type="text" id="input2" required>
-                        </div>
-                        <div class="title_input_pair">
-                            <label for="input3">Load on 600 kn:</label>
-                            <input type="text" id="input3" required>
-                        </div>
-                        <div class="title_input_pair">
-                            <label for="input4">Load on 800 kn:</label>
-                            <input type="text" id="input4" required>
-                        </div>
-                        <div class="title_input_pair">
-                            <label for="input5">Load on 1000 kn:</label>
-                            <input type="text" id="input5" required>
-                        </div>
-                        <div class="title_input_pair">
-                            <label for="input6">Load on 1200 kn:</label>
-                            <input type="text" id="input6" required>
-                        </div>
-                        <div class="title_input_pair">
-                            <label for="input7">Load on 1400 kn:</label>
-                            <input type="text" id="input7" required>
-                        </div>
-                        <div class="title_input_pair">
-                            <label for="input8">Load on 1600 kn:</label>
-                            <input type="text" id="input8" required>
-                        </div>
-                        <div class="title_input_pair">
-                            <label for="input9">Load on 1800 kn:</label>
-                            <input type="text" id="input9" required>
-                        </div>
-                        <div class="title_input_pair">
-                            <label for="input10">Load on 2000 kn:</label>
-                            <input type="text" id="input10" required>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="totalStation">
                     <div class="title_input_pair">
-                        <label><input type="checkbox" id="totalStation"> Total Station</label>
+                        <label for="levelmodel">Model:</label>
+                        <input type="text" id="levelmodel">
                     </div> 
-                    <div id="TSinputContainer" class="TS-input-container">
+                </div> 
+                <button type="button" id="CTMButton" class="toggle-button">CUBE TESTING MACHINE</button>
+                <div id="ctminputContainer" class="ctm-input-container">
+                    <div class="title_input_pair">
+                        <label for="ctmserialno">SERIAL NO:</label>
+                        <input type="text" id="ctmserialno">
+                    </div>
+                    <div class="title_input_pair">
+                        <label for="ctmmake">MAKE:</label>
+                        <input type="text" id="ctmmake">
+                    </div>
+                    <div class="title_input_pair">
+                        <label for="ctmcapacity">CAPACITY:</label>
+                        <input type="text" id="ctmcapacity">
+                    </div>
+                    <div class="reading">
                         <div class="title_input_pair">
-                            <label for="serial no">Serial No:</label>
-                            <input type="text" id="ts_serialno" required>
+                          <label for="input1">200</label>
+                          <input type="text" id="input1" maxlength="7" required>
                         </div>
                         <div class="title_input_pair">
-                            <label for="make">Make:</label>
-                            <input type="text" id="tsmake" required>
+                          <label for="input2">400</label>
+                          <input type="text" id="input2" maxlength="7" required>
                         </div>
                         <div class="title_input_pair">
-                            <label for="model">Model:</label>
-                            <input type="text" id="ts_model" required>
-                        </div> 
+                          <label for="input3">600</label>
+                          <input type="text" id="input3" maxlength="7" required>
+                        </div>
+                        <div class="title_input_pair">
+                          <label for="input4">800</label>
+                          <input type="text" id="input4" maxlength="7" required>
+                        </div>
+                        <div class="title_input_pair">
+                          <label for="input5">1000</label>
+                          <input type="text" id="input5" maxlength="7" required>
+                        </div>
+                        <div class="title_input_pair">
+                          <label for="input6">1200</label>
+                          <input type="text" id="input6" maxlength="7" required>
+                        </div>
+                        <div class="title_input_pair">
+                          <label for="input7">1400</label>
+                          <input type="text" id="input7" maxlength="7" required>
+                        </div>
+                        <div class="title_input_pair">
+                          <label for="input8">1600</label>
+                          <input type="text" id="input8" maxlength="7" required>
+                        </div>
+                        <div class="title_input_pair">
+                          <label for="input9">1800</label>
+                          <input type="text" id="input9" maxlength="7" required>
+                        </div>
+                        <div class="title_input_pair">
+                          <label for="input10"> 2000</label>
+                          <input type="text" id="input10" maxlength="7" required>
+                        </div>
+                      </div>
+                </div>
+                <button type="button" id="totalStationButton" class="toggle-button">TOTAL STATION</button>
+                <div id="TSinputContainer" class="TS-input-container">
+                    <div class="title_input_pair">
+                        <label for="ts_serialno">Serial No:</label>
+                        <input type="text" id="ts_serialno">
+                    </div>
+                    <div class="title_input_pair">
+                        <label for="tsmake">Make:</label>
+                        <input type="text" id="tsmake">
+                    </div>
+                    <div class="title_input_pair">
+                        <label for="ts_model">Model:</label>
+                        <input type="text" id="ts_model">
+                    </div> 
+                </div>
+                <button type="button" id="measuringCylinderButton" class="toggle-button">MEASURING CYLINDER</button>
+                <div id="cylinderinputContainer" class="cylinder-input-container">
+                    <div class="title_input_pair">
+                        <label for="cylinder_serialno">Serial No:</label>
+                        <input type="text" id="cylinder_serialno">
+                    </div>
+                    <div class="title_input_pair">
+                        <label for="cylinder_make">Make:</label>
+                        <input type="text" id="cylinder_make">
+                    </div>
+                    <div class="title_input_pair">
+                        <label for="cylinder_capacity">CAPACITY:</label>
+                        <input type="text" id="cylinder_capacity">
                     </div>
                 </div>
-
-                <div class="measuring_cylinder">
+                <button type="button" id="sandReplacementButton" class="toggle-button">SAND REPLACEMENT KIT</button>
+                <div id="sandReplacementinputContainer" class="sandReplacement-input-container">
                     <div class="title_input_pair">
-                        <label><input type="checkbox" id="measuring_cylinder"> Slumcone</label>
+                        <label for="sand_replacement_sr">Serial No:</label>
+                        <input type="text" id="sand_replacement_sr">
                     </div>
-                    <div id="cylinderinputContainer" class="cylinder-input-container">
-                        <div class="title_input_pair">
-                            <label for="serial no">Serial No:</label>
-                            <input type="text" id="cylinder_serialno" required>
-                        </div>
-                        <div class="title_input_pair">
-                            <label for="make">Make:</label>
-                            <input type="text" id="cylinder_make" required>
-                        </div>
-                        <div class="title_input_pair">
-                            <label for="Capacity">CAPICITY:</label>
-                            <input type="text" id="cylinder_capacity" required>
-                        </div>
+                    <div class="title_input_pair">
+                        <label for="sand_replacement_make">Make:</label>
+                        <input type="text" id="sand_replacement_make">
+                    </div>
+                    <div class="title_input_pair">
+                        <label for="sand_replacement_capacity">CAPACITY:</label>
+                        <input type="text" id="sand_replacement_capacity">
                     </div>
                 </div>
-                <div class="sand_replacement">
+                <button type="button" id="slumconeButton" class="toggle-button">SLUMCONE</button>
+                <div id="slumconeinputContainer" class="slumcone-input-container">
                     <div class="title_input_pair">
-                        <label><input type="checkbox" id="sand_replacement"> SAND REPLACEMENT KIT</label>
+                        <label for="slumcone_serialno">Serial No:</label>
+                        <input type="text" id="slumcone_serialno">
                     </div>
-                    <div id="sandReplacementinputContainer" class="sandReplacement-input-container">
-                        <div class="title_input_pair">
-                            <label for="serial no">Serial No:</label>
-                            <input type="text" id="sand_replacement_sr" required>
-                        </div>
-                        <div class="title_input_pair">
-                            <label for="make">Make:</label>
-                            <input type="text" id="sand_replacement_make" required>
-                        </div>
-                        <div class="title_input_pair">
-                            <label for="Capacity">CAPICITY:</label>
-                            <input type="text" id="sand_replacement_capacity" required>
-                        </div>
-                    </div>
-                </div>
-                <div class="slumcone">
                     <div class="title_input_pair">
-                        <label><input type="checkbox" id="slumcone"> MEASURING CYLINDER </label>
-                    </div>
-                    <div id="slumconeinputContainer" class="slumcone-input-container">
-                        <div class="title_input_pair">
-                            <label for="serial no">Serial No:</label>
-                            <input type="text" id="slumcone_serialno" required>
-                        </div>
-                        <div class="title_input_pair">
-                            <label for="make">Make:</label>
-                            <input type="text" id="slumcone_make" required>
-                        </div>
+                        <label for="slumcone_make">Make:</label>
+                        <input type="text" id="slumcone_make">
                     </div>
                 </div>
             </div>
 
             <button type="button" onclick="generatePDF()">Generate Certificate PDF</button>
             <button type="button" onclick="preview()">Show Preview</button>
-            <button type="button" onclick="withleterhade()">Generate Certificate with out letterhead</button>
+            <button type="button" onclick="withleterhade()">Generate Certificate without Letterhead</button>
         </form>
     </div>
 
     <script>
         // Initialize jsPDF
-const { jsPDF } = window.jspdf;
+        const { jsPDF } = window.jspdf;
 
-// Toggle input containers based on checkbox selection
-const toggleInputContainer = (checkboxId, containerId) => {
-    document.getElementById(checkboxId).addEventListener('change', function() {
-        document.getElementById(containerId).style.display = this.checked ? 'block' : 'none';
-    });
-};
+        // Toggle input containers based on button selection
+        const toggleInputContainer = (buttonId, containerId) => {
+            document.getElementById(buttonId).addEventListener('click', function() {
+                const container = document.getElementById(containerId);
+                container.style.display = container.style.display === 'block' ? 'none' : 'block';
+                this.classList.toggle('active');
+            });
+        };
 
-toggleInputContainer('Autolevel', 'LevelinputContainer');
-toggleInputContainer('CTM', 'ctminputContainer');
-toggleInputContainer('totalStation', 'TSinputContainer');
-toggleInputContainer('slumcone', 'slumconeinputContainer');
-toggleInputContainer('measuring_cylinder', 'cylinderinputContainer');
-toggleInputContainer('sand_replacement', 'sandReplacementinputContainer');
+        toggleInputContainer('AutolevelButton', 'LevelinputContainer');
+        toggleInputContainer('CTMButton', 'ctminputContainer');
+        toggleInputContainer('totalStationButton', 'TSinputContainer');
+        toggleInputContainer('measuringCylinderButton', 'cylinderinputContainer');
+        toggleInputContainer('sandReplacementButton', 'sandReplacementinputContainer');
+        toggleInputContainer('slumconeButton', 'slumconeinputContainer');
 
 function addImg(doc) {      
         const img = new Image();
@@ -360,7 +378,9 @@ function addImg(doc) {
 function preview() {
     const doc = new jsPDF();
     // addImg(doc);
-
+    if (!document.getElementById("calibrationForm").reportValidity()) {
+        return;
+      }
 
     generateCertificate(doc); // Generate PDF content
     const pdfBlob = doc.output('blob');
@@ -378,6 +398,9 @@ function preview() {
 }
 
 function generatePDF() {
+    if (!document.getElementById("calibrationForm").reportValidity()) {
+        return;
+      }
     const doc = new jsPDF();
     generateCertificate(doc);
     const partyName = document.getElementById('partyName').value;
@@ -388,12 +411,14 @@ function generatePDF() {
 
 function withleterhade() {
     const doc = new jsPDF();
+    if (!document.getElementById("calibrationForm").reportValidity()) {
+        return;
+      }
     // generateCertificate(doc); 
     const partyName = document.getElementById('partyName').value;
     const siteLocation = document.getElementById('siteLocation').value;
     const calibrationDate= document.getElementById("calibrationDate").value.split("-").reverse().join("/");
     const nextCalibrationDate = document.getElementById('nextCalibrationDate').value;
-    const personResponsible = document.getElementById('personResponsible').value;
     const certificateNumber = document.getElementById('certificateNumber').value;
     let firstPage = true;
 
@@ -524,7 +549,7 @@ function withleterhade() {
                     doc.text(textValue, centeredX, y + 6); // Draw the text centered
                 }
                 }
-                doc.text(`Calibration By      :-   ${personResponsible}`, 14, 225); 
+                doc.text(`Calibration By      :-   YOGESH BHAI`, 14, 225); 
                 doc.text("FOR, Shreeji Instruments", 150, 225);
 
 
@@ -623,7 +648,7 @@ function withleterhade() {
                 doc.text(`Serial No / Make     :     ${serialNo} / ${make}`, 14, 125);
                 doc.text(`Site Location           :     ${siteLocation}`, 14, 140);
                 doc.text(`Next Due Date         :     ${nextCalibrationDate}`, 14, 155);
-                doc.text(`Calibration By         :     ${personResponsible}`, 14, 170);
+                doc.text(`Calibration By         :     YOGESH BHAI`, 14, 170);
 
                 // Footer
                 doc.text("FOR, Shreeji Instruments", 130, 210);
@@ -664,7 +689,7 @@ function withleterhade() {
                 doc.text(`Serial No / Make     :     ${serialNo} / ${make}`, 14, 140);
                 doc.text(`Site Location           :     ${siteLocation}`, 14, 155);
                 doc.text(`Next Due Date         :     ${nextCalibrationDate}`, 14, 170);
-                doc.text(`Calibration By         :     ${personResponsible}`, 14, 185);
+                doc.text(`Calibration By         :     YOGESH BHAI`, 14, 185);
 
                 // Footer
                 doc.text("FOR, Shreeji Instruments", 130, 210);
@@ -705,7 +730,7 @@ function withleterhade() {
                 doc.text(`Serial No / Make     :     ${serialNo} / ${make}`, 14, 140);
                 doc.text(`Site Location           :     ${siteLocation}`, 14, 155);
                 doc.text(`Next Due Date         :     ${nextCalibrationDate}`, 14, 170);
-                doc.text(`Calibration By         :     ${personResponsible}`, 14, 185);
+                doc.text(`Calibration By         :     YOGESH BHAI`, 14, 185);
 
                 // Footer
                 doc.text("FOR, Shreeji Instruments", 130, 210);
@@ -719,11 +744,11 @@ function withleterhade() {
 }
 
 function generateCertificate(doc) {
+    
     const partyName = document.getElementById('partyName').value;
     calibrationDate= document.getElementById("calibrationDate").value.split("-").reverse().join("/");
     const siteLocation = document.getElementById('siteLocation').value;
     const nextCalibrationDate = document.getElementById('nextCalibrationDate').value;
-    const personResponsible = document.getElementById('personResponsible').value;
     const certificateNumber = document.getElementById('certificateNumber').value;
     let firstPage = true;
 
@@ -855,7 +880,7 @@ function generateCertificate(doc) {
                     doc.text(textValue, centeredX, y + 6); // Draw the text centered
                 }
                 }
-                doc.text(`Calibration By      :-   ${personResponsible}`, 14, 225); 
+                doc.text(`Calibration By      :-   YOGESH BHAI`, 14, 225); 
                 doc.text("FOR, Shreeji Instruments", 150, 225);
 
 
@@ -955,7 +980,7 @@ function generateCertificate(doc) {
                 doc.text(`Serial No / Make     :     ${serialNo} / ${make}`, 14, 125);
                 doc.text(`Site Location           :     ${siteLocation}`, 14, 140);
                 doc.text(`Next Due Date         :     ${nextCalibrationDate}`, 14, 155);
-                doc.text(`Calibration By         :     ${personResponsible}`, 14, 170);
+                doc.text(`Calibration By         :     YOGESH BHAI}`, 14, 170);
 
                 // Footer
                 doc.text("FOR, Shreeji Instruments", 130, 210);
@@ -997,7 +1022,7 @@ function generateCertificate(doc) {
                 doc.text(`Serial No / Make     :     ${serialNo} / ${make}`, 14, 140);
                 doc.text(`Site Location           :     ${siteLocation}`, 14, 155);
                 doc.text(`Next Due Date         :     ${nextCalibrationDate}`, 14, 170);
-                doc.text(`Calibration By         :     ${personResponsible}`, 14, 185);
+                doc.text(`Calibration By         :     YOGESH BHAI`, 14, 185);
 
                 // Footer
                 doc.text("FOR, Shreeji Instruments", 130, 210);
@@ -1038,7 +1063,7 @@ function generateCertificate(doc) {
                 doc.text(`Serial No / Make     :     ${serialNo} / ${make}`, 14, 140);
                 doc.text(`Site Location           :     ${siteLocation}`, 14, 155);
                 doc.text(`Next Due Date         :     ${nextCalibrationDate}`, 14, 170);
-                doc.text(`Calibration By         :     ${personResponsible}`, 14, 185);
+                doc.text(`Calibration By         :     YOGESH BHAI`, 14, 185);
 
                 // Footer
                 doc.text("FOR, Shreeji Instruments", 130, 210);
