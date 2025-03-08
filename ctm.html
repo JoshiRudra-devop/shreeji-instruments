@@ -4,25 +4,35 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="img/png" href="images/logo512.png" />
-  <title>Shreeji Instruments Calibration</title>
+  <title>CTM Calibration</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      justify-content: center;
-      align-items: center;
       background-color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
     }
     nav {
       background-color: #00796b;
+      width: 100%;
       padding: 10px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    nav h1 {
+      color: white;
+      margin: 0;
     }
     nav ul {
       list-style: none;
       display: flex;
       gap: 15px;
+      padding: 0;
+      margin: 0;
     }
     nav ul li {
       display: inline;
@@ -37,37 +47,57 @@
       color: #ffccbc;
     }
     .container {
+      background-color: white;
       padding: 20px;
-      border: 1px solid #ccc;
+      margin: 20px 0;
+      border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      background-color: #fff;
+      max-width: 800px;
+      width: 100%;
     }
     h2.centered {
       text-align: center;
       font-size: 24px;
       margin-bottom: 20px;
+      color: #00796b;
     }
+    .date{
+            display: inline-flex;
+            gap: 100px;
+        }
+        .date .title_input_pair{
+            display: inline;
+            
+        }
     .title_input_pair {
       display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
     }
-   
     label {
-      display: block;
-      margin-top: 10px;
       font-weight: bold;
+      margin-bottom: 5px;
     }
-    input, textarea {
-      width: 30%;  
-      padding: 8px;
-      margin-top: 5px;
-      margin-bottom: 10px;
+    input, select, textarea {
+      width: 97%;
+      padding: 10px;
       border: 1px solid #ccc;
       border-radius: 4px;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    .reading {
+      display: flex;
+      /* flex-wrap: wrap; */
+      gap: 15px;
+    }
+    .reading .title_input_pair {
+      flex: 1  calc(50% - 15px);
     }
     button {
-      width: 100%;
+      width: calc(50% - 10px);
       padding: 12px;
-      margin: 1%;
+      margin: 5px;
       background-color: #00796b;
       color: white;
       border: none;
@@ -79,12 +109,16 @@
     button:hover {
       background-color: #45a049;
     }
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+    }
   </style>
 </head>
 
 <body>
   <nav>
-    <h1 style="color: white;">Shreeji Instruments</h1>
+    <h1 style="color: white;">SHREEJI INSTRUMENTS</h1>
     <ul>
       <li><a href="index.html">Home</a></li>
       <li><a href="#">About</a></li>
@@ -92,16 +126,22 @@
     </ul>
   </nav>
   <div class="container">
-    <h2 class="centered">CALIBRATION CERTIFICATE</h2>
+    <h2 class="centered">CUBE TESTING MACHINE CALIBRATION CERTIFICATE</h2>
     <form id="calibrationForm">
       <div class="title_input_pair">
         <label for="certificateNumber">Certificate No:</label>
         <input type="text" id="certificateNumber" required>
       </div>
-      <div class="title_input_pair">
-        <label for="calibrationDate">Calibration Date:</label>
-        <input type="date" id="calibrationDate" required>
-      </div>
+      <div class="date">
+        <div class="title_input_pair">
+            <label for="calibrationDate">Date of Calibration:</label>
+            <input type="date" id="calibrationDate" required>
+        </div>
+        <div class="title_input_pair">
+            <label for="nextCalibrationDate">Next Suggested Date:</label>
+            <input type="date" id="nextCalibrationDate" required>
+        </div>
+    </div>
       <div class="title_input_pair">
         <label for="partyName">Name of Party:</label>
         <input type="text" id="partyName" required>
@@ -126,62 +166,55 @@
         <label for="siteLocation">Site Location:</label>
         <input type="text" id="siteLocation" required>
       </div>
-      <div class="title_input_pair">
-        <label for="nextCalibrationDate">Next Due Date:</label>
-        <input type="date" id="nextCalibrationDate" required>
+      <div class="reading">
+        <div class="title_input_pair">
+          <label for="input1">200</label>
+          <input type="text" id="input1" maxlength="7" required>
+        </div>
+        <div class="title_input_pair">
+          <label for="input2">400</label>
+          <input type="text" id="input2" maxlength="7" required>
+        </div>
+        <div class="title_input_pair">
+          <label for="input3">600</label>
+          <input type="text" id="input3" maxlength="7" required>
+        </div>
+        <div class="title_input_pair">
+          <label for="input4">800</label>
+          <input type="text" id="input4" maxlength="7" required>
+        </div>
+        <div class="title_input_pair">
+          <label for="input5">1000</label>
+          <input type="text" id="input5" maxlength="7" required>
+        </div>
+        <div class="title_input_pair">
+          <label for="input6">1200</label>
+          <input type="text" id="input6" maxlength="7" required>
+        </div>
+        <div class="title_input_pair">
+          <label for="input7">1400</label>
+          <input type="text" id="input7" maxlength="7" required>
+        </div>
+        <div class="title_input_pair">
+          <label for="input8">1600</label>
+          <input type="text" id="input8" maxlength="7" required>
+        </div>
+        <div class="title_input_pair">
+          <label for="input9">1800</label>
+          <input type="text" id="input9" maxlength="7" required>
+        </div>
+        <div class="title_input_pair">
+          <label for="input10"> 2000</label>
+          <input type="text" id="input10" maxlength="7" required>
+        </div>
       </div>
-      <div class="title_input_pair">
-        <label for="personResponsible">Calibration By:</label>
-        <input type="text" id="personResponsible" required>
+      <div class="form-actions button-group">
+        <button type="button" onclick="showpreview()">Show preview</button>
+        <button type="button" onclick="generatePDF()">Generate Certificate</button>
+        <button type="button" onclick="generatePDFWithoutLetterpad()">Generate Certificate without Letterhead</button>
       </div>
-      <div class="title_input_pair">
-          <label for="input1">Load on 200 kn:</label>
-          <input type="text" id="input1" required>
-      </div>
-        <div class="title_input_pair">
-          <label for="input2">Load on 400 kn:</label>
-          <input type="text" id="input2" required>
-        </div>
-        <div class="title_input_pair">
-          <label for="input3">Load on 600 kn:</label>
-          <input type="text" id="input3" required>
-        </div>
-        <div class="title_input_pair">
-          <label for="input4">Load on 800 kn:</label>
-          <input type="text" id="input4" required>
-        </div>
-        <div class="title_input_pair">
-          <label for="input5">Load on 1000 kn:</label>
-          <input type="text" id="input5" required>
-        </div>
-        <div class="title_input_pair">
-          <label for="input6">Load on 1200 kn:</label>
-          <input type="text" id="input6" required>
-        </div>
-        <div class="title_input_pair">
-          <label for="input7">Load on 1400 kn:</label>
-          <input type="text" id="input7" required>
-        </div>
-        <div class="title_input_pair">
-          <label for="input8">Load on 1600 kn:</label>
-          <input type="text" id="input8" required>
-        </div>
-        <div class="title_input_pair">
-          <label for="input9">Load on 1800 kn:</label>
-          <input type="text" id="input9" required>
-        </div>
-        <div class="title_input_pair">
-          <label for="input10">Load on 2000 kn:</label>
-          <input type="text" id="input10" required>
-        </div>
-      
-
-      <button type="button" onclick="showpreview()">Show preview </button>
-      <button type="button" onclick="generatePDF()">Generate Certificate</button>
-      <button type="button" onclick="generatePDFWithoutLetterpad()">Generate Certificate without Letterhead </button>
     </form>
   </div>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
     async function showpreview() {
@@ -205,7 +238,6 @@
       const capacity = document.getElementById("capacity").value;
       const nextCalibrationDateRaw = document.getElementById("nextCalibrationDate").value;
       const nextCalibrationDate = nextCalibrationDateRaw.split("-").reverse().join("/");
-      const personResponsible = document.getElementById("personResponsible").value;
 
       const inputs = [];
       for (let i = 1; i <= 10; i++) {
@@ -272,7 +304,7 @@
           doc.text(textValue, centeredX, y + 6); // Draw the text centered
         }
       }
-      doc.text(`Calibration By      :-   ${personResponsible}`, 14, 225); 
+      doc.text(`Calibration By      :-   YOGESH BHAI`, 14, 225); 
       doc.text("FOR, Shreeji Instruments", 150, 225);
 
       const img = new Image();
