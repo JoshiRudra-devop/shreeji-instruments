@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="img/png" href="logo.png" />
+  <title>Oven Calibration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+    }
+    nav {
+      background-color: #00796b;
+      width: 100%;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    nav h1 {
+      color: white;
+      margin: 0;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+      padding: 0;
+      margin: 0;
+    }
+    nav ul li {
+      display: inline;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+    nav ul li a:hover {
+      color: #ffccbc;
+    }
+    .container {
+      background-color: white;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      width: 100%;
+    }
+    h2.centered {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #00796b;
+    }
+    .date{
+            display: inline-flex;
+            gap: 100px;
+        }
+        .date .title_input_pair{
+            display: inline;
+            
+        }
+
+    .title_input_pair {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
+    }
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    input, select, textarea {
+      width: 97%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    button {
+      width: calc(50% - 10px);
+      padding: 12px;
+      margin: 5px;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .button-group {
+      display: flex;
+      /* flex-wrap: wrap; */
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <h1 style="color: white;">Shreeji Instruments</h1>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="container">
+    <h2 class="centered">HOT AIR OVEN CALIBRATION CERTIFICATE</h2>
+    <form id="calibrationForm">
+      <div class="title_input_pair">
+        <label for="certificateNumber">Certificate No:</label>
+        <input type="text" id="certificateNumber" required>
+      </div>
+      <div class="date">
+          <div class="title_input_pair">
+              <label for="calibrationDate">Date of Calibration:</label>
+              <input type="date" id="calibrationDate" required>
+          </div>
+          <div class="title_input_pair">
+              <label for="nextCalibrationDate">Next Suggested Date:</label>
+              <input type="date" id="nextCalibrationDate" required>
+          </div>
+      </div>
+      <div class="title_input_pair">
+        <label for="partyName">Name of Party:</label>
+        <input type="text" id="partyName" required>
+      </div>
+      <div class="title_input_pair">
+        <label for="siteLocation">Site Location:</label>
+        <input type="text" id="siteLocation" required>
+      </div>
+      <div class="title_input_pair">
+        <label for="size">SIZE:</label>
+        <input type="text" id="size" required>
+      </div>
+      <div class="title_input_pair">
+        <label for="capacity">Capacity:</label>
+        <input type="text" id="capacity" required>
+      </div>
+      <div class="title_input_pair">
+        <label for="make">Make:</label>
+        <input type="text" id="make" required>
+      </div> 
+      <div class="button-group">
+        <button type="button" onclick="preview()">Preview Calibration Certificate</button>
+        <button type="button" onclick="generatePDF()">Download Certificate with Letterhead</button>
+        <button type="button" onclick="generatePDFblankpg()">Download Certificate without Letterhead</button>
+        </div>
+    </form>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+  <script>
+    // Function to fetch form details
+    function getFormDetails() {
+      return {
+        certificateNumber: document.getElementById("certificateNumber").value,
+        calibrationDate: document.getElementById("calibrationDate").value.split("-").reverse().join("/"),
+        siteLocation: document.getElementById("siteLocation").value,
+        partyName: document.getElementById("partyName").value,
+        // equipmentType: document.getElementById("equipmentType").value,
+        make: document.getElementById("make").value,
+        size: document.getElementById("size").value,
+        capacity: document.getElementById("capacity").value,
+        nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/"),
+      };
+    }
+
+    // Function to add common certificate details
+    function addImg(doc, details)
+     {
+      const img = new Image();
+      img.src = 'footer.jpeg';
+      doc.addImage(img, 'PNG', 0, 255, 210, 27);
+     
+      const img3 = new Image();
+      img3.src = 'sign.jpeg';
+      doc.addImage(img3, 'PNG', 160, 232, 40, 10);
+      
+      const img1 = new Image();
+      img1.src = 'stamp.jpeg';
+      doc.addImage(img1, 'PNG', 90, 207, 40, 40);
+
+      const img2 = new Image();
+      img2.src = 'header.jpeg';
+      doc.addImage(img2, 'PNG', 3, 3, 210, 30);
+     }
+
+    function addCertificateDetails(doc, details)
+     {
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(25);
+      doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, 50, { align: 'center' });
+
+    // Spacing
+    doc.setFontSize(12);
+    doc.text(`Date:-${details.calibrationDate}`, 140, 60);
+    doc.text(`REF NO:- SI-${details.certificateNumber}`, 14, 60);
+    doc.text(`Name of Party               :-   ${details.partyName}`, 14, 70);
+    doc.text(`Name OF Instrument    :-  ELECTRICAL HOT AIR OVEN(${details.size})`, 14, 80);
+    doc.text(`Capacity & Make          :-   ${details.capacity} & ${details.make}`, 14, 90);
+    doc.text(`SR No                            :-   SI-${details.certificateNumber}`, 14, 100);
+    doc.text(`Next Due Date               :-   ${details.nextCalibrationDate}`, 14, 110);
+    doc.text(`Site Location                 :-   ${details.siteLocation}`, 14, 120);
+    const tableStartY =120;
+const data = [
+    [ "1", " 50","50"],
+    [ "2", " 100","100"],
+    [ "3", " 150","15O"],
+    [ "4", " 200","200"],
+    [ "5", " 250","25O"],
+
+];
+
+doc.autoTable({
+        head: [['SR.NO', 'STANDARD TEMPERATURE', 'STANDARD TEMPERATURE BY 1 St Bucket “A”']],
+        body: data,
+        startY: tableStartY + 10,
+        styles: { 
+          fontSize: 12 ,
+          lineColor:[87, 86, 85],
+          lineWidth: 0.2,
+          halign: 'center',  // horizontal align to center
+          valign: 'middle',  // vertical align to middle
+        },
+        headStyles: {
+          fontSize: 15,
+          fillColor: [255, 255, 255],
+          textColor: [0,0,0],
+          lineColor: [0, 0, 0],
+          lineWidth: 0.2,
+          halign: 'center',  // horizontal align to center
+          valign: 'middle',  // vertical align to middle
+        },
+        alternateRowStyles: {
+          fillColor: [255, 255, 255]
+        }
+    });
+    let tableStartY2=doc.autoTable.previous.finalY;
+// Add calibrated by
+doc.setFontSize(12);
+doc.text("CALIBRATED BY: YOGESH B JOSHI", 14, tableStartY2+=10);
+
+// Add footer
+doc.setFont("helvetica", "BOLD"); 
+      doc.setFontSize(12); 
+      doc.text("FOR, Shreeji Instruments", 145, 230);
+      doc.text("Proprietor", 170, 245);
+
+    }
+
+    // Preview the generated certificate
+    async function preview() {
+      if (!document.getElementById("calibrationForm").reportValidity()) return;
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      // Fetch form details
+      const details = getFormDetails();
+
+      // Add certificate details using the reusable function
+      addCertificateDetails(doc, details);
+
+      addImg(doc, details);
+
+      // Generate preview
+      const pdfBlob = doc.output('blob');
+      const pdfURL = URL.createObjectURL(pdfBlob);
+      const previewFrame = document.createElement('iframe');
+      previewFrame.style.width = "100%";
+      previewFrame.style.height = "600px";
+      previewFrame.src = pdfURL;
+
+      // Clear previous preview and add new one
+      const container = document.querySelector('.container');
+      const existingPreview = document.querySelector('iframe');
+      if (existingPreview) container.removeChild(existingPreview);
+      container.appendChild(previewFrame);
+    }
+
+    // Generate PDF with letterhead
+    async function generatePDF() {
+      if (!document.getElementById("calibrationForm").reportValidity()) return;
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      // Fetch form details
+      const details = getFormDetails();
+
+      // Add certificate details using the reusable function
+      addCertificateDetails(doc, details);
+
+      addImg(doc, details);
+      // Save PDF
+      setTimeout(() => doc.save(`${details.certificateNumber}_Calibration_Certificate.pdf`), 500);
+    }
+
+    // Generate PDF without letterhead
+    async function generatePDFblankpg() {
+      if (!document.getElementById("calibrationForm").reportValidity()) return;
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      // Fetch form details
+      const details = getFormDetails();
+
+      // Add certificate details using the reusable function
+      addCertificateDetails(doc, details);
+
+      // Save PDF without letterhead/footer
+      setTimeout(() => doc.save(`${details.certificateNumber}_Calibration_Certificate_Without_Letterhead.pdf`), 500);
+    }
+  </script>
+</body>
+</html>

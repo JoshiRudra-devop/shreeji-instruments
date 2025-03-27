@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="img/png" href="logo.png" />
+  <title>CTM Calibration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+    }
+    nav {
+      background-color: #00796b;
+      width: 95%;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    nav h1 {
+      color: white;
+      margin: 0;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+      padding: 0;
+      margin: 0;
+    }
+    nav ul li {
+      display: inline;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+    nav ul li a:hover {
+      color: #ffccbc;
+    }
+    .container {
+      background-color: white;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      width: 100%;
+    }
+    h2.centered {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #00796b;
+    }
+    .date{
+            display: inline-flex;
+            gap: 100px;
+    }
+    .date .title_input_pair{
+            display: inline;
+            
+    }
+    .title_input_pair {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
+    }
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    input, select, textarea {
+      width: 97%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    .READING-container {
+      /* display: flex; */
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .READING-container .title_input_pair {
+      flex: 1  calc(50% - 15px);
+    }
+    button {
+      width: calc(50% - 10px);
+      padding: 12px;
+      margin: 5px;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <h1 style="color: white;">SHREEJI INSTRUMENTS</h1>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="container">
+    <h2 class="centered">CUBE TESTING MACHINE CALIBRATION CERTIFICATE</h2>
+    <form id="calibrationForm">
+      <div class="title_input_pair">
+        <label for="certificateNumber">Certificate No:</label>
+        <input type="text" id="certificateNumber" required>
+      </div>
+      <div class="date">
+        <div class="title_input_pair">
+            <label for="calibrationDate">Date of Calibration:</label>
+            <input type="date" id="calibrationDate" required>
+        </div>
+        <div class="title_input_pair">
+            <label for="nextCalibrationDate">Next Suggested Date:</label>
+            <input type="date" id="nextCalibrationDate" required>
+        </div>
+      </div>
+      <div class="title_input_pair">
+        <label for="partyName">Name of Party:</label>
+        <input type="text" id="partyName" required>
+      </div>
+      <div class="title_input_pair">
+        <label for="operated">Type of Machine:</label>
+        <select  id="operated">
+          <option value="Electrical Operated">Electrical Operated</option>
+          <option value="HAND Operated">HAND Operated</option>
+        </select>
+      </div>
+      <div class="title_input_pair">
+        <label for="make">Make:</label>
+        <input type="text" id="make" required>
+      </div>  
+      <div class="title_input_pair">
+        <label for="serialNo">Serial No:</label>
+        <input type="text" id="serialNo" required>
+      </div>
+      <div class="title_input_pair">
+        <label for="capacity">Capacity:</label>
+        <select id="capacity">
+          <option value="1000 KN">1000 KN</option>
+          <option value="1200 KN">1200 KN</option>
+          <option value="1500 KN">1500 KN</option>
+          <option value="2000 KN">2000 KN</option>
+        </select> 
+      </div>
+      <div class="title_input_pair">
+        <label for="siteLocation">Site Location:</label>
+        <input type="text" id="siteLocation" required>
+      </div>
+      <div class="title_input_pair">
+        <label for="ring">PROVIRING WANT TO SELECT:</label>
+        <select id="ring" onchange="showInputBoxes()">
+          <option value="">SELECT PROVIRING</option>
+          <option value='1000KN'>1000 KN </option>
+          <option value='2000KN'>2000 KN</option>
+          <!-- <option value='3000KN'>3000 KN</option> -->
+        </select>
+      </div>  
+      <div class="READING-container">
+            <div id="reading1000" class="reading1000" style="display: none;">
+                <div class="title_input_pair">
+                  <label for="input1">100</label>
+                  <input type="text" id="i1" maxlength="7" >
+                </div>
+                <div class="title_input_pair">
+                  <label for="input2">200</label>
+                  <input type="text" id="i2" maxlength="7" >
+                </div>
+                <div class="title_input_pair">
+                  <label for="input3">300</label>
+                  <input type="text" id="i3" maxlength="7" >
+                </div>
+                <div class="title_input_pair">
+                  <label for="input4">400</label>
+                  <input type="text" id="i4" maxlength="7" >
+                </div>
+                <div class="title_input_pair">
+                  <label for="input5">500</label>
+                  <input type="text" id="i5" maxlength="7" >
+                </div>
+                <div class="title_input_pair">
+                  <label for="input6">600</label>
+                  <input type="text" id="i6" maxlength="7" >
+                </div>
+                <div class="title_input_pair">
+                  <label for="input7">700</label>
+                  <input type="text" id="i7" maxlength="7" >
+                </div>  
+                <div class="title_input_pair">
+                  <label for="input8">800</label>
+                  <input type="text" id="i8" maxlength="7" >
+                </div>
+                <div class="title_input_pair">
+                  <label for="input9">900</label>
+                  <input type="text" id="i9" maxlength="7" >
+                </div>
+                <div class="title_input_pair">
+                  <label for="input10"> 1000</label>
+                  <input type="text" id="i10" maxlength="7" >
+                </div>
+            </div>  
+            <div id="reading2000" class="reading2000" style="display: none;">
+            <div class="title_input_pair">
+                  <label for="input1">200</label>
+                  <input type="text" id="i21" maxlength="7" >
+                </div>
+                <div class="title_input_pair">
+                  <label for="input2">400</label>
+                  <input type="text" id="i22" maxlength="7" >
+                </div>
+                <div class="title_input_pair">
+                  <label for="input3">600</label>
+                  <input type="text" id="i23" maxlength="7" >
+                </div>
+                <div class="title_input_pair">
+                  <label for="input4">800</label>
+                  <input type="text" id="i24" maxlength="7" >
+                </div>
+                <div class="title_input_pair">
+                  <label for="input5">1000</label>
+                  <input type="text" id="i25" maxlength="7" >
+                </div>
+                <div class="title_input_pair">
+                  <label for="input6">1200</label>
+                  <input type="text" id="i26" maxlength="7" >
+                </div>
+                <div class="title_input_pair">
+                  <label for="input7">1400</label>
+                  <input type="text" id="i27" maxlength="7" >
+                </div>
+                <div class="title_input_pair">
+                  <label for="input8">1600</label>
+                  <input type="text" id="i28" maxlength="7" >
+                </div>
+                <div class="title_input_pair">
+                  <label for="input9">1800</label>
+                  <input type="text" id="i29" maxlength="7" >
+                </div>
+                <div class="title_input_pair">
+                  <label for="input10"> 2000</label>
+                  <input type="text" id="i210" maxlength="7" >
+                </div>
+            </div>
+      </div>      
+      <div class="form-actions button-group">
+        <button type="button" onclick="showpreview()">Show preview</button>
+        <button type="button" onclick="generatePDF()">Generate Certificate</button>
+        <button type="button" onclick="generatePDFWithoutLetterpad()">Generate Certificate without Letterhead</button>
+      </div>
+    </form>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+  function showInputBoxes() {
+            var option = document.getElementById("ring").value;
+            var option1Inputs = document.getElementById("reading1000");
+            var option2Inputs = document.getElementById("reading2000");
+
+            option1Inputs.style.display = "none";
+            option2Inputs.style.display = "none";
+
+            if (option === "1000KN") {
+                option1Inputs.style.display = "flex";
+            } else if (option === "2000KN") {
+                option2Inputs.style.display = "flex";
+            }
+        }
+    
+  async function showpreview() {
+      if (!document.getElementById("calibrationForm").reportValidity()) {
+        return;
+      }
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const certificateNumber = document.getElementById("certificateNumber").value;
+      const calibrationDateRaw = document.getElementById("calibrationDate").value;
+      const calibrationDate = calibrationDateRaw.split("-").reverse().join("/");
+      const siteLocation = document.getElementById("siteLocation").value;
+      const partyName = document.getElementById("partyName").value;
+      const operated = document.getElementById("operated").value;
+      const make = document.getElementById("make").value;
+      const ring = document.getElementById("ring").value;
+      const serialNo = document.getElementById("serialNo").value;
+      const capacity = document.getElementById("capacity").value;
+      const nextCalibrationDateRaw = document.getElementById("nextCalibrationDate").value;
+      const nextCalibrationDate = nextCalibrationDateRaw.split("-").reverse().join("/");
+
+      const inputs1000 = [];
+      for (let i = 1; i <= 10; i++) {
+        inputs1000.push(document.getElementById(`i${i}`).value);
+      }
+      const inputs2000 = [];
+      for (let i = 1; i <= 10; i++) {
+        inputs2000.push(document.getElementById(`i2${i}`).value);
+      }
+
+      doc.setFont("Cloister Black Font", "bold");
+      doc.setFontSize(25);
+      doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, 50, { align: "center" });
+      doc.setFontSize(10);
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(12);
+      doc.text(`Date:-    ${calibrationDate}`, 140, 60);
+      doc.text(`REF No      :-    ${certificateNumber}`, 14, 60);
+      doc.text(`Name of Party       :-    ${partyName}`, 14, 70);
+      doc.text(`Instrument name  :-    CUBE TESTING MACHINE(${operated})`, 14, 80);
+      doc.text(`Capacity  / MAKE  :-    ${capacity}  /  ${make}`, 14, 90);
+      doc.text(`Serial No                :-    ${serialNo}`, 14, 100);
+      doc.text(`Next Due Date:-    ${nextCalibrationDate}`, 140, 100);
+      doc.text(`Site Location         :-    ${siteLocation}`, 14, 110); 
+
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "bold");
+      let RING=String(ring);
+      console.log(typeof(ring));
+      // if(RING<="1000KN"){
+      //   const container = document.getElementById("1000reading");
+      //           container.style.display = container.style.display === 'block' ? 'none' : 'block';
+      // }
+      if(RING==="1000KN"){
+        doc.text(`CALIBRATION INSTRUMENT 1000KN`, 14, 120);  
+      doc.text(`PROVING RING NO:1000KN 065 IS 4169:2014`, 14, 125);  
+      doc.text(`CALIBRATED BY : NATIONAL COUNCIL FOR CEMENT AND BUILDING MATERIALS`, 14, 130);  
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(11);
+      const startX = 13;
+      const startY = 142;
+      const cellWidth = 30;
+      const cellHeight = 7;
+
+      doc.text(`Divisions`, 18, 141);
+      doc.text(`KN`, 174, 141);
+
+      const fixedTexts = ["Deflection In", "LOAD IN KN", "1st set in KN", "2nd set in KN", "3rd set in KN", "AVERAGE in"];
+
+      for (let k = 0; k < 6; k++) {
+        const x = startX + k * cellWidth;
+        doc.rect(x, 132, cellWidth, 10);
+        doc.text(fixedTexts[k], x + 2, 137);
+      }
+
+      const fixedValuesColumn1 = ["79.1", "155.2", "232.3", "308.1", "384.4", "460.1","536.7", "613.4", "689.7", "766.1"];
+      const fixedValuesColumn2 = ["100", "200", "300", "400", "5000", "600", "700", "800", "900", "1000"];
+
+      for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 6; j++) {
+          const x = startX + j * cellWidth;
+          const y = startY + i * cellHeight;
+          doc.rect(x, y, cellWidth, cellHeight);
+
+          let textValue = "";
+          if (j === 0) textValue = fixedValuesColumn1[i];
+          else if (j === 1) textValue = fixedValuesColumn2[i];
+          else textValue = inputs1000[i];
+
+          // Centering the text horizontally within the cell
+          const textWidth = doc.getTextWidth(textValue); // Get the width of the text
+          const centeredX = x + (cellWidth - textWidth) / 2; // Calculate centered X position
+          doc.text(textValue, centeredX, y + 6); // Draw the text centered
+        }
+      }
+      }
+      else if(RING==="2000KN"){
+      doc.text(`CALIBRATION INSTRUMENT 2000KN`, 14, 120);  
+      doc.text(`PROVING RING NO:2000KN 094 IS 4169:2014`, 14, 125);  
+      doc.text(`CALIBRATED BY : NATIONAL COUNCIL FOR CEMENT AND BUILDING MATERIALS`, 14, 130);  
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(11);
+      const startX = 13;
+      const startY = 142;
+      const cellWidth = 30;
+      const cellHeight = 7;
+
+      doc.text(`Divisions`, 18, 141);
+      doc.text(`KN`, 174, 141);
+
+      const fixedTexts = ["Deflection In", "LOAD IN KN", "1st set in KN", "2nd set in KN", "3rd set in KN", "AVERAGE in"];
+
+      for (let k = 0; k < 6; k++) {
+        const x = startX + k * cellWidth;
+        doc.rect(x, 132, cellWidth, 10);
+        doc.text(fixedTexts[k], x + 2, 137);
+      }
+
+      const fixedValuesColumn1 = ["84.1", "168.6", "254.7", "342.1", "429.1", "513.9", "600.9", "689.2", "776.7", "865.8"];
+      const fixedValuesColumn2 = ["200", "400", "600", "800", "1000", "1200", "1400", "1600", "1800", "2000"];
+
+      for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 6; j++) {
+          const x = startX + j * cellWidth;
+          const y = startY + i * cellHeight;
+          doc.rect(x, y, cellWidth, cellHeight);
+
+          let textValue = "";
+          if (j === 0) textValue = fixedValuesColumn1[i];
+          else if (j === 1) textValue = fixedValuesColumn2[i];
+          else textValue = inputs2000[i];
+
+          // Centering the text horizontally within the cell
+          const textWidth = doc.getTextWidth(textValue); // Get the width of the text
+          const centeredX = x + (cellWidth - textWidth) / 2; // Calculate centered X position
+          doc.text(textValue, centeredX, y + 6); // Draw the text centered
+        }
+      }
+      }
+      else if(ring.value=="3000KN"){
+        alert("THIS OPTION IS NOT AVAILABLE");
+        return;
+      }
+      else{
+        console.log(ring);
+        alert("Select a appropreat proviring");
+        return;
+      }
+      doc.text(`Calibration By      :-   YOGESH BHAI`, 14, 225); 
+      doc.text("FOR, Shreeji Instruments", 145, 230);
+      doc.text("Proprietor", 170, 245);
+
+      const img = new Image();
+      img.src = 'footer.jpeg';
+      doc.addImage(img, 'PNG', 0, 255, 210, 27);
+     
+      const img3 = new Image();
+      img.src = 'sign.jpeg';
+      doc.addImage(img, 'PNG', 160, 232, 40, 10);
+
+      const img1 = new Image();
+      img.src = 'stamp.jpeg';
+      doc.addImage(img, 'PNG', 100, 215, 40, 35);
+
+      const img2 = new Image();
+      img.src = 'header.jpeg';
+      doc.addImage(img, 'PNG', 3, 3, 210, 30);
+
+
+
+            // Generate preview
+      const pdfBlob = doc.output('blob');
+      const pdfURL = URL.createObjectURL(pdfBlob);
+      const previewFrame = document.createElement('iframe');
+      previewFrame.style.width = "100%";
+      previewFrame.style.height = "600px";
+      previewFrame.src = pdfURL;
+
+      // Clear previous preview and add new one
+      const container = document.querySelector('.container');
+      const existingPreview = document.querySelector('iframe');
+      if (existingPreview) container.removeChild(existingPreview);
+      container.appendChild(previewFrame);
+
+}
+
+  async function generatePDF() {
+        {
+      if (!document.getElementById("calibrationForm").reportValidity()) {
+        return;
+      }
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      
+
+      const certificateNumber = document.getElementById("certificateNumber").value;
+      const calibrationDateRaw = document.getElementById("calibrationDate").value;
+      const calibrationDate = calibrationDateRaw.split("-").reverse().join("/");
+      const siteLocation = document.getElementById("siteLocation").value;
+      const partyName = document.getElementById("partyName").value;
+      const operated = document.getElementById("operated").value;
+      const ring = document.getElementById("ring").value;
+      const make = document.getElementById("make").value;
+      const serialNo = document.getElementById("serialNo").value;
+      const capacity = document.getElementById("capacity").value;
+      const nextCalibrationDateRaw = document.getElementById("nextCalibrationDate").value;
+      const nextCalibrationDate = nextCalibrationDateRaw.split("-").reverse().join("/");
+      // const personResponsible = document.getElementById("personResponsible").value;
+
+      const inputs1000 = [];
+      for (let i = 1; i <= 10; i++) {
+        inputs1000.push(document.getElementById(`i${i}`).value);
+      }
+      const inputs2000 = [];
+      for (let i = 1; i <= 10; i++) {
+        inputs2000.push(document.getElementById(`i2${i}`).value);
+      }
+
+
+      doc.setFont("Cloister Black Font", "bold");
+      doc.setFontSize(25);
+      doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, 50, { align: "center" });
+      doc.setFontSize(10);
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(12);
+      doc.text(`Date:-    ${calibrationDate}`, 140, 60);
+      doc.text(`REF No      :-    ${certificateNumber}`, 14, 60);
+      doc.text(`Name of Party      :-    ${partyName}`, 14, 70);
+      doc.text(`Instrument name :-    CUBE TESTING MACHINE(${operated})`, 14, 80);
+      doc.text(`Capacity  / MAKE  :-    ${capacity}  /  ${make}`, 14, 90);
+      doc.text(`Serial No                :-    ${serialNo}`, 14, 100);
+      doc.text(`Next Due Date:-    ${nextCalibrationDate}`, 140, 100);
+      doc.text(`Site Location         :-    ${siteLocation}`, 14, 110); 
+
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "bold");
+
+      let RING=String(ring);
+      console.log(typeof(ring));
+      if(RING==="1000KN"){
+        doc.text(`CALIBRATION INSTRUMENT 1000KN`, 14, 120);  
+      doc.text(`PROVING RING NO:1000KN 065 IS 4169:2014`, 14, 125);  
+      doc.text(`CALIBRATED BY : NATIONAL COUNCIL FOR CEMENT AND BUILDING MATERIALS`, 14, 130);  
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(11);
+      const startX = 13;
+      const startY = 142;
+      const cellWidth = 30;
+      const cellHeight = 7;
+
+      doc.text(`Divisions`, 18, 141);
+      doc.text(`KN`, 174, 141);
+
+      const fixedTexts = ["Deflection In", "LOAD IN KN", "1st set in KN", "2nd set in KN", "3rd set in KN", "AVERAGE in"];
+
+      for (let k = 0; k < 6; k++) {
+        const x = startX + k * cellWidth;
+        doc.rect(x, 132, cellWidth, 10);
+        doc.text(fixedTexts[k], x + 2, 137);
+      }
+
+      const fixedValuesColumn1 = ["79.1", "155.2", "232.3", "308.1", "384.4", "460.1","536.7", "613.4", "689.7", "766.1"];
+      const fixedValuesColumn2 = ["100", "200", "300", "400", "5000", "600", "700", "800", "900", "1000"];
+
+      for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 6; j++) {
+          const x = startX + j * cellWidth;
+          const y = startY + i * cellHeight;
+          doc.rect(x, y, cellWidth, cellHeight);
+
+          let textValue = "";
+          if (j === 0) textValue = fixedValuesColumn1[i];
+          else if (j === 1) textValue = fixedValuesColumn2[i];
+          else textValue = inputs1000[i];
+
+          // Centering the text horizontally within the cell
+          const textWidth = doc.getTextWidth(textValue); // Get the width of the text
+          const centeredX = x + (cellWidth - textWidth) / 2; // Calculate centered X position
+          doc.text(textValue, centeredX, y + 6); // Draw the text centered
+        }
+      }
+      }
+      else if(RING==="2000KN"){
+      doc.text(`CALIBRATION INSTRUMENT 2000KN`, 14, 120);  
+      doc.text(`PROVING RING NO:2000KN 094 IS 4169:2014`, 14, 125);  
+      doc.text(`CALIBRATED BY : NATIONAL COUNCIL FOR CEMENT AND BUILDING MATERIALS`, 14, 130);  
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(11);
+      const startX = 13;
+      const startY = 142;
+      const cellWidth = 30;
+      const cellHeight = 7;
+
+      doc.text(`Divisions`, 18, 141);
+      doc.text(`KN`, 174, 141);
+
+      const fixedTexts = ["Deflection In", "LOAD IN KN", "1st set in KN", "2nd set in KN", "3rd set in KN", "AVERAGE in"];
+
+      for (let k = 0; k < 6; k++) {
+        const x = startX + k * cellWidth;
+        doc.rect(x, 132, cellWidth, 10);
+        doc.text(fixedTexts[k], x + 2, 137);
+      }
+
+      const fixedValuesColumn1 = ["84.1", "168.6", "254.7", "342.1", "429.1", "513.9", "600.9", "689.2", "776.7", "865.8"];
+      const fixedValuesColumn2 = ["200", "400", "600", "800", "1000", "1200", "1400", "1600", "1800", "2000"];
+
+      for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 6; j++) {
+          const x = startX + j * cellWidth;
+          const y = startY + i * cellHeight;
+          doc.rect(x, y, cellWidth, cellHeight);
+
+          let textValue = "";
+          if (j === 0) textValue = fixedValuesColumn1[i];
+          else if (j === 1) textValue = fixedValuesColumn2[i];
+          else textValue = inputs2000[i];
+
+          // Centering the text horizontally within the cell
+          const textWidth = doc.getTextWidth(textValue); // Get the width of the text
+          const centeredX = x + (cellWidth - textWidth) / 2; // Calculate centered X position
+          doc.text(textValue, centeredX, y + 6); // Draw the text centered
+        }
+      }
+      }
+      else if(ring.value=="3000KN"){
+        alert("THIS OPTION IS NOT AVAILABLE");
+        return;
+      }
+      else{
+        console.log(ring);
+        alert("Select a appropreat proviring");
+        return;
+      }
+
+      doc.text(`Calibration By      :-   YOGESHI BHAI`, 14, 225); 
+      doc.text("FOR, Shreeji Instruments", 150, 225);
+
+      const img = new Image();
+      img.src = 'footer.jpeg';
+      doc.addImage(img, 'PNG', 0, 255, 210, 27);
+     
+      const img3 = new Image();
+      img.src = 'sign.jpeg';
+      doc.addImage(img, 'PNG', 160, 225, 40, 10);
+
+      const img1 = new Image();
+      img.src = 'stamp.jpeg';
+      doc.addImage(img, 'PNG', 110, 215, 40, 35);
+
+      const img2 = new Image();
+      img.src = 'header.jpeg';
+      doc.addImage(img, 'PNG', 3, 3, 210, 30);
+
+      doc.text("Proprietor", 174, 235);
+
+            // Generate preview
+            const pdfBlob = doc.output('blob');
+      const pdfURL = URL.createObjectURL(pdfBlob);
+      const previewFrame = document.createElement('iframe');
+      previewFrame.style.width = "100%";
+      previewFrame.style.height = "600px";
+      previewFrame.src = pdfURL;
+
+      // Clear previous preview and add new one
+      const container = document.querySelector('.container');
+      const existingPreview = document.querySelector('iframe');
+      if (existingPreview) container.removeChild(existingPreview);
+      container.appendChild(previewFrame);
+
+      
+      doc.save(`${certificateNumber}_Calibration_Certificate.pdf`);
+    }
+  }
+
+  async function generatePDFWithoutLetterpad() {
+
+        {
+      if (!document.getElementById("calibrationForm").reportValidity()) {
+        return;
+      }
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      
+
+      const certificateNumber = document.getElementById("certificateNumber").value;
+      const calibrationDateRaw = document.getElementById("calibrationDate").value;
+      const calibrationDate = calibrationDateRaw.split("-").reverse().join("/");
+      const siteLocation = document.getElementById("siteLocation").value;
+      const partyName = document.getElementById("partyName").value;
+      const operated = document.getElementById("operated").value;
+      const ring = document.getElementById("ring").value;
+      const make = document.getElementById("make").value;
+      const serialNo = document.getElementById("serialNo").value;
+      const capacity = document.getElementById("capacity").value;
+      const nextCalibrationDateRaw = document.getElementById("nextCalibrationDate").value;
+      const nextCalibrationDate = nextCalibrationDateRaw.split("-").reverse().join("/");
+      // const personResponsible = document.getElementById("personResponsible").value;
+
+      const inputs1000 = [];
+      for (let i = 1; i <= 10; i++) {
+        inputs1000.push(document.getElementById(`i${i}`).value);
+      }
+      const inputs2000 = [];
+      for (let i = 1; i <= 10; i++) {
+        inputs2000.push(document.getElementById(`i2${i}`).value);
+      }
+
+
+      doc.setFont("Cloister Black Font", "bold");
+      doc.setFontSize(25);
+      doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, 50, { align: "center" });
+      doc.setFontSize(10);
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(12);
+      doc.text(`Date:-    ${calibrationDate}`, 140, 60);
+      doc.text(`REF No      :-    SI-${certificateNumber}`, 14, 60);
+      doc.text(`Name of Party      :-    ${partyName}`, 14, 70);
+      doc.text(`Instrument name :-    CUBE TESTING MACHINE(${operated})`, 14, 80);
+      doc.text(`Capacity  / MAKE  :-    ${capacity}  /  ${make}`, 14, 90);
+      doc.text(`Serial No                :-    ${serialNo}`, 14, 100);
+      doc.text(`Next Due Date:-    ${nextCalibrationDate}`, 140, 100);
+      doc.text(`Site Location         :-    ${siteLocation}`, 14, 110); 
+
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "bold");
+
+      let RING=String(ring);
+      console.log(typeof(ring));
+      if(RING==="1000KN"){
+        doc.text(`CALIBRATION INSTRUMENT 1000KN`, 14, 120);  
+      doc.text(`PROVING RING NO:1000KN 065 IS 4169:2014`, 14, 125);  
+      doc.text(`CALIBRATED BY : NATIONAL COUNCIL FOR CEMENT AND BUILDING MATERIALS`, 14, 130);  
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(11);
+      const startX = 13;
+      const startY = 142;
+      const cellWidth = 30;
+      const cellHeight = 7;
+
+      doc.text(`Divisions`, 18, 141);
+      doc.text(`KN`, 174, 141);
+
+      const fixedTexts = ["Deflection In", "LOAD IN KN", "1st set in KN", "2nd set in KN", "3rd set in KN", "AVERAGE in"];
+
+      for (let k = 0; k < 6; k++) {
+        const x = startX + k * cellWidth;
+        doc.rect(x, 132, cellWidth, 10);
+        doc.text(fixedTexts[k], x + 2, 137);
+      }
+
+      const fixedValuesColumn1 = ["79.1", "155.2", "232.3", "308.1", "384.4", "460.1","536.7", "613.4", "689.7", "766.1"];
+      const fixedValuesColumn2 = ["100", "200", "300", "400", "5000", "600", "700", "800", "900", "1000"];
+
+      for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 6; j++) {
+          const x = startX + j * cellWidth;
+          const y = startY + i * cellHeight;
+          doc.rect(x, y, cellWidth, cellHeight);
+
+          let textValue = "";
+          if (j === 0) textValue = fixedValuesColumn1[i];
+          else if (j === 1) textValue = fixedValuesColumn2[i];
+          else textValue = inputs1000[i];
+
+          // Centering the text horizontally within the cell
+          const textWidth = doc.getTextWidth(textValue); // Get the width of the text
+          const centeredX = x + (cellWidth - textWidth) / 2; // Calculate centered X position
+          doc.text(textValue, centeredX, y + 6); // Draw the text centered
+        }
+      }
+      }
+      else if(RING==="2000KN"){
+      doc.text(`CALIBRATION INSTRUMENT 2000KN`, 14, 120);  
+      doc.text(`PROVING RING NO:2000KN 094 IS 4169:2014`, 14, 125);  
+      doc.text(`CALIBRATED BY : NATIONAL COUNCIL FOR CEMENT AND BUILDING MATERIALS`, 14, 130);  
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(11);
+      const startX = 13;
+      const startY = 142;
+      const cellWidth = 30;
+      const cellHeight = 7;
+
+      doc.text(`Divisions`, 18, 141);
+      doc.text(`KN`, 174, 141);
+
+      const fixedTexts = ["Deflection In", "LOAD IN KN", "1st set in KN", "2nd set in KN", "3rd set in KN", "AVERAGE in"];
+
+      for (let k = 0; k < 6; k++) {
+        const x = startX + k * cellWidth;
+        doc.rect(x, 132, cellWidth, 10);
+        doc.text(fixedTexts[k], x + 2, 137);
+      }
+
+      const fixedValuesColumn1 = ["84.1", "168.6", "254.7", "342.1", "429.1", "513.9", "600.9", "689.2", "776.7", "865.8"];
+      const fixedValuesColumn2 = ["200", "400", "600", "800", "1000", "1200", "1400", "1600", "1800", "2000"];
+
+      for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 6; j++) {
+          const x = startX + j * cellWidth;
+          const y = startY + i * cellHeight;
+          doc.rect(x, y, cellWidth, cellHeight);
+
+          let textValue = "";
+          if (j === 0) textValue = fixedValuesColumn1[i];
+          else if (j === 1) textValue = fixedValuesColumn2[i];
+          else textValue = inputs2000[i];
+
+          // Centering the text horizontally within the cell
+          const textWidth = doc.getTextWidth(textValue); // Get the width of the text
+          const centeredX = x + (cellWidth - textWidth) / 2; // Calculate centered X position
+          doc.text(textValue, centeredX, y + 6); // Draw the text centered
+        }
+      }
+      }
+      else if(ring.value=="3000KN"){
+        alert("THIS OPTION IS NOT AVAILABLE");
+        return;
+      }
+      else{
+        console.log(ring);
+        alert("Select a appropreat proviring");
+        return;
+      }
+
+      doc.text(`Calibration By      :-   YOGESH BHAI`, 14, 225); 
+      doc.text("FOR, Shreeji Instruments", 150, 225);
+
+      doc.text("Proprietor", 174, 235);
+
+            // Generate preview
+            const pdfBlob = doc.output('blob');
+      const pdfURL = URL.createObjectURL(pdfBlob);
+      const previewFrame = document.createElement('iframe');
+      previewFrame.style.width = "100%";
+      previewFrame.style.height = "600px";
+      previewFrame.src = pdfURL;
+
+      // Clear previous preview and add new one
+      const container = document.querySelector('.container');
+      const existingPreview = document.querySelector('iframe');
+      if (existingPreview) container.removeChild(existingPreview);
+      container.appendChild(previewFrame);
+
+      
+      doc.save(`${certificateNumber}_Calibration_Certificate_Without_Letterhead.pdf`);
+    }
+  }
+  </script>
+</body>
+</html>

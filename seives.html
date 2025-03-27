@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="img/png" href="logo.png" />
+    <title>TEST SEIVES Calibration</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0;
+      }
+      nav {
+        background-color: #00796b;
+        width: 100%;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      nav h1 {
+        color: white;
+        margin: 0;
+      }
+      nav ul {
+        list-style: none;
+        display: flex;
+        gap: 15px;
+        padding: 0;
+        margin: 0;
+      }
+      nav ul li {
+        display: inline;
+      }
+      nav ul li a {
+        text-decoration: none;
+        color: white;
+        font-weight: bold;
+        transition: color 0.3s ease;
+      }
+      nav ul li a:hover {
+        color: #ffccbc;
+      }
+      .container {
+        background-color: white;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 800px;
+        width: 100%;
+      }
+      h2.centered {
+        text-align: center;
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #00796b;
+      }
+      .date{
+            display:inline-flex;
+            width: 100%;
+            gap: 100px;
+        }
+        .date .title_input_pair{
+            display: inline;
+            
+        }
+
+      .title_input_pair {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 15px;
+      }
+      label {
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      input, select, textarea {
+        width: 97%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+      button {
+        width: calc(50% - 10px);
+        padding: 12px;
+        margin: 5px;
+        background-color: #00796b;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+      .button-group {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+    </style>
+</head>
+<body>
+  <nav>
+    <h1>Shreeji Instruments</h1>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="container">
+      <h2 class="centered">TEST SEIVES CALIBRATION CERTIFICATE</h2>
+      <form id="calibrationForm">
+        <div class="title_input_pair">
+          <label for="certificateNumber">Certificate No:</label>
+          <input type="text" id="certificateNumber" required>
+        </div>
+        <div class="date">
+                    <div class="title_input_pair">
+                        <label for="calibrationDate">Date of Calibration:</label>
+                        <input type="date" id="calibrationDate" required>
+                    </div>
+                    <div class="title_input_pair">
+                        <label for="nextCalibrationDate">Next Suggested Date:</label>
+                        <input type="date" id="nextCalibrationDate" required>
+                    </div>
+                </div>
+        <div class="title_input_pair">
+          <label for="partyName">Name of Party:</label>
+          <input type="text" id="partyName" required>
+        </div>
+        
+        <div class="title_input_pair">
+          <label for="siteLocation">Site Location:</label>
+          <input type="text" id="siteLocation" required>
+        </div>
+        <div class="date">
+          <div class="title_input_pair">
+            <label for="sieveSize">SELECT SIZE OF SEIVE:</label>
+            <select id="sieveSize" required>
+              <option value="">Select type of Seive</option>
+              <option value='Brass 200 MM DIA'>BRASS SEIVE 8"</option>
+              <option value='GI 300 MM DIA'>GI SEIVE 12"</option>
+              <option value='GI 450 MM DIA'>GI SEIVE 18"</option>
+            </select>
+          </div>
+          <div class="title_input_pair">
+            <label for="make">MAKE:</label>
+            <select id="make" required>
+              <option value="">Select MAKE</option>
+              <option value='ASC'>ASC</option>
+              <option value='STANDARD'>STANDARD</option>
+            </select> 
+          </div>
+        </div>
+        <div id="testResults">
+          <h3>Test Results</h3>
+          <div class="test-result">
+            <input type="text" placeholder="Sieves NUMBER" required>
+          </div>
+        </div>
+        
+        <div class="button-group">
+          <button type="button" onclick="addTestResultRow()">Add Test Result Row</button>
+          <button type="button" onclick="preview()">Show Preview</button>
+          <button type="button" onclick="generatePDF()">Generate Certificate</button>
+          <button type="button" onclick="generatePDFblankpg()">Generate Certificate without Letterhead</button>
+        </div>
+      </form>
+    </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+  <script> 
+    function getFormDetails() {
+      return {
+        certificateNumber: document.getElementById("certificateNumber").value,
+        calibrationDate: document.getElementById("calibrationDate").value.split("-").reverse().join("/"),
+        siteLocation: document.getElementById("siteLocation").value,
+        partyName: document.getElementById("partyName").value,
+        nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/"),
+        make: document.getElementById("make").value,
+        sieveSize: document.getElementById("sieveSize").value,
+      };
+    }
+   
+    function addTestResultRow() {
+      const testResults = document.getElementById('testResults');
+      const currentRows = testResults.getElementsByClassName('test-result').length;
+      if (currentRows >= 9) {
+        alert("You can only add up to 9 rows.");
+        return;
+      }
+      const row = document.createElement('div');
+      row.className = 'test-result';
+      row.innerHTML = `<input type="text" placeholder="Sieves NUMBER" required>`;
+      testResults.appendChild(row);
+    }
+
+    function addImg(doc) {
+      const img = new Image();
+      img.src = 'footer.jpeg';
+      doc.addImage(img, 'PNG', 0, 255, 210, 27);
+
+      const img3 = new Image();
+      img3.src = 'sign.jpeg';
+      doc.addImage(img3, 'PNG', 160, 232, 40, 10);
+
+      const img1 = new Image();
+      img1.src = 'stamp.jpeg';
+      doc.addImage(img1, 'PNG', 90, 207, 40, 40);
+
+      const img2 = new Image();
+      img2.src = 'header.jpeg';
+      doc.addImage(img2, 'PNG', 3, 3, 210, 30);
+    }
+    
+    function addCertificateDetails(doc, details) {
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(25);   
+      doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth()/2, 40, { align: 'center' });
+
+      doc.setFont("helvetica", "simple"); 
+      doc.setFontSize(12);  
+    
+      doc.text(`NAME OF PARTY           :     ${details.partyName}`, 14, 45);
+      doc.text(`REF NO: SI-${details.certificateNumber}`, 140, 45);
+      doc.text(`EQUIPMENT NAME       :     TEST SEIVES`, 14, 50);
+      doc.text(`SITE LOCATION             :     ${details.siteLocation}`, 14, 55);
+      doc.text(`CALIBRATION DATE    :     ${details.calibrationDate}`, 14, 60);
+      doc.text(`NEXT DUE DATE           :     ${details.nextCalibrationDate}`, 14, 65);
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(14);   
+      doc.text("Test Results", doc.internal.pageSize.getWidth()/2, 70, { align: 'center' });
+
+      const testResults = [];
+      let sr_no = 1;
+      document.querySelectorAll('#testResults .test-result').forEach(row => {
+        const sieveNo = row.children[0].value;
+        testResults.push([`BS-${sr_no}`, details.make, details.sieveSize, sieveNo, 'OK']);
+        sr_no += 1;
+      });
+
+      doc.autoTable({
+        head: [['SR NO.', 'MAKE', 'SEIVE', 'SEIVE SIZE', 'RESULT']],
+        body: testResults,
+        startY: 75,
+        styles: { 
+          fontSize: 8 ,
+          lineColor:[87, 86, 85],
+          lineWidth: 0.2,
+          halign: 'center',  // horizontal align to center
+          valign: 'middle',  // vertical align to middle
+        },
+        headStyles: {
+          fontSize: 10,
+          fillColor: [255, 255, 255],
+          textColor: [0,0,0],
+          lineColor: [0, 0, 0],
+          lineWidth: 0.2,
+          halign: 'center',  // horizontal align to center
+          valign: 'middle',  // vertical align to middle
+        },
+        alternateRowStyles: {
+          fillColor: [255, 255, 255]
+        }
+      });
+
+      let yPosition = doc.autoTable.previous.finalY + 3;
+      doc.setFontSize(8);
+      doc.setFont("helvetica", "bold");
+      doc.text("*REMARKS:-", 14, yPosition); yPosition += 5;
+      doc.setFont("helvetica", "simple"); 
+
+      doc.text("•THESE RESULTS ARE OBTAINED AT THE TIME OF CALIBRATION.", 14, yPosition); yPosition += 5;
+      doc.text("•ANY HAND WRITTEN CORRECTION (EXCEPT @ OR PHOTOCOPIES OF THE REPORT INVALIDATES THIS CERTIFICATE).", 14, yPosition); yPosition += 5;
+      doc.text("•ENVIRONMENT CONDITION DURING CALIBRATION: 20 + 2.C, 40 TO 60% RH.", 14, yPosition); yPosition += 5;
+      doc.text("•THE UNCERTAINTIES ARE FOR A CONFIDENCE PROBABILITY OF NOT LESS THAN 95%. ", 14, yPosition); yPosition += 5;
+      doc.text("•REFERENCE CALIBRATION METHOD NO: NCQC/CM/102.", 14, yPosition); yPosition += 5;
+      doc.text("•REFERENCE STANDARD NO.IS-2-1960.", 14, yPosition); yPosition += 5;
+
+      doc.setFont("helvetica", "bold");
+      doc.text("*DETAILS OF OUR MASTER INSTRUMENT THROUGH WHICH SEIVES ARE CALIBRATED", 14, yPosition); yPosition += 5;
+      doc.setFont("helvetica", "simple"); 
+
+      doc.text("NAME :DIGITAL VERNIAR CALIPER", 14, yPosition); yPosition += 5;
+      doc.text(`SERIAL NO  :ACCUPLUS/13-200`, 124, yPosition);
+      doc.text('RANGE:0-200MM', 14, yPosition); yPosition += 5;
+      doc.text(`LEAST COUNT:0.001"(O.O1MM)`, 124, yPosition);
+      doc.text('VALID UP TO DATE:03/07/2026', 14, yPosition); yPosition += 5;
+      doc.text('OUR MASTER INSTRUMENT IS CALIBRATED AND TRACEABLE TO NATIONAL STANDARD THROUGH NABL ACCREDITED ', 14, yPosition); yPosition += 5;
+      doc.text('LABORATORY "IDEMI CALIBRATION LABORATORY."', 14, yPosition); yPosition += 5;
+      doc.text('CERTIFICATE NUMBER:-62', 14, yPosition); yPosition += 5;
+      
+      doc.setFont("helvetica", "BOLD"); 
+      doc.setFontSize(12); 
+      doc.text("FOR, Shreeji Instruments", 145, 230);
+      doc.text("Proprietor", 170, 245);
+    }
+
+    async function preview() {
+      if (!document.getElementById("calibrationForm").reportValidity()) return;
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const details = getFormDetails();
+      addCertificateDetails(doc, details);
+      addImg(doc);
+
+      const pdfBlob = doc.output('blob');
+      const pdfURL = URL.createObjectURL(pdfBlob);
+      const previewFrame = document.createElement('iframe');
+      previewFrame.style.width = "100%";
+      previewFrame.style.height = "600px";
+      previewFrame.src = pdfURL;
+
+      const container = document.querySelector('.container');
+      const existingPreview = document.querySelector('iframe');
+      if (existingPreview) container.removeChild(existingPreview);
+      container.appendChild(previewFrame);
+    }
+
+    async function generatePDF() {
+      if (!document.getElementById("calibrationForm").reportValidity()) return;
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const details = getFormDetails();
+      addCertificateDetails(doc, details);
+      addImg(doc);
+
+      setTimeout(() => doc.save(`${details.certificateNumber}_Calibration_Certificate.pdf`), 500);
+    }
+
+    async function generatePDFblankpg() {
+      if (!document.getElementById("calibrationForm").reportValidity()) return;
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const details = getFormDetails();
+      addCertificateDetails(doc, details);
+
+      setTimeout(() => doc.save(`${details.certificateNumber}_Calibration.pdf`), 500);
+    }
+  </script>
+</body>
+</html>

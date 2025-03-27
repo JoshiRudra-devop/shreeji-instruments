@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="img/png" href="logo.png" />
+  <title>TS CALIBRATION </title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+    }
+    nav {
+      background-color: #00796b;
+      width: 100%;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    nav h1 {
+      color: white;
+      margin: 0;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+      padding: 0;
+      margin: 0;
+    }
+    nav ul li {
+      display: inline;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+    nav ul li a:hover {
+      color: #ffccbc;
+    }
+    .container {
+      background-color: white;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      width: 100%;
+    }
+    h2.centered {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #00796b;
+    }
+    .date{
+            display: inline-flex;
+            gap: 100px;
+        }
+        .date .title_input_pair{
+            display: inline;
+            
+        }
+
+    .title_input_pair {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
+    }
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    input, select, textarea {
+      width: 97%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    button {
+      width: calc(50% - 10px);
+      padding: 12px;
+      margin: 5px;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .button-group {
+      display: flex;
+      /* flex-wrap: wrap; */
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <h1 style="color: white;">Shreeji Instruments</h1>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="container">
+    <h2 class="centered">ELECTRONIC TOTAL STATION CALIBRATION CERTIFICATE</h2>
+    <form id="calibrationForm">
+      <div class="title_input_pair">
+        <label for="certificateNumber">Certificate No:</label>
+        <input type="text" id="certificateNumber" required>
+      </div>
+      <div class="date">
+          <div class="title_input_pair">
+              <label for="calibrationDate">Date of Calibration:</label>
+              <input type="date" id="calibrationDate" required>
+          </div>
+          <div class="title_input_pair">
+              <label for="nextCalibrationDate">Next Suggested Date:</label>
+              <input type="date" id="nextCalibrationDate" required>
+          </div>
+      </div>
+      <div class="title_input_pair">
+        <label for="partyName">Name of Party:</label>
+        <input type="text" id="partyName" required>
+      </div>
+      <div class="title_input_pair">
+        <label for="make">Make:</label>
+        <input type="text" id="make" required>
+      </div>  
+      <div class="title_input_pair">
+        <label for="serialNo">Serial No:</label>
+        <input type="text" id="serialNo" required>
+      </div>
+      <div class="title_input_pair">
+        <label for="modelNo">MODEL No:</label>
+        <input type="text" id="modelNo" required>
+      </div>
+      <div class="button-group">
+        <button type="button" onclick="preview()">Preview Calibration Certificate</button>
+        <button type="button" onclick="generatePDF()">Download Certificate with Letterhead</button>
+        <button type="button" onclick="generatePDFblankpg()">Download Certificate without Letterhead</button>
+      </div>
+      </form>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    // Function to fetch form details
+    function getFormDetails() {
+      return {
+        certificateNumber: document.getElementById("certificateNumber").value,
+        calibrationDate: document.getElementById("calibrationDate").value.split("-").reverse().join("/"),
+        partyName: document.getElementById("partyName").value,
+        // equipmentType: document.getElementById("equipmentType").value,
+        make: document.getElementById("make").value,
+        serialNo: document.getElementById("serialNo").value,
+        modelNo: document.getElementById("modelNo").value,
+        nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/"),
+      };
+    }
+
+    // Function to add common certificate details
+    function addImg(doc, details)
+     {
+      const img = new Image();
+      img.src = 'footer.jpeg';
+      doc.addImage(img, 'PNG', 0, 255, 210, 27);
+
+      const img3 = new Image();
+      img3.src = 'sign.jpeg';
+      doc.addImage(img3, 'PNG', 160, 232, 40, 10);
+
+      const img1 = new Image();
+      img1.src = 'stamp.jpeg';
+      doc.addImage(img1, 'PNG', 90, 207, 40, 40);
+
+      const img2 = new Image();
+      img2.src = 'header.jpeg';
+      doc.addImage(img2, 'PNG', 3, 3, 210, 30);
+     }
+
+    function addCertificateDetails(doc, details)
+     {
+      doc.setFont("helvetica", "bold");
+                doc.setFontSize(15);
+                doc.text(`TEST CERTIFICATE FOR`,  doc.internal.pageSize.getWidth() / 2, 37,{ align: 'center' });
+                doc.text("ELECTRONIC TOTAL STATION", doc.internal.pageSize.getWidth() /2,42,{ align: 'center' });
+                doc.setFontSize(25);   
+                doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, 52, { align: 'center' });
+
+                
+                doc.setFont("helvetica", "simple"); 
+                doc.setFontSize(15);  
+                doc.text(`REF NO:SI-${details.certificateNumber}`, 14, 60);
+                doc.text(`NAME OF PARTY          :     ${details.partyName}`, 14, 68);
+                doc.text(`EQUIPMENT NAME      :     ELECTRONIC TOTAL STATION`, 14, 76);
+                doc.text(`SERIAL NO                     :     ${details.serialNo}`, 14, 84);
+                doc.text(`MAKE                              :     ${details.make}`, 14, 92);
+                doc.text(`MODEL NO                     :     ${details.modelNo} `, 14, 100);
+                doc.text(`NEXT DUE DATE          :     ${details.nextCalibrationDate}`, 14, 108);
+                doc.text(`DATE                               :     ${details.calibrationDate}`, 14, 115);
+
+                doc.setFontSize(12);
+                doc.setFont("helvetica", "bold");
+                doc.text(`i. GENERAL CHECKING AS UNDER. `, 14, 120);
+                doc.text(`ii. HORIZONTAL CIRCLE CHECKED AS UNDER. `, 14, 145);
+                doc.text(`iii. VERTICAL CIRCLE CHECKED AS UNDER.`, 14, 175);
+
+
+                doc.setFont("helvetica", "simple");   
+                doc.text(`•Diaphragm of the Instrument checked. Found Satisfactory`, 14, 125);
+                doc.text(`•Optical Plummet checked in all 360 Degrees. Found Satisfactory `, 14, 130);
+                doc.text(`•Bubble checked in all 360 degrees. Found Accurate.`, 14, 135);
+
+                doc.text(`•Set Circle reading 0 degree, 0 minute, 0 second, point sighted 'X' approx. 30 meter away from the instrument.`, 14, 150);
+                doc.text(`•Telescope reversed. Point sighted Y' approx. 15 meter away from instrument. `, 14, 155);
+                doc.text(`•Alidade rotated through 180 degrees, O minute, O second, sighted point 'X' again. `, 14, 160);
+                doc.text(`•Telescope reversed. It automatically sighted point 'Y' Error - Nil.`, 14, 165);
+
+
+                doc.text(`•Sighted Telescope at a clearly defined object. (Point 'X' approx. 30 meter away from the Instrument) `, 14, 180);
+                doc.text(`•Vertical Circle reading was 90 degree, O minute, O second.`, 14, 185);
+                doc.text(`•Reversed Telescope, rotated alidade through 180 degrees, sighted same point, vertical circle Reading was 270  `, 14, 190);
+                doc.text(` degrees, 0 minutes, 0 seconds, Hence Error-Nil. `, 14, 195);
+                doc.text(`•Therefore the Electronic Total Station is certified as free from collimation error as date & Error - Nil`, 14, 205);
+
+      doc.text("FOR, Shreeji Instruments", 145, 230);
+      doc.text("Proprietor", 170, 245);
+    }
+
+    // Preview the generated certificate
+    async function preview() {
+      if (!document.getElementById("calibrationForm").reportValidity()) return;
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      // Fetch form details
+      const details = getFormDetails();
+
+      // Add certificate details using the reusable function
+      addCertificateDetails(doc, details);
+
+      addImg(doc, details);
+
+      // Generate preview
+      const pdfBlob = doc.output('blob');
+      const pdfURL = URL.createObjectURL(pdfBlob);
+      const previewFrame = document.createElement('iframe');
+      previewFrame.style.width = "100%";
+      previewFrame.style.height = "600px";
+      previewFrame.src = pdfURL;
+
+      // Clear previous preview and add new one
+      const container = document.querySelector('.container');
+      const existingPreview = document.querySelector('iframe');
+      if (existingPreview) container.removeChild(existingPreview);
+      container.appendChild(previewFrame);
+    }
+
+    // Generate PDF with letterhead
+    async function generatePDF() {
+      if (!document.getElementById("calibrationForm").reportValidity()) return;
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      // Fetch form details
+      const details = getFormDetails();
+
+      // Add certificate details using the reusable function
+      addCertificateDetails(doc, details);
+
+      addImg(doc, details);
+      // Save PDF
+      setTimeout(() => doc.save(`${details.certificateNumber}_Calibration_Certificate.pdf`), 500);
+    }
+
+    // Generate PDF without letterhead
+    async function generatePDFblankpg() {
+      if (!document.getElementById("calibrationForm").reportValidity()) return;
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      // Fetch form details
+      const details = getFormDetails();
+
+      // Add certificate details using the reusable function
+      addCertificateDetails(doc, details);
+
+      // Save PDF without letterhead/footer
+      setTimeout(() => doc.save(`${details.certificateNumber}_Calibration_Certificate_Without_Letterhead.pdf`), 500);
+    }
+  </script>
+</body>
+</html>
