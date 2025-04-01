@@ -230,11 +230,11 @@
       doc.setFontSize(25);   
       doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth()/2, 40, { align: 'center' });
 
-      doc.setFont("helvetica", "simple"); 
+      doc.setFont("helvetica", "bold"); 
       doc.setFontSize(12);  
     
       doc.text(`NAME OF PARTY           :     ${details.partyName}`, 14, 45);
-      doc.text(`REF NO: SI-${details.certificateNumber}`, 140, 45);
+      doc.text(`REF NO: SI-${details.certificateNumber}`, 140, 50);
       doc.text(`EQUIPMENT NAME       :     TEST SEIVES`, 14, 50);
       doc.text(`SITE LOCATION             :     ${details.siteLocation}`, 14, 55);
       doc.text(`CALIBRATION DATE    :     ${details.calibrationDate}`, 14, 60);
@@ -281,7 +281,7 @@
       doc.setFontSize(8);
       doc.setFont("helvetica", "bold");
       doc.text("*REMARKS:-", 14, yPosition); yPosition += 5;
-      doc.setFont("helvetica", "simple"); 
+      doc.setFont("helvetica", "bold"); 
 
       doc.text("•THESE RESULTS ARE OBTAINED AT THE TIME OF CALIBRATION.", 14, yPosition); yPosition += 5;
       doc.text("•ANY HAND WRITTEN CORRECTION (EXCEPT @ OR PHOTOCOPIES OF THE REPORT INVALIDATES THIS CERTIFICATE).", 14, yPosition); yPosition += 5;
@@ -292,7 +292,7 @@
 
       doc.setFont("helvetica", "bold");
       doc.text("*DETAILS OF OUR MASTER INSTRUMENT THROUGH WHICH SEIVES ARE CALIBRATED", 14, yPosition); yPosition += 5;
-      doc.setFont("helvetica", "simple"); 
+      doc.setFont("helvetica", "bold"); 
 
       doc.text("NAME :DIGITAL VERNIAR CALIPER", 14, yPosition); yPosition += 5;
       doc.text(`SERIAL NO  :ACCUPLUS/13-200`, 124, yPosition);
