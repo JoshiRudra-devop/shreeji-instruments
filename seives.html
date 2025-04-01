@@ -228,7 +228,9 @@
     function addCertificateDetails(doc, details) {
       doc.setFont("helvetica", "bold");
       doc.setFontSize(25);   
-      doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth()/2, 40, { align: 'center' });
+      doc.text{
+  text-decoration: underline;
+}("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth()/2, 40, { align: 'center' });
 
       doc.setFont("helvetica", "bold"); 
       doc.setFontSize(12);  
