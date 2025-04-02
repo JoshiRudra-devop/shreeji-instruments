@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  
   <meta name="theme-color" content="#000000" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Welcome to Shreeji Instruments - Create Calibration Certificates Easily.">
@@ -16,12 +15,12 @@
     }
     body {
       font-family: 'Arial', sans-serif;
-      background-color: white;
-      color: black;
+      background-color: #1E1E1E;
+      color: #EAEAEA;
       margin: 0 10px;
     }
     nav {
-      background-color: #00796b;
+      background-color: #22b55d;
       padding: 10px 20px;
       display: flex;
       justify-content: space-between;
@@ -61,6 +60,42 @@
         font-size: 20px;
       }
     }
+    .search-bar-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 20px 0;
+      position: relative;
+    }
+    .search-icon {
+      width: 40px;
+      height: 40px;
+      background-color: #EAEAEA;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      left: calc(50% - 350px);
+      transition: right 0.3s ease, opacity 0.3s ease;
+      cursor: pointer;
+      font-size: 20px;
+      color: #00796b;
+    }
+    .search-bar {
+      width: 80%;
+      max-width: 600px;
+      padding: 10px 20px;
+      border-radius: 25px;
+      border: none;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      font-size: 18px;
+      outline: none;
+      transition: box-shadow 0.3s ease;
+    }
+    .search-bar:focus {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
     .container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -68,20 +103,20 @@
       padding: 40px 10px;
     }
     .card {
-      background: white;
+      background: #333333;
       border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
       text-align: center;
       padding: 20px;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     .card:hover {
       transform: translateY(-8px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
     }
     .card a {
       text-decoration: none;
-      background-color: #00796b;
+      background-color: #22b55d;
       color: white;
       padding: 15px 25px;
       border-radius: 5px;
@@ -104,7 +139,13 @@
       <li><a href="#">Contact</a></li>
     </ul>
   </nav>
-  <header>We are here to Create Calibration Certificates Easily</header>
+  <header>You Can Create Calibration Certificates Easily</header>
+  <div class="search-bar-container">
+    <div class="search-icon" id="search-icon">
+      🔍
+    </div>
+    <input type="text" class="search-bar" placeholder="Search for cards..." onfocus="moveIcon()" onblur="resetIcon()">
+  </div>
   <div class="container">
     <div class="card">
       <a href="general.html">General Formate</a>
@@ -122,35 +163,66 @@
       <a href="TS.html">Total Station</a>
     </div>
     <div class="card">
-      <a href="full_leb.html">Full Leb</a>
+      <a href="full_leb.html">Full Lab</a>
     </div>
     <div class="card">
-      <a href="flakness.html">FLAKNESS Gauge</a>
+      <a href="flakness.html">Flakness Gauge</a>
     </div>
     <div class="card">
-      <a href="elogation.html">ELOGATION Gauge</a>
+      <a href="elogation.html">Elongation Gauge</a>
     </div>
     <div class="card">
-      <a href="slumcone.html">SLUMCONE</a>
+      <a href="slumcone.html">Slumcone</a>
     </div>
     <div class="card">
-      <a href="digital_thermo.html">DIGITAL THERMOMETER</a>
+      <a href="digital_thermo.html">Digital Thermometer</a>
     </div>
     <div class="card">
-      <a href="water_bath.html">WATER BATH</a>
+      <a href="water_bath.html">Water Bath</a>
     </div>
     <div class="card">
-      <a href="oven.html">ELECTRICAL HOT AIR OVEN</a>
+      <a href="oven.html">Electrical Hot Air Oven</a>
     </div>
     <div class="card">
-      <a href="weigh_batcher.html">WEIGH BATCHER</a>
+      <a href="weigh_batcher.html">Weigh Batcher</a>
     </div>
     <div class="card">
-      <a href="conpenitometer.html">CONE PENITOMETER</a>
+      <a href="conpenitometer.html">Cone Penitometer</a>
     </div>
     <div class="card">
-      <a href="aggregate_impact.html">AGGREGATE IMPACT VALUE APP</a>
+      <a href="aggregate_impact.html">Aggregate Impact Value App</a>
     </div>
   </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+  <script>
+    // Move Icon on Search Bar Focus
+    function moveIcon() {
+      const icon = document.getElementById('search-icon');
+      gsap.to(icon, {duration: 0.3, left: '20px', opacity: 0, onComplete: () => icon.style.display = 'none'});
+    }
+
+    // Reset Icon on Search Bar Blur
+    function resetIcon() {
+      const icon = document.getElementById('search-icon');
+      icon.style.display = 'flex';
+      gsap.to(icon, {duration: 0.3, left: 'calc(50% - 350px)', opacity: 1});
+    }
+
+    // Search Filter
+    const searchBar = document.querySelector('.search-bar');
+    const cards = document.querySelectorAll('.card');
+
+    searchBar.addEventListener('input', (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      cards.forEach(card => {
+        const cardText = card.textContent.toLowerCase();
+        if (cardText.includes(searchTerm)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  </script>
 </body>
 </html>
