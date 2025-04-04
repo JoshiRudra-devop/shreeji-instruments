@@ -5,7 +5,8 @@
   <meta name="theme-color" content="#000000" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Welcome to Shreeji Instruments - Create Calibration Certificates Easily.">
-  <link rel="icon" type="img/png" href="logo.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="icon" type="img/png" href="logo.png" style="border-radius:30%;" />
   <title>Shreeji Instruments</title>
   <style>
     * {
@@ -38,10 +39,13 @@
       text-decoration: none;
       color: white;
       font-weight: bold;
-      transition: color 0.3s ease;
+      transition: color 0.3s ease, background-color 0.3s ease;
+      padding: 5px 10px;
+      border-radius: 5px;
     }
     nav ul li a:hover {
       color: #ffccbc;
+      background-color: #00796b;
     }
     header {
       background: url('https://via.placeholder.com/1200x400') no-repeat center center/cover;
@@ -128,11 +132,54 @@
     .card a:hover {
       background-color: #004d40;
     }
+    footer {
+      background-color: #222;
+      color: #EAEAEA;
+      padding: 20px;
+      text-align: center;
+      margin-top: 40px;
+      border-top: 2px solid white;
+    }
+    footer .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 15px 0;
+    }
+    footer .social-icons a {
+      color: white;
+      font-size: 24px;
+      transition: color 0.3s ease;
+    }
+    footer .social-icons a:hover {
+      color: #22b55d;
+    }
+    footer p {
+      margin: 10px 0;
+    }
+    footer a {
+      color: #22b55d;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    footer a:hover {
+      color: #ffccbc;
+    }
+    .copyright {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #888;
+      background-color: rgb(10, 47, 6);
+    }
   </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
   <nav>
-    <h1 style="color: white;">Shreeji Instruments</h1>
+    <a href="#" style="display: flex; align-items: center; text-decoration: none;">
+      <img src="https://github.com/JoshiRudra-devop/shreeji-instruments/blob/main/logo.png?raw=true" alt="Company Logo" style="width: 40px; border-radius:30%; height: 40px; margin-right: 10px;">
+      <h1 style="color: white; margin: 0;">SHREEJI INSTRUMENTS</h1>
+    </a>
     <ul>
       <li><a href="#">Home</a></li>
       <li><a href="#">About</a></li>
@@ -162,9 +209,7 @@
     <div class="card">
       <a href="TS.html">Total Station</a>
     </div>
-    <div class="card">
-      <a href="full_leb.html">Full Lab</a>
-    </div>
+   
     <div class="card">
       <a href="flakness.html">Flakness Gauge</a>
     </div>
@@ -193,6 +238,26 @@
       <a href="aggregate_impact.html">Aggregate Impact Value App</a>
     </div>
   </div>
+   <div class="fulllebcard card">
+      <a href="full_leb.html">Full Lab</a>
+    </div>
+  <footer>
+    <div class="social-icons">
+      <a href="https://www.facebook.com/profile.php?id=100064984329642&mibextid=ZbWKwL" target="_blank"><i class="fab fa-facebook-f"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="https://maps.app.goo.gl/oNEbQerty7R3vzC88?g_st=aw" target="_blank"><i class="fa fa-map-pin"></i></a>
+      <a href="https://wa.me/919904904610" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    </div>
+    <img src="https://github.com/JoshiRudra-devop/shreeji-instruments/blob/main/logo.png?raw=true" alt="Company Logo" style="width: 50px;border-radius: 50%; height: 50px; margin-bottom: 10px;">
+    <p style="color:orange">  SHREEJI INSTRUMENTS</p>
+    <p><i class="fa fa-map-marker"></i> Ghodasar, Ahmedabad, Gujarat. 380050</p>
+    <p >|  <i class="fa fa-user-circle"></i> : +91 99049-04610 , +91 93282-01463 ,+91 93771-96244 | </p>
+     <p>|  Email: shreejiinstrument83@yahoo.com  |</p>
+    <p><a href="https://www.shreejiinstruments.com" target="_blank"> <i class="fa fa-globe"></i> | Visit our official website |</a></p>
+    <div class="copyright">
+      &copy; 2025 Shreeji Instruments. All rights reserved.
+    </div>
+  </footer>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
   <script>
     // Move Icon on Search Bar Focus
