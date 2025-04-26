@@ -244,6 +244,20 @@
       doc.text("Proprietor", 170, 245);
     }
 
+    // Create a writable stream for the file
+    const writableStream = await fileHandle.createWritable();
+
+    // Write the PDF data to the file
+    await writableStream.write(pdfDocument);
+
+    // Close the writable stream
+    await writableStream.close();
+
+    console.log('PDF saved successfully!');
+  } catch (error) {
+    console.error('Error saving PDF:', error);
+  }
+}
     // Preview the generated certificate
     async function preview() {
       if (!document.getElementById("calibrationForm").reportValidity()) return;
@@ -288,8 +302,9 @@
       addCertificateDetails(doc, details);
 
       addImg(doc, details);
-      // Save PDF
-      setTimeout(() => doc.save(`${details.certificateNumber}_Calibration_Certificate.pdf`), 500);
+     // Save PDF
+     const pdfBlob = doc.output('blob'); // Convert the PDF to a Blob
+      savePDFWithLocation(pdfBlob, `${details.serialNo} ${details.make} ${details.modelNo}.pdf`);
     }
 
     // Generate PDF without letterhead
@@ -305,8 +320,9 @@
       // Add certificate details using the reusable function
       addCertificateDetails(doc, details);
 
-      // Save PDF without letterhead/footer
-      setTimeout(() => doc.save(`${details.certificateNumber}_Calibration_Certificate_Without_Letterhead.pdf`), 500);
+      // Save PDF
+     const pdfBlob = doc.output('blob'); // Convert the PDF to a Blob
+      savePDFWithLocation(pdfBlob, `${details.serialNo} ${details.make} ${details.modelNo}.pdf`);
     }
   </script>
 </body>
