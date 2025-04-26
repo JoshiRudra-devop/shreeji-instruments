@@ -8,14 +8,15 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
+      background-color: #1E1E1E;
+      color: whitesmoke;
       display: flex;
       flex-direction: column;
       align-items: center;
       margin: 0;
     }
     nav {
-      background-color: #00796b;
+      background-color: #22b55d;
       width: 100%;
       padding: 10px 20px;
       display: flex;
@@ -174,6 +175,33 @@
         nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/"),
       };
     }
+    async function savePDFWithLocation(pdfDocument, defaultFileName) {
+  try {
+    // Open a file picker to let the user choose the location and file name
+    const fileHandle = await window.showSaveFilePicker({
+      suggestedName: defaultFileName,
+      types: [
+        {
+          description: 'PDF Files',
+          accept: { 'application/pdf': ['.pdf'] },
+        },
+      ],
+    });
+
+    // Create a writable stream for the file
+    const writableStream = await fileHandle.createWritable();
+
+    // Write the PDF data to the file
+    await writableStream.write(pdfDocument);
+
+    // Close the writable stream
+    await writableStream.close();
+
+    console.log('PDF saved successfully!');
+  } catch (error) {
+    console.error('Error saving PDF:', error);
+  }
+}
 
     // Function to add common certificate details
     function addImg(doc, details)
@@ -244,20 +272,6 @@
       doc.text("Proprietor", 170, 245);
     }
 
-    // Create a writable stream for the file
-    const writableStream = await fileHandle.createWritable();
-
-    // Write the PDF data to the file
-    await writableStream.write(pdfDocument);
-
-    // Close the writable stream
-    await writableStream.close();
-
-    console.log('PDF saved successfully!');
-  } catch (error) {
-    console.error('Error saving PDF:', error);
-  }
-}
     // Preview the generated certificate
     async function preview() {
       if (!document.getElementById("calibrationForm").reportValidity()) return;
@@ -302,8 +316,8 @@
       addCertificateDetails(doc, details);
 
       addImg(doc, details);
-     // Save PDF
-     const pdfBlob = doc.output('blob'); // Convert the PDF to a Blob
+      // Save PDF
+      const pdfBlob = doc.output('blob'); // Convert the PDF to a Blob
       savePDFWithLocation(pdfBlob, `${details.serialNo} ${details.make} ${details.modelNo}.pdf`);
     }
 
@@ -320,7 +334,7 @@
       // Add certificate details using the reusable function
       addCertificateDetails(doc, details);
 
-      // Save PDF
+     // Save PDF
      const pdfBlob = doc.output('blob'); // Convert the PDF to a Blob
       savePDFWithLocation(pdfBlob, `${details.serialNo} ${details.make} ${details.modelNo}.pdf`);
     }
