@@ -8,8 +8,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #1E1E1E;
-      color: whitesmoke;
+      background-color: #f0f0f0;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -48,7 +47,7 @@
       color: #ffccbc;
     }
     .container {
-      background-color: #ddd7d738;
+      background-color: white;
       padding: 20px;
       margin: 20px 0;
       border-radius: 8px;
@@ -92,7 +91,7 @@
       width: calc(50% - 10px);
       padding: 12px;
       margin: 5px;
-      background-color: #22b55d;
+      background-color: #00796b;
       color: white;
       border: none;
       cursor: pointer;
@@ -173,6 +172,33 @@
         nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/"),
       };
     }
+     async function savePDFWithLocation(pdfDocument, defaultFileName) {
+  try {
+    // Open a file picker to let the user choose the location and file name
+    const fileHandle = await window.showSaveFilePicker({
+      suggestedName: defaultFileName,
+      types: [
+        {
+          description: 'PDF Files',
+          accept: { 'application/pdf': ['.pdf'] },
+        },
+      ],
+    });
+
+    // Create a writable stream for the file
+    const writableStream = await fileHandle.createWritable();
+
+    // Write the PDF data to the file
+    await writableStream.write(pdfDocument);
+
+    // Close the writable stream
+    await writableStream.close();
+
+    console.log('PDF saved successfully!');
+  } catch (error) {
+    console.error('Error saving PDF:', error);
+  }
+}
 
     // Function to add common certificate details
     function addImg(doc, details)
@@ -268,7 +294,8 @@
 
       addImg(doc, details);
       // Save PDF
-      setTimeout(() => doc.save(`${details.certificateNumber}_Calibration_Certificate.pdf`), 500);
+      const pdfBlob = doc.output('blob'); // Convert the PDF to a Blob
+      savePDFWithLocation(pdfBlob, `${details.serialNo} ${details.make} ${details.modelNo}.pdf`);
     }
 
     // Generate PDF without letterhead
@@ -284,8 +311,9 @@
       // Add certificate details using the reusable function
       addCertificateDetails(doc, details);
 
-      // Save PDF without letterhead/footer
-      setTimeout(() => doc.save(`${details.certificateNumber}_Calibration_Certificate_Without_Letterhead.pdf`), 500);
+     // Save PDF
+      const pdfBlob = doc.output('blob'); // Convert the PDF to a Blob
+      savePDFWithLocation(pdfBlob, `${details.serialNo} ${details.make} ${details.modelNo}.pdf`);
     }
   </script>
 </body>
