@@ -189,6 +189,33 @@
       img2.src = 'header.jpeg';
       doc.addImage(img2, 'PNG', 3, 3, 210, 30);
      }
+    async function savePDFWithLocation(pdfDocument, defaultFileName) {
+  try {
+    // Open a file picker to let the user choose the location and file name
+    const fileHandle = await window.showSaveFilePicker({
+      suggestedName: defaultFileName,
+      types: [
+        {
+          description: 'PDF Files',
+          accept: { 'application/pdf': ['.pdf'] },
+        },
+      ],
+    });
+
+    // Create a writable stream for the file
+    const writableStream = await fileHandle.createWritable();
+
+    // Write the PDF data to the file
+    await writableStream.write(pdfDocument);
+
+    // Close the writable stream
+    await writableStream.close();
+
+    console.log('PDF saved successfully!');
+  } catch (error) {
+    console.error('Error saving PDF:', error);
+  }
+}
 
     function addCertificateDetails(doc, details)
      {
@@ -305,7 +332,8 @@
 
       addImg(doc, details);
       // Save PDF
-      setTimeout(() => doc.save(`${details.certificateNumber}_Calibration_Certificate.pdf`), 500);
+     const pdfBlob = doc.output('blob'); // Convert the PDF to a Blob
+      savePDFWithLocation(pdfBlob, `${details.serialNo} ${details.make} ${details.modelNo}.pdf`);
     }
 
     // Generate PDF without letterhead
@@ -321,8 +349,9 @@
       // Add certificate details using the reusable function
       addCertificateDetails(doc, details);
 
-      // Save PDF without letterhead/footer
-      setTimeout(() => doc.save(`${details.certificateNumber}_Calibration_Certificate_Without_Letterhead.pdf`), 500);
+     // Save PDF
+     const pdfBlob = doc.output('blob'); // Convert the PDF to a Blob
+      savePDFWithLocation(pdfBlob, `${details.serialNo} ${details.make} ${details.modelNo}.pdf`);
     }
   </script>
 </body>
