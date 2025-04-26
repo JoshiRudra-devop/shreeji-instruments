@@ -14,25 +14,17 @@
       align-items: center;
       margin: 0;
     }
-    nav {
-      background-color: #00796b;
-      width: 100%;
+        nav {
+      background-color: #22b55d;
       padding: 10px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    nav h1 {
-      color: white;
-      margin: 0;
     }
     nav ul {
       list-style: none;
       display: flex;
       gap: 15px;
-      padding: 0;
-      margin: 0;
     }
     nav ul li {
       display: inline;
@@ -41,10 +33,13 @@
       text-decoration: none;
       color: white;
       font-weight: bold;
-      transition: color 0.3s ease;
+      transition: color 0.3s ease, background-color 0.3s ease;
+      padding: 5px 10px;
+      border-radius: 5px;
     }
     nav ul li a:hover {
       color: #ffccbc;
+      background-color: #00796b;
     }
     .container {
       background-color:  white;
@@ -111,10 +106,13 @@
 </head>
 <body>
   <nav>
-    <h1 style="color: white;">Shreeji Instruments</h1>
+    <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
+      <img src="https://github.com/JoshiRudra-devop/shreeji-instruments/blob/main/logo.png?raw=true" alt="Company Logo" style="width: 40px; border-radius:30%; height: 40px; margin-right: 10px;">
+      <h1 style="color: white; margin: 0;">SHREEJI INSTRUMENTS</h1>
+    </a>
     <ul>
       <li><a href="index.html">Home</a></li>
-      <li><a href="#">About</a></li>
+      <li><a href="#footer">About</a></li>
       <li><a href="#">Contact</a></li>
     </ul>
   </nav>
