@@ -14,17 +14,25 @@
       align-items: center;
       margin: 0;
     }
-        nav {
-      background-color: #22b55d;
+      nav {
+      background-color: #00796b;
+      width: 100%;
       padding: 10px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    nav h1 {
+      color: white;
+      margin: 0;
     }
     nav ul {
       list-style: none;
       display: flex;
       gap: 15px;
+      padding: 0;
+      margin: 0;
     }
     nav ul li {
       display: inline;
@@ -33,13 +41,10 @@
       text-decoration: none;
       color: white;
       font-weight: bold;
-      transition: color 0.3s ease, background-color 0.3s ease;
-      padding: 5px 10px;
-      border-radius: 5px;
+      transition: color 0.3s ease;
     }
     nav ul li a:hover {
       color: #ffccbc;
-      background-color: #00796b;
     }
     .container {
       background-color:  white;
