@@ -131,7 +131,7 @@
       <div class="date">
           <div class="title_input_pair">
               <label for="calibrationDate">Date of Calibration:</label>
-              <input type="date" id="calibrationDate" required>
+              <input type="date" id="calibrationDate"onchange="calculateNextDate()" required>
           </div>
           <div class="title_input_pair">
               <label for="nextCalibrationDate">Next Suggested Date:</label>
@@ -177,6 +177,22 @@
         nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/"),
       };
     }
+// this function is to calculate the next date after one year autometically
+    function calculateNextDate() {
+           const calibrationDateInput = document.getElementById('calibrationDate');
+           const nextDateInput = document.getElementById('nextCalibrationDate');
+
+           const calibrationDate = new Date(calibrationDateInput.value);
+           if (!isNaN(calibrationDate)) {
+               const nextYearDate = new Date(calibrationDate);
+               nextYearDate.setFullYear(nextYearDate.getFullYear() + 1);
+               nextYearDate.setDate(nextYearDate.getDate() - 1); // Subtract 1 day
+
+               const formattedDate = nextYearDate.toISOString().split('T')[0];
+               nextDateInput.value = formattedDate;
+           }
+       }
+//this function is to save the file with any location 
     async function savePDFWithLocation(pdfDocument, defaultFileName) {
   try {
     // Open a file picker to let the user choose the location and file name
@@ -205,7 +221,7 @@
   }
 }
 
-    // Function to add common certificate details
+    // Function to add images
     function addImg(doc, details)
      {
       const img = new Image();
