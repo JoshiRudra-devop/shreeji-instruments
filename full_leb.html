@@ -219,7 +219,7 @@
                 <div class="date">
                     <div class="title_input_pair">
                         <label for="calibrationDate">Date of Calibration:</label>
-                        <input type="date" id="calibrationDate" required>
+                        <input type="date" id="calibrationDate" onchange="calculateNextDate()" required>
                     </div>
                     <div class="title_input_pair">
                         <label for="nextCalibrationDate">Next Suggested Date:</label>
@@ -545,6 +545,20 @@
         toggleInputContainer('water_bath_Button', 'water_bathinputContainer');
         toggleInputContainer('weigh_batcher_Button', 'weigh_batcherinputContainer');
 
+function calculateNextDate() {
+           const calibrationDateInput = document.getElementById('calibrationDate');
+           const nextDateInput = document.getElementById('nextCalibrationDate');
+
+           const calibrationDate = new Date(calibrationDateInput.value);
+           if (!isNaN(calibrationDate)) {
+               const nextYearDate = new Date(calibrationDate);
+               nextYearDate.setFullYear(nextYearDate.getFullYear() + 1);
+               nextYearDate.setDate(nextYearDate.getDate() - 1); // Subtract 1 day
+
+               const formattedDate = nextYearDate.toISOString().split('T')[0];
+               nextDateInput.value = formattedDate;
+           }
+       }
 
         async function savePDFWithLocation(pdfDocument, defaultFileName) {
   try {
