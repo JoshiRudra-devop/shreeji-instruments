@@ -46,6 +46,26 @@
     nav ul li a:hover {
       color: #ffccbc;
     }
+    /* Style for the back button */
+    .back-button {
+            position: absolute;
+            display: block;
+            top: 100px; /* Adjust based on the height of the navigation bar */
+            right: 20px; /* Align to the right */
+            padding: 10px 20px;
+            margin: auto;
+            background-color: #00796b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 25px;
+            z-index: 1000; /* Ensure it's above other elements */
+        }
+
+        .back-button:hover {
+            background-color: #22b55d;
+        }
     .container {
       background-color:  white;
       padding: 20px;
@@ -121,6 +141,7 @@
       <li><a href="contactUs.html">Contact Us</a></li>
     </ul>
   </nav>
+  <button class="back-button" onclick="window.history.back()"><< Back</button>
   <div class="container">
     <h2 class="centered">ELECTRONIC TOTAL STATION CALIBRATION CERTIFICATE</h2>
     <form id="calibrationForm">
