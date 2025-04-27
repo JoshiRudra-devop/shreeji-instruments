@@ -131,11 +131,11 @@
       <div class="date">
           <div class="title_input_pair">
               <label for="calibrationDate">Date of Calibration:</label>
-              <input type="date" id="calibrationDate" required>
+              <input type="date" id="calibrationDate"  onchange="calculateNextDate()" required>
           </div>
           <div class="title_input_pair">
               <label for="nextCalibrationDate">Next Suggested Date:</label>
-              <input type="date" id="nextCalibrationDate" onchange="calculateNextDate()" required>
+              <input type="date" id="nextCalibrationDate" required>
           </div>
       </div>
       <div class="title_input_pair">
