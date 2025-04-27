@@ -39,6 +39,26 @@
       color: #ffccbc;
       background-color: #22b55d;
     }
+     /* Style for the back button */
+    .back-button {
+            position: absolute;
+            display: block;
+            top: 100px; /* Adjust based on the height of the navigation bar */
+            right: 20px; /* Align to the right */
+            padding: 10px 20px;
+            margin: auto;
+            background-color: #00796b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 25px;
+            z-index: 1000; /* Ensure it's above other elements */
+        }
+
+        .back-button:hover {
+            background-color: #22b55d;
+        }
     .container {
       max-width: 800px;
       margin: 50px auto;
@@ -64,7 +84,7 @@
       border-radius: 5px;
       font-size: 16px;
     }
-    button {
+    .button2 {
       padding: 12px;
       background-color: #00796b;
       color: white;
@@ -74,7 +94,7 @@
       cursor: pointer;
       transition: background-color 0.3s;
     }
-    button:hover {
+    .button2:hover {
       background-color: #22b55d;
     }
     .contact-info {
@@ -143,6 +163,7 @@
           <li><a href="contactUs.html">Contact Us</a></li>
         </ul>
       </nav>
+  <button class="back-button" onclick="window.history.back()"><< Back</button>
 <div class="container">
   <h1>Contact Us</h1>
   <form id="contactForm">
@@ -150,7 +171,7 @@
     <input type="email" name="Email" placeholder="Your Email" required>
     <input type="text" name="Subject" placeholder="Subject" required>
     <textarea name="Message" rows="5" placeholder="Your Message" required></textarea>
-    <button type="submit">Send Message</button>
+    <button class="button2" type="submit">Send Message</button>
   </form>
 
   <div class="contact-info">
