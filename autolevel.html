@@ -265,8 +265,8 @@ async function savePDFWithLocation(pdfDocument, defaultFileName) {
       doc.text(`SERIAL NO                   :     ${details.serialNo}`, 14, 125);
       doc.text(`MAKE                            :     ${details.make}`, 14, 105);
       doc.text(`MODEL NO                   :     ${details.modelNo} `, 14, 115);
-      doc.text(`NEXT DUE DATE         :     ${details.nextCalibrationDate}`, 14, 135);
-      doc.text(`DATE                              :     ${details.calibrationDate}`, 14, 145);
+      doc.text(`DATE                              :     ${details.calibrationDate}`, 14, 135);
+      doc.text(`NEXT DUE DATE         :     ${details.nextCalibrationDate}`, 14, 145);
 
       doc.setFontSize(12);
       doc.text(`This is to certify that ${details.make} Automatic Level-${details.modelNo} Serial No ${details.serialNo} Been Checked `, 14, 155);
