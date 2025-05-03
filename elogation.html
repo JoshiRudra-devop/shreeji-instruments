@@ -46,6 +46,26 @@
     nav ul li a:hover {
       color: #ffccbc;
     }
+     /* Style for the back button */
+    .back-button {
+            position: absolute;
+            display: block;
+            top: 100px; /* Adjust based on the height of the navigation bar */
+            right: 20px; /* Align to the right */
+            padding: 10px 20px;
+            margin: auto;
+            background-color: #00796b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 25px;
+            z-index: 1000; /* Ensure it's above other elements */
+        }
+
+        .back-button:hover {
+            background-color: #22b55d;
+        }
     .container {
       background-color: white;
       padding: 20px;
@@ -87,7 +107,7 @@
       font-size: 16px;
       margin-bottom: 10px;
     }
-    button {
+    .button2 {
       width: calc(50% - 10px);
       padding: 12px;
       margin: 5px;
@@ -99,7 +119,7 @@
       border-radius: 4px;
       transition: background-color 0.3s ease;
     }
-    button:hover {
+    .button2:hover {
       background-color: #45a049;
     }
     .button-group {
@@ -121,6 +141,7 @@
       <li><a href="contactUs.html">Contact Us</a></li>
     </ul>
   </nav>
+  <button class="back-button" onclick="window.history.back()"> <<Back </button>
   <div class="container">
     <h2 class="centered">ELOGATION GAUGE CALIBRATION CERTIFICATE</h2>
     <form id="calibrationForm">
@@ -148,9 +169,9 @@
       </div>
       
       <div class="button-group">
-        <button type="button" onclick="preview()">Preview Calibration Certificate</button>
-        <button type="button" onclick="generatePDF()">Download Certificate with Letterhead</button>
-        <button type="button" onclick="generatePDFblankpg()">Download Certificate without Letterhead</button>
+        <button type="button" class="button2" onclick="preview()">Preview Calibration Certificate</button>
+        <button type="button" class="button2" onclick="generatePDF()">Download Certificate with Letterhead</button>
+        <button type="button" class="button2" onclick="generatePDFblankpg()">Download Certificate without Letterhead</button>
         </div>
     </form>
   </div>
