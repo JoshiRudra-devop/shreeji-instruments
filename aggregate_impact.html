@@ -251,7 +251,7 @@
       
       const img1 = new Image();
       img1.src = 'stamp.jpeg';
-      doc.addImage(img1, 'PNG', 90, 207, 40, 40);
+      doc.addImage(img1, 'PNG', 100, 217, 35, 35);
 
       const img2 = new Image();
       img2.src = 'header.jpeg';
@@ -260,31 +260,31 @@
 
     function addCertificateDetails(doc, details)
      {
+      let Yalign=50;
       doc.setFont("helvetica", "bold");
       doc.setFontSize(25);
-      doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, 50, { align: 'center' });
-
-      doc.setFontSize(10);
-      doc.text("SHREEJI INSTRUMENTS: Calibration laboratory certifies that the instrument has been inspected, tested,", 12, 60);
-      doc.text("and calibrated in accordance with documented procedures using measuring and test equipment traceable", 12, 65);
-      doc.text("to international standards.", 12, 70);
+      doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, Yalign, { align: 'center' });
 
       doc.setFontSize(12);
+      doc.text("SHREEJI INSTRUMENTS: Calibration laboratory certifies that the instrument has been inspected,", 12, Yalign+=10);
+      doc.text("tested,and calibrated in accordance with documented procedures using measuring and test", 12, Yalign+=7);
+      doc.text("equipment traceable to international standards.", 12, Yalign+=7);
+
+      doc.setFontSize(15);
       // Certificate Details
-      doc.text(`Date: ${details.calibrationDate}`, 140, 80);
-      doc.text(`REF No                    :     SI-${details.certificateNumber}`, 14, 80);
-      doc.text(`Name of Party         :     ${details.partyName}`, 14, 95);
-      doc.text(`Instrument Name    :     AGGREGATE IMPACT VALUE APP`, 14, 110);
-      doc.text(`Serial No                 :     SI-${details.certificateNumber}`, 14, 125);
-      doc.text(`MAKE                      :     ${details.make}(AS PER IS 2386)`, 14, 140);
-      doc.text(`Site Location           :     ${details.siteLocation}`, 14, 155);
-//   doc.text(`Capacity                  :     ${details.capacity}`, 14, 155);
-      doc.text(`Next Due Date         :     ${details.nextCalibrationDate}`, 14, 170);
-      doc.text(`Calibration By         :     YOGESH BHAI`, 14, 185);
+      doc.text(`DATE:${details.calibrationDate}`, 155, Yalign+=15);
+      doc.text(`REF NO                         :     SI-${details.certificateNumber}`, 14, Yalign);
+      doc.text(`NAME OF PARTY         :     ${details.partyName}`, 14, Yalign+=15);
+      doc.text(`EQUIPMENT NAME      :      AGGREGATE IMPACT VALUE APP`, 14, Yalign+=15);
+      doc.text(`SERIAL NO                   :     SI-${details.certificateNumber}`, 14, Yalign+=15);
+      doc.text(`MAKE                            :     ${details.make}(AS PER IS 2386)`, 14, Yalign+=15);
+      doc.text(`SITE LOACATION        :     ${details.siteLocation}`, 14, Yalign+=15);
+      doc.text(`NEXT DUE DATE         :     ${details.nextCalibrationDate}`, 14, Yalign+=15);
+      doc.text(`CALIBRATION BY        :     YOGESH BHAI`, 14, Yalign+=15);
 
-
-      doc.text("FOR, Shreeji Instruments", 145, 230);
-      doc.text("Proprietor", 170, 245);
+      doc.setFontSize(12);
+      doc.text("FOR,SHREEJI INSTRUMENTS", 145, 230);
+      doc.text("PROPRIETOR", 170, 245);
     }
 
     // Preview the generated certificate
