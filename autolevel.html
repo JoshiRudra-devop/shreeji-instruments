@@ -255,7 +255,7 @@ async function savePDFWithLocation(pdfDocument, defaultFileName) {
 
       const img1 = new Image();
       img1.src = 'stamp.jpeg';
-      doc.addImage(img1, 'PNG', 90, 207, 40, 40);
+      doc.addImage(img1, 'PNG', 100, 217, 35, 35);
 
       const img2 = new Image();
       img2.src = 'header.jpeg';
@@ -275,13 +275,10 @@ async function savePDFWithLocation(pdfDocument, defaultFileName) {
 
 
       
-      doc.text(`FOR , ${details.make}  AUTO LEVEL`, doc.internal.pageSize.getWidth() / 2, 65, {  align: 'center' });
-      doc.text(`MODLE : ${details.modelNo}  ,SR NO:- ${details.serialNo}`, doc.internal.pageSize. getWidth() / 2,70, { align: 'center' });
+      doc.text(`FOR , ${details.make}  AUTO LEVEL`, doc.internal.pageSize.getWidth() / 2, 67, {  align: 'center' });
+      doc.text(`MODLE : ${details.modelNo}  ,SR NO:- ${details.serialNo}`, doc.internal.pageSize. getWidth() / 2,74, { align: 'center' });
       // Certificate Details
       
-
-
-     
       doc.text(`NAME OF PARTY        :     ${details.partyName}`, 14, 85);
       doc.text(`EQUIPMENT NAME    :     AUTO LEVEL`, 14, 95);
       doc.text(`SERIAL NO                   :     ${details.serialNo}`, 14, 125);
@@ -300,8 +297,8 @@ async function savePDFWithLocation(pdfDocument, defaultFileName) {
       doc.text(`Hence error is NIL (Within the tolerance Level). Therefore, instrument is found free from  `, 14, 195);
       doc.text(`collimation error as of Date.`, 14, 200);
 
-      doc.text("FOR, Shreeji Instruments", 145, 230);
-      doc.text("Proprietor", 170, 245);
+      doc.text("FOR,SHREEJI INSTRUMENTS", 145, 230);
+      doc.text("PROPRIETOR", 170, 245);
 
 
     }
