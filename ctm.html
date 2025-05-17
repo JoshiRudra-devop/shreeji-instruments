@@ -172,8 +172,8 @@
       <div class="title_input_pair">
         <label for="operated">Type of Machine:</label>
         <select  id="operated">
-          <option value="Electrical Operated">Electrical Operated</option>
-          <option value="HAND Operated">HAND Operated</option>
+          <option value="ELECTRICAL OPERATED">Electrical Operated</option>
+          <option value="HAND OPERATED">HAND Operated</option>
         </select>
       </div>
       <div class="title_input_pair">
@@ -366,23 +366,19 @@
 
       doc.setFont("helvetica", "bold");
       doc.setFontSize(12);
-      doc.text(`Date:-    ${calibrationDate}`, 140, 60);
-      doc.text(`REF No      :-    ${certificateNumber}`, 14, 60);
-      doc.text(`Name of Party       :-    ${partyName}`, 14, 70);
-      doc.text(`Instrument name  :-    CUBE TESTING MACHINE(${operated})`, 14, 80);
-      doc.text(`Capacity  / MAKE  :-    ${capacity}  /  ${make}`, 14, 90);
-      doc.text(`Serial No                :-    ${serialNo}`, 14, 100);
-      doc.text(`Next Due Date:-    ${nextCalibrationDate}`, 140, 100);
-      doc.text(`Site Location         :-    ${siteLocation}`, 14, 110); 
+      doc.text(`DATE:-${calibrationDate}`, 160, 60);
+      doc.text(`REF NO                       :-    ${certificateNumber}`, 14, 60);
+      doc.text(`NAME OF PARTY       :-    ${partyName}`, 14, 70);
+      doc.text(`EQUIPMENT NAME    :-    CUBE TESTING MACHINE ( ${operated} )`, 14, 80);
+      doc.text(`CAPACITY  / MAKE    :-    ${capacity}  /  ${make}`, 14, 90);
+      doc.text(`SERIAL NO                  :-    ${serialNo}`, 14, 100);
+      doc.text(`NEXT DUE DATE:-${nextCalibrationDate}`, 140, 100);
+      doc.text(`SITE LOCATION         :-    ${siteLocation}`, 14, 110); 
 
       doc.setFontSize(10);
       doc.setFont("helvetica", "bold");
       let RING=String(ring);
-      console.log(typeof(ring));
-      // if(RING<="1000KN"){
-      //   const container = document.getElementById("1000reading");
-      //           container.style.display = container.style.display === 'block' ? 'none' : 'block';
-      // }
+      
       if(RING==="1000KN"){
         doc.text(`CALIBRATION INSTRUMENT 1000KN`, 14, 120);  
       doc.text(`PROVING RING NO:1000KN 065 IS 4169:2014`, 14, 125);  
@@ -394,10 +390,10 @@
       const cellWidth = 30;
       const cellHeight = 7;
 
-      doc.text(`Divisions`, 18, 141);
+      doc.text(`IN DIVISIONS`, 16, 141);
       doc.text(`KN`, 174, 141);
 
-      const fixedTexts = ["Deflection In", "LOAD IN KN", "1st set in KN", "2nd set in KN", "3rd set in KN", "AVERAGE in"];
+      const fixedTexts = ["DEFLECTION", "LOAD IN KN", "1st SET IN KN", "2nd SET IN KN", "3rd SET IN KN", "AVERAGE IN"];
 
       for (let k = 0; k < 6; k++) {
         const x = startX + k * cellWidth;
@@ -437,10 +433,10 @@
       const cellWidth = 30;
       const cellHeight = 7;
 
-      doc.text(`Divisions`, 18, 141);
+      doc.text(`IN DIVISIONS`, 16, 141);
       doc.text(`KN`, 174, 141);
 
-      const fixedTexts = ["Deflection In", "LOAD IN KN", "1st set in KN", "2nd set in KN", "3rd set in KN", "AVERAGE in"];
+      const fixedTexts = ["DEFLECTION", "LOAD IN KN", "1st SET IN KN", "2nd SET IN KN", "3rd SET IN KN", "AVERAGE IN"];
 
       for (let k = 0; k < 6; k++) {
         const x = startX + k * cellWidth;
@@ -478,9 +474,10 @@
         alert("Select a appropreat proviring");
         return;
       }
-      doc.text(`Calibration By      :-   YOGESH BHAI`, 14, 225); 
-      doc.text("FOR, Shreeji Instruments", 145, 230);
-      doc.text("Proprietor", 170, 245);
+      doc.text(`CALIBRATION BY      :-   YOGESH BHAI`, 14, 225); 
+      doc.setFontSize(12);
+      doc.text("FOR,SHREEJI INSTRUMENTS", 145, 230);
+      doc.text("PROPRIETOR", 170, 245);
 
       const img = new Image();
       img.src = 'footer.jpeg';
@@ -492,7 +489,7 @@
 
       const img1 = new Image();
       img.src = 'stamp.jpeg';
-      doc.addImage(img, 'PNG', 100, 215, 40, 35);
+      doc.addImage(img, 'PNG', 100, 217, 35, 35);
 
       const img2 = new Image();
       img.src = 'header.jpeg';
@@ -517,15 +514,12 @@
 }
 
   async function generatePDF() {
-        {
-      if (!document.getElementById("calibrationForm").reportValidity()) {
+        
+    if (!document.getElementById("calibrationForm").reportValidity()) {
         return;
       }
-
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
-
-      
 
       const certificateNumber = document.getElementById("certificateNumber").value;
       const calibrationDateRaw = document.getElementById("calibrationDate").value;
@@ -533,13 +527,12 @@
       const siteLocation = document.getElementById("siteLocation").value;
       const partyName = document.getElementById("partyName").value;
       const operated = document.getElementById("operated").value;
-      const ring = document.getElementById("ring").value;
       const make = document.getElementById("make").value;
+      const ring = document.getElementById("ring").value;
       const serialNo = document.getElementById("serialNo").value;
       const capacity = document.getElementById("capacity").value;
       const nextCalibrationDateRaw = document.getElementById("nextCalibrationDate").value;
       const nextCalibrationDate = nextCalibrationDateRaw.split("-").reverse().join("/");
-      // const personResponsible = document.getElementById("personResponsible").value;
 
       const inputs1000 = [];
       for (let i = 1; i <= 10; i++) {
@@ -550,7 +543,6 @@
         inputs2000.push(document.getElementById(`i2${i}`).value);
       }
 
-
       doc.setFont("Cloister Black Font", "bold");
       doc.setFontSize(25);
       doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, 50, { align: "center" });
@@ -558,20 +550,19 @@
 
       doc.setFont("helvetica", "bold");
       doc.setFontSize(12);
-      doc.text(`Date:-    ${calibrationDate}`, 140, 60);
-      doc.text(`REF No      :-    ${certificateNumber}`, 14, 60);
-      doc.text(`Name of Party      :-    ${partyName}`, 14, 70);
-      doc.text(`Instrument name :-    CUBE TESTING MACHINE(${operated})`, 14, 80);
-      doc.text(`Capacity  / MAKE  :-    ${capacity}  /  ${make}`, 14, 90);
-      doc.text(`Serial No                :-    ${serialNo}`, 14, 100);
-      doc.text(`Next Due Date:-    ${nextCalibrationDate}`, 140, 100);
-      doc.text(`Site Location         :-    ${siteLocation}`, 14, 110); 
+      doc.text(`DATE:-${calibrationDate}`, 160, 60);
+      doc.text(`REF NO                       :-    ${certificateNumber}`, 14, 60);
+      doc.text(`NAME OF PARTY       :-    ${partyName}`, 14, 70);
+      doc.text(`EQUIPMENT NAME    :-    CUBE TESTING MACHINE ( ${operated} )`, 14, 80);
+      doc.text(`CAPACITY  / MAKE    :-    ${capacity}  /  ${make}`, 14, 90);
+      doc.text(`SERIAL NO                  :-    ${serialNo}`, 14, 100);
+      doc.text(`NEXT DUE DATE:-${nextCalibrationDate}`, 140, 100);
+      doc.text(`SITE LOCATION         :-    ${siteLocation}`, 14, 110); 
 
       doc.setFontSize(10);
       doc.setFont("helvetica", "bold");
-
       let RING=String(ring);
-      console.log(typeof(ring));
+      
       if(RING==="1000KN"){
         doc.text(`CALIBRATION INSTRUMENT 1000KN`, 14, 120);  
       doc.text(`PROVING RING NO:1000KN 065 IS 4169:2014`, 14, 125);  
@@ -583,10 +574,10 @@
       const cellWidth = 30;
       const cellHeight = 7;
 
-      doc.text(`Divisions`, 18, 141);
+      doc.text(`IN DIVISIONS`, 16, 141);
       doc.text(`KN`, 174, 141);
 
-      const fixedTexts = ["Deflection In", "LOAD IN KN", "1st set in KN", "2nd set in KN", "3rd set in KN", "AVERAGE in"];
+      const fixedTexts = ["DEFLECTION", "LOAD IN KN", "1st SET IN KN", "2nd SET IN KN", "3rd SET IN KN", "AVERAGE IN"];
 
       for (let k = 0; k < 6; k++) {
         const x = startX + k * cellWidth;
@@ -595,7 +586,7 @@
       }
 
       const fixedValuesColumn1 = ["79.1", "155.2", "232.3", "308.1", "384.4", "460.1","536.7", "613.4", "689.7", "766.1"];
-      const fixedValuesColumn2 = ["100", "200", "300", "400", "5000", "600", "700", "800", "900", "1000"];
+      const fixedValuesColumn2 = ["100", "200", "300", "400", "500", "600", "700", "800", "900", "1000"];
 
       for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 6; j++) {
@@ -626,10 +617,10 @@
       const cellWidth = 30;
       const cellHeight = 7;
 
-      doc.text(`Divisions`, 18, 141);
+      doc.text(`IN DIVISIONS`, 16, 141);
       doc.text(`KN`, 174, 141);
 
-      const fixedTexts = ["Deflection In", "LOAD IN KN", "1st set in KN", "2nd set in KN", "3rd set in KN", "AVERAGE in"];
+      const fixedTexts = ["DEFLECTION", "LOAD IN KN", "1st SET IN KN", "2nd SET IN KN", "3rd SET IN KN", "AVERAGE IN"];
 
       for (let k = 0; k < 6; k++) {
         const x = startX + k * cellWidth;
@@ -667,9 +658,10 @@
         alert("Select a appropreat proviring");
         return;
       }
-
-      doc.text(`Calibration By      :-   YOGESHI BHAI`, 14, 225); 
-      doc.text("FOR, Shreeji Instruments", 150, 225);
+      doc.text(`CALIBRATION BY      :-   YOGESH BHAI`, 14, 225); 
+      doc.setFontSize(12);
+      doc.text("FOR,SHREEJI INSTRUMENTS", 145, 230);
+      doc.text("PROPRIETOR", 170, 245);
 
       const img = new Image();
       img.src = 'footer.jpeg';
@@ -677,17 +669,15 @@
      
       const img3 = new Image();
       img.src = 'sign.jpeg';
-      doc.addImage(img, 'PNG', 160, 225, 40, 10);
+      doc.addImage(img, 'PNG', 160, 232, 40, 10);
 
       const img1 = new Image();
       img.src = 'stamp.jpeg';
-      doc.addImage(img, 'PNG', 110, 215, 40, 35);
+      doc.addImage(img, 'PNG', 100, 217, 35, 35);
 
       const img2 = new Image();
       img.src = 'header.jpeg';
       doc.addImage(img, 'PNG', 3, 3, 210, 30);
-
-      doc.text("Proprietor", 174, 235);
 
             // Generate preview
             const pdfBlob = doc.output('blob');
@@ -705,20 +695,16 @@
 
       
       doc.save(`${certificateNumber}_Calibration_Certificate.pdf`);
-    }
+    
   }
 
   async function generatePDFWithoutLetterpad() {
 
-        {
-      if (!document.getElementById("calibrationForm").reportValidity()) {
+    if (!document.getElementById("calibrationForm").reportValidity()) {
         return;
       }
-
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
-
-      
 
       const certificateNumber = document.getElementById("certificateNumber").value;
       const calibrationDateRaw = document.getElementById("calibrationDate").value;
@@ -726,13 +712,12 @@
       const siteLocation = document.getElementById("siteLocation").value;
       const partyName = document.getElementById("partyName").value;
       const operated = document.getElementById("operated").value;
-      const ring = document.getElementById("ring").value;
       const make = document.getElementById("make").value;
+      const ring = document.getElementById("ring").value;
       const serialNo = document.getElementById("serialNo").value;
       const capacity = document.getElementById("capacity").value;
       const nextCalibrationDateRaw = document.getElementById("nextCalibrationDate").value;
       const nextCalibrationDate = nextCalibrationDateRaw.split("-").reverse().join("/");
-      // const personResponsible = document.getElementById("personResponsible").value;
 
       const inputs1000 = [];
       for (let i = 1; i <= 10; i++) {
@@ -743,28 +728,25 @@
         inputs2000.push(document.getElementById(`i2${i}`).value);
       }
 
-
-      doc.setFont("Cloister Black Font", "bold");
-      doc.setFontSize(25);
+         doc.setFontSize(25);
       doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, 50, { align: "center" });
       doc.setFontSize(10);
 
       doc.setFont("helvetica", "bold");
       doc.setFontSize(12);
-      doc.text(`Date:-    ${calibrationDate}`, 140, 60);
-      doc.text(`REF No      :-    SI-${certificateNumber}`, 14, 60);
-      doc.text(`Name of Party      :-    ${partyName}`, 14, 70);
-      doc.text(`Instrument name :-    CUBE TESTING MACHINE(${operated})`, 14, 80);
-      doc.text(`Capacity  / MAKE  :-    ${capacity}  /  ${make}`, 14, 90);
-      doc.text(`Serial No                :-    ${serialNo}`, 14, 100);
-      doc.text(`Next Due Date:-    ${nextCalibrationDate}`, 140, 100);
-      doc.text(`Site Location         :-    ${siteLocation}`, 14, 110); 
-
+      doc.text(`DATE:-${calibrationDate}`, 160, 60);
+      doc.text(`REF NO                       :-    ${certificateNumber}`, 14, 60);
+      doc.text(`NAME OF PARTY       :-    ${partyName}`, 14, 70);
+      doc.text(`EQUIPMENT NAME    :-    CUBE TESTING MACHINE ( ${operated} )`, 14, 80);
+      doc.text(`CAPACITY  / MAKE    :-    ${capacity}  /  ${make}`, 14, 90);
+      doc.text(`SERIAL NO                  :-    ${serialNo}`, 14, 100);
+      doc.text(`NEXT DUE DATE:-${nextCalibrationDate}`, 140, 100);
+      doc.text(`SITE LOCATION         :-    ${siteLocation}`, 14, 110); 
+      
       doc.setFontSize(10);
       doc.setFont("helvetica", "bold");
-
       let RING=String(ring);
-      console.log(typeof(ring));
+      
       if(RING==="1000KN"){
         doc.text(`CALIBRATION INSTRUMENT 1000KN`, 14, 120);  
       doc.text(`PROVING RING NO:1000KN 065 IS 4169:2014`, 14, 125);  
@@ -776,10 +758,10 @@
       const cellWidth = 30;
       const cellHeight = 7;
 
-      doc.text(`Divisions`, 18, 141);
+      doc.text(`IN DIVISIONS`, 16, 141);
       doc.text(`KN`, 174, 141);
 
-      const fixedTexts = ["Deflection In", "LOAD IN KN", "1st set in KN", "2nd set in KN", "3rd set in KN", "AVERAGE in"];
+      const fixedTexts = ["DEFLECTION", "LOAD IN KN", "1st SET IN KN", "2nd SET IN KN", "3rd SET IN KN", "AVERAGE IN"];
 
       for (let k = 0; k < 6; k++) {
         const x = startX + k * cellWidth;
@@ -819,10 +801,10 @@
       const cellWidth = 30;
       const cellHeight = 7;
 
-      doc.text(`Divisions`, 18, 141);
+      doc.text(`IN DIVISIONS`, 16, 141);
       doc.text(`KN`, 174, 141);
 
-      const fixedTexts = ["Deflection In", "LOAD IN KN", "1st set in KN", "2nd set in KN", "3rd set in KN", "AVERAGE in"];
+      const fixedTexts = ["DEFLECTION", "LOAD IN KN", "1st SET IN KN", "2nd SET IN KN", "3rd SET IN KN", "AVERAGE IN"];
 
       for (let k = 0; k < 6; k++) {
         const x = startX + k * cellWidth;
@@ -860,11 +842,12 @@
         alert("Select a appropreat proviring");
         return;
       }
+      doc.text(`CALIBRATION BY      :-   YOGESH BHAI`, 14, 225); 
+      doc.setFontSize(12);
+      doc.text("FOR,SHREEJI INSTRUMENTS", 145, 230);
+      doc.text("PROPRIETOR", 170, 245);
 
-      doc.text(`Calibration By      :-   YOGESH BHAI`, 14, 225); 
-      doc.text("FOR, Shreeji Instruments", 150, 225);
 
-      doc.text("Proprietor", 174, 235);
 
             // Generate preview
             const pdfBlob = doc.output('blob');
@@ -883,7 +866,7 @@
       
       doc.save(`${certificateNumber}_Calibration_Certificate_Without_Letterhead.pdf`);
     }
-  }
+  
   </script>
 </body>
 </html>
