@@ -199,7 +199,8 @@
         nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/"),
       };
     }
-     function calculateNextDate() {
+    
+    function calculateNextDate() {
            const calibrationDateInput = document.getElementById('calibrationDate');
            const nextDateInput = document.getElementById('nextCalibrationDate');
 
@@ -213,8 +214,8 @@
                nextDateInput.value = formattedDate;
            }
        }
-
-async function savePDFWithLocation(pdfDocument, defaultFileName) {
+    
+    async function savePDFWithLocation(pdfDocument, defaultFileName) {
   try {
     // Open a file picker to let the user choose the location and file name
     const fileHandle = await window.showSaveFilePicker({
@@ -241,7 +242,8 @@ async function savePDFWithLocation(pdfDocument, defaultFileName) {
     console.error('Error saving PDF:', error);
   }
 }
-    // Function to add common certificate details
+    
+    // Function to add IMAGES In certificare
     function addImg(doc, details)
      {
       const img = new Image();
@@ -263,39 +265,41 @@ async function savePDFWithLocation(pdfDocument, defaultFileName) {
      }
 
     function addCertificateDetails(doc, details)
-     {
+     {     
+        let Yalign=48;
+
+       doc.setFontSize(15);
+      doc.setFont("helvetica", "bold");   
+      doc.text(`DATE:${details.calibrationDate}`, 155, Yalign);
+      doc.text(`REF No:SI-${details.certificateNumber}`, 10, Yalign)
+
       doc.setFont("helvetica", "bold");
       doc.setFontSize(25);
-      doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, 60, { align: 'center' });
+      doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, Yalign+=15, { align: 'center' });
       
+
       doc.setFontSize(15);
-      doc.setFont("helvetica", "simple");   
-      doc.text(`DATE:${details.calibrationDate}`, 155, 45);
-      doc.text(`REF No:SI-${details.certificateNumber}`, 10, 45)
-
-
-      
-      doc.text(`FOR , ${details.make}  AUTO LEVEL`, doc.internal.pageSize.getWidth() / 2, 67, {  align: 'center' });
-      doc.text(`MODLE : ${details.modelNo}  ,SR NO:- ${details.serialNo}`, doc.internal.pageSize. getWidth() / 2,74, { align: 'center' });
+      doc.text(`FOR , ${details.make}  AUTO LEVEL`, doc.internal.pageSize.getWidth() / 2, Yalign+=7, {  align: 'center' });
+      doc.text(`MODLE : ${details.modelNo}  ,SR NO:- ${details.serialNo}`, doc.internal.pageSize. getWidth() / 2,Yalign+=7, { align: 'center' });
       // Certificate Details
       
-      doc.text(`NAME OF PARTY        :     ${details.partyName}`, 14, 85);
-      doc.text(`EQUIPMENT NAME    :     AUTO LEVEL`, 14, 95);
-      doc.text(`SERIAL NO                   :     ${details.serialNo}`, 14, 125);
-      doc.text(`MAKE                            :     ${details.make}`, 14, 105);
-      doc.text(`MODEL NO                   :     ${details.modelNo} `, 14, 115);
-      doc.text(`DATE                              :     ${details.calibrationDate}`, 14, 135);
-      doc.text(`NEXT DUE DATE         :     ${details.nextCalibrationDate}`, 14, 145);
+      doc.text(`NAME OF PARTY         :     ${details.partyName}`, 14, Yalign+=11);
+      doc.text(`EQUIPMENT NAME      :     AUTO LEVEL`, 14, Yalign+=9);
+      doc.text(`MAKE                            :     ${details.make}`, 14, Yalign+=9);
+      doc.text(`MODEL NO                   :     ${details.modelNo} `, 14, Yalign+=9);
+      doc.text(`SERIAL NO                   :     ${details.serialNo}`, 14, Yalign+=9);
+      doc.text(`DATE                             :     ${details.calibrationDate}`, 14, Yalign+=9);
+      doc.text(`NEXT DUE DATE          :     ${details.nextCalibrationDate}`, 14, Yalign+=9);
 
       doc.setFontSize(12);
-      doc.text(`This is to certify that ${details.make} Automatic Level-${details.modelNo} Serial No ${details.serialNo} Been Checked `, 14, 155);
-      doc.text(` By us as under One year warranty.`, 14, 160);
-      doc.text(`1. Level was kept At a distance of 20 meter from staff-A and 30 meter from Staff-B, Which `, 14, 170);
-      doc.text(`were ).Pre-fixed at same level in our workshop (permanent bench-mark of same elevation).`, 14, 175);
-      doc.text(`2. Reading of Staff-A was taken as 1,600`, 14, 180);
-      doc.text(`3. Reading of Staff-B was taken as 1,600 .`, 14, 185);
-      doc.text(`Hence error is NIL (Within the tolerance Level). Therefore, instrument is found free from  `, 14, 195);
-      doc.text(`collimation error as of Date.`, 14, 200);
+      doc.text(`This is to certify that ${details.make} Automatic Level-${details.modelNo} Serial No ${details.serialNo} Been Checked `, 14, Yalign+=10);
+      doc.text(` By us as under One year warranty.`, 14, Yalign+=5);
+      doc.text(`1. Level was kept At a distance of 20 meter from staff-A and 30 meter from Staff-B, Which `, 14, Yalign+=10);
+      doc.text(`were ).Pre-fixed at same level in our workshop (permanent bench-mark of same elevation).`, 14, Yalign+=5);
+      doc.text(`2. Reading of Staff-A was taken as 1,600`, 14, Yalign+=10);
+      doc.text(`3. Reading of Staff-B was taken as 1,600 .`, 14, Yalign+=10);
+      doc.text(`Hence error is NIL (Within the tolerance Level). Therefore, instrument is found free from  `, 14, Yalign+=10);
+      doc.text(`collimation error as of Date.`, 14, Yalign+=5);
 
       doc.text("FOR,SHREEJI INSTRUMENTS", 145, 230);
       doc.text("PROPRIETOR", 170, 245);
