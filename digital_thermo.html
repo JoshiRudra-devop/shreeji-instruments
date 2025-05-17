@@ -210,11 +210,11 @@
      
       const img3 = new Image();
       img3.src = 'sign.jpeg';
-      doc.addImage(img3, 'PNG', 160, 232, 40, 10);
+      doc.addImage(img3, 'PNG', 160, 220, 40, 10);
       
       const img1 = new Image();
       img1.src = 'stamp.jpeg';
-      doc.addImage(img1, 'PNG', 90, 207, 40, 40);
+      doc.addImage(img1, 'PNG', 100, 217, 35, 35);
 
       const img2 = new Image();
       img2.src = 'header.jpeg';
@@ -264,21 +264,22 @@ async function savePDFWithLocation(pdfDocument, defaultFileName) {
 }
     function addCertificateDetails(doc, details)
      {
+      let Yalign=50;
       doc.setFont("helvetica", "bold");
       doc.setFontSize(25);
-      doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, 50, { align: 'center' });
+      doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, Yalign, { align: 'center' });
 
     // Spacing
     doc.setFontSize(12);
-    doc.text(`Date:-${details.calibrationDate}`, 140, 60);
-    doc.text(`REF NO:- SI-${details.certificateNumber}`, 14, 60);
-    doc.text(`Name of Party               :-   ${details.partyName}`, 14, 70);
-    doc.text(`Name OF Instrument    :-   DIGITAL THERMOMETER`, 14, 80);
-    doc.text(`Capacity & Make          :-   ${details.capacity} & ${details.make}`, 14, 90);
-    doc.text(`Identification No           :-   SI-${details.certificateNumber}`, 14, 100);
-    doc.text(`Next Due Date               :-   ${details.nextCalibrationDate}`, 14, 110);
-    doc.text(`Site Location                 :-   ${details.siteLocation}`, 14, 120);
-    const tableStartY =120;
+    doc.text(`DATE:-${details.calibrationDate}`, 155, Yalign+=10);
+    doc.text(`REF NO                         :-      SI-${details.certificateNumber}`, 14, Yalign);
+    doc.text(`NAME OF PARTY         :-     ${details.partyName}`, 14, Yalign+=10);
+    doc.text(`EQUIPEMENT NAME    :-     DIGITAL THERMOMETER`, 14, Yalign+=10);
+    doc.text(`CAPACITY & MAKE      :-     ${details.capacity} & ${details.make}`, 14, Yalign+=10);
+    doc.text(`SERIAL NO                    :-     SI-${details.certificateNumber}`, 14, Yalign+=10);
+    doc.text(`NEXT DUE DATE           :-     ${details.nextCalibrationDate}`, 14, Yalign+=10);
+    doc.text(`SITE LOCATION            :-     ${details.siteLocation}`, 14, Yalign+=10);
+    const tableStartY =Yalign;
 const data = [
     [ "1", " 50"," 50"],
     [ "2", " 100"," 100" ],
@@ -289,12 +290,13 @@ const data = [
 ];
 
 doc.autoTable({
-        head: [['SR.NO', 'STANDARD TEMPERATURE', 'STANDARD TEMPERATURE BY 1 St Bucket “A”']],
+        head: [['SR.NO', 'STANDARD TEMPERATURE', 'STANDARD TEMPERATURE BY 1 St BUCKET “A”']],
         body: data,
         startY: tableStartY + 10,
         styles: { 
           fontSize: 12 ,
-          lineColor:[87, 86, 85],
+          textColor:[0,0,0],
+          lineColor:[0,0,0],
           lineWidth: 0.2,
           halign: 'center',  // horizontal align to center
           valign: 'middle',  // vertical align to middle
@@ -314,14 +316,14 @@ doc.autoTable({
     });
     let tableStartY2=doc.autoTable.previous.finalY;
 // Add calibrated by
-doc.setFontSize(12);
-doc.text("CALIBRATED BY: YOGESH B JOSHI", 14, tableStartY2+=5);
+doc.setFontSize(12); 
+doc.setFont("helvetica", "bold"); 
+
+doc.text("CALIBRATED BY       :-     YOGESH B JOSHI", 14, tableStartY2+=5);
 
 // Add footer
-doc.setFont("helvetica", "BOLD"); 
-      doc.setFontSize(12); 
-      doc.text("FOR, Shreeji Instruments", 145, 230);
-      doc.text("Proprietor", 170, 245);
+      doc.text("FOR, SHREEJI INSTRUMENTS", 137, tableStartY2+=15);
+      doc.text("PROPRIETOR", 170, tableStartY2+=20);
 
     }
 
