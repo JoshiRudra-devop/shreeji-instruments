@@ -251,7 +251,7 @@ async function savePDFWithLocation(pdfDocument, defaultFileName) {
       
       const img1 = new Image();
       img1.src = 'stamp.jpeg';
-      doc.addImage(img1, 'PNG', 90, 207, 40, 40);
+      doc.addImage(img1, 'PNG', 100, 217, 35, 35);
 
       const img2 = new Image();
       img2.src = 'header.jpeg';
@@ -260,28 +260,29 @@ async function savePDFWithLocation(pdfDocument, defaultFileName) {
 
     function addCertificateDetails(doc, details)
      {
+      let Yalign=50;
         doc.setFont("helvetica", "bold");
         doc.setFontSize(25);
-        doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, 50, { align: 'center' });
+        doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, Yalign, { align: 'center' });
 
-        doc.setFontSize(10);
-        doc.text("SHREEJI INSTRUMENTS: Calibration laboratory certifies that the instrument has been inspected, tested,", 12, 60);
-        doc.text("and calibrated in accordance with documented procedures using measuring and test equipment traceable", 12, 65);
-        doc.text("to international standards.", 12, 70);
-          let hori_axis=70;
+        doc.setFontSize(12);
+      doc.text("SHREEJI INSTRUMENTS: Calibration laboratory certifies that the instrument has been inspected,", 12, Yalign+=15);
+      doc.text("tested,and calibrated in accordance with documented procedures using measuring and test", 12, Yalign+=7);
+      doc.text("equipment traceable to international standards.", 12, Yalign+=7);
+          let hori_axis=(Yalign+=5);
         doc.text("From the below test this is to certify that the Slump test apparatus is meeting necessary requirements as", 12, hori_axis+=9);
         doc.text("per IS: 7320-1974 within the permissible limit. ", 12, hori_axis+=5);
 
      
         doc.setFontSize(12);
         // Certificate Details
-        doc.text(`REF NO:SI-${details.certificateNumber}`, 14, hori_axis+=10);
-        doc.text(`Date: ${details.calibrationDate}`, 140, hori_axis);
-        doc.text(`Name of Party         :     ${details.partyName}`, 14, hori_axis+=10);
-        doc.text(`Instrument Name    :     SLUMCONE `, 14, hori_axis+=10);
-        doc.text(`Serial No / Make      :     ${details.certificateNumber} / ${details.make}`, 14, hori_axis+=10);
-        doc.text(`Site Location           :     ${details.siteLocation}`, 14, hori_axis+=10);
-        doc.text(`Next Due Date         :     ${details.nextCalibrationDate}`, 14, hori_axis+=10);
+        doc.text(`REF NO                       :     SI-${details.certificateNumber}`, 14, hori_axis+=10);
+        doc.text(`DATE: ${details.calibrationDate}`, 155, hori_axis);
+        doc.text(`NAME OF PARTY       :     ${details.partyName}`, 14, hori_axis+=10);
+        doc.text(`EQUIPMENT NAME    :     SLUMCONE `, 14, hori_axis+=10);
+        doc.text(`SERIAL NO / MAKE    :     ${details.certificateNumber} / ${details.make}`, 14, hori_axis+=10);
+        doc.text(`SITE LOCATION          :     ${details.siteLocation}`, 14, hori_axis+=10);
+        doc.text(`NEXT DUE DATE         :     ${details.nextCalibrationDate}`, 14, hori_axis+=10);
         doc.text("SPECIFICATIONS:-", doc.internal.pageSize.getWidth() / 2, hori_axis+=10, { align: 'center' });
 
 const data = [
@@ -296,6 +297,7 @@ doc.autoTable({
         startY: hori_axis + 5,
         styles: { 
           fontSize: 12 ,
+          textColor:[0,0,0],
           lineColor:[87, 86, 85],
           lineWidth: 0.2,
           halign: 'center',  // horizontal align to center
@@ -318,12 +320,12 @@ doc.autoTable({
 // Add calibrated by
 doc.setFontSize(12);
 doc.text("CALIBRATED BY: YOGESH B JOSHI", 14, tableStartY2+=10);
-doc.setFontSize(10);
+doc.setFontSize(12);
  
 
 
-        doc.text("FOR, Shreeji Instruments", 145, 230);
-        doc.text("Proprietor", 170, 245);
+        doc.text("FOR, SHREEJI INSTRUMENTS", 145, 230);
+        doc.text("PROPRIETOR", 170, 247);
 
     }
 
