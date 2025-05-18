@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="img/png" href="logo.png" />
+  <title>Cube Mould Calibration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+    }
+    nav {
+      background-color: #00796b;
+      width: 100%;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    nav h1 {
+      color: white;
+      margin: 0;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+      padding: 0;
+      margin: 0;
+    }
+    nav ul li {
+      display: inline;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+    nav ul li a:hover {
+      color: #ffccbc;
+    }
+    .back-button {
+      position: absolute;
+      display: block;
+      top: 100px;
+      right: 20px;
+      padding: 10px 20px;
+      margin: auto;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 25px;
+      z-index: 1000;
+    }
+    .back-button:hover {
+      background-color: #22b55d;
+    }
+    .container {
+      background-color: white;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      width: 100%;
+    }
+    h2.centered {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #00796b;
+    }
+    .date {
+      display: inline-flex;
+      gap: 100px;
+    }
+    .date .title_input_pair {
+      display: inline;
+    }
+    .title_input_pair {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
+    }
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    input, select, textarea {
+      width: 97%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    .button2 {
+      width: calc(50% - 10px);
+      padding: 12px;
+      margin: 5px;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    .button2:hover {
+      background-color: #45a049;
+    }
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
+      <img src="https://github.com/JoshiRudra-devop/shreeji-instruments/blob/main/logo.png?raw=true" alt="Company Logo" style="width: 40px; border-radius:30%; height: 40px; margin-right: 10px;">
+      <h1 style="color: white; margin: 0;">SHREEJI INSTRUMENTS</h1>
+    </a>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#footer">About</a></li>
+      <li><a href="contactUs.html">Contact Us</a></li>
+    </ul>
+  </nav>
+  <button class="back-button" onclick="window.history.back()">&lt;&lt; Back</button>
+  <div class="container">
+    <h2 class="centered">CUBE MOULD CALIBRATION CERTIFICATE</h2>
+    <form id="calibrationForm">
+      <div class="title_input_pair">
+        <label for="certificateNumber">Certificate No:</label>
+        <input type="text" id="certificateNumber" required>
+      </div>
+      <div class="date">
+        <div class="title_input_pair">
+          <label for="calibrationDate">Date of Calibration:</label>
+          <input type="date" id="calibrationDate" onchange="calculateNextDate()" required>
+        </div>
+        <div class="title_input_pair">
+          <label for="nextCalibrationDate">Next Suggested Date:</label>
+          <input type="date" id="nextCalibrationDate" required>
+        </div>
+      </div>
+      <div class="title_input_pair">
+        <label for="partyName">Name of Party:</label>
+        <input type="text" id="partyName" required>
+      </div>
+      <div class="title_input_pair">
+        <label for="quantity">NO. OF CUBE</label>
+        <input type="number" id="quantity" required min="1">
+      </div>
+      <div class="title_input_pair">
+        <label for="siteLocation">Site Location:</label>
+        <input type="text" id="siteLocation" required>
+      </div>
+      <div class="title_input_pair">
+        <label for="size">SIZE:</label>
+        <select id="size" required>
+          <option value="">Select Size</option>
+          <option value="150MM x 150MM x 150MM">150MM x 150MM x 150MM</option>
+          <option value="50MM x 50MM x 50MM">50MM x 50MM x 50MM</option>
+          <option value="100MM x 100MM x 100MM">100MM x 100MM x 100MM</option>
+          <option value="70.6MM x 70.6MM x 70.6MM">70.6MM x 70.6MM x 70.6MM</option>
+          <option value="700MM x 100MM x  100MM ">BIM MOULD</option>
+        </select>
+      </div>
+      <div class="button-group">
+        <button type="button" class="button2" onclick="preview()">Preview Calibration Certificate</button>
+        <button type="button" class="button2" onclick="generatePDF()">Download Certificate with Letterhead</button>
+        <button type="button" class="button2" onclick="generatePDFblankpg()">Download Certificate without Letterhead</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+  <script>
+    // Helper to load an image and return a promise for base64
+    function loadImageToBase64(url) {
+      return new Promise((resolve, reject) => {
+        var img = new window.Image();
+        img.crossOrigin = "Anonymous";
+        img.onload = function () {
+          var canvas = document.createElement("canvas");
+          canvas.width = img.width;
+          canvas.height = img.height;
+          var ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0);
+          resolve(canvas.toDataURL("image/png"));
+        };
+        img.onerror = reject;
+        img.src = url;
+      });
+    }
+
+    // Collect all images to base64 (do this once for performance)
+    let headerImgB64, footerImgB64, stampImgB64, signImgB64;
+    async function prepareImages() {
+      if (!headerImgB64) headerImgB64 = await loadImageToBase64("header.jpeg");
+      if (!footerImgB64) footerImgB64 = await loadImageToBase64("footer.jpeg");
+      if (!stampImgB64)  stampImgB64  = await loadImageToBase64("stamp.jpeg");
+      if (!signImgB64)   signImgB64   = await loadImageToBase64("sign.jpeg");
+    }
+
+    function getFormDetails() {
+      return {
+        certificateNumber: document.getElementById("certificateNumber").value,
+        calibrationDate: document.getElementById("calibrationDate").value.split("-").reverse().join("/"),
+        siteLocation: document.getElementById("siteLocation").value,
+        partyName: document.getElementById("partyName").value,
+        quantity: document.getElementById("quantity").value,
+        size: document.getElementById("size").value,
+        nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/")
+      };
+    }
+
+    function calculateNextDate() {
+      const calibrationDateInput = document.getElementById('calibrationDate');
+      const nextDateInput = document.getElementById('nextCalibrationDate');
+      const calibrationDate = new Date(calibrationDateInput.value);
+      if (!isNaN(calibrationDate)) {
+        const nextYearDate = new Date(calibrationDate);
+        nextYearDate.setFullYear(nextYearDate.getFullYear() + 1);
+        nextYearDate.setDate(nextYearDate.getDate() - 1); // Subtract 1 day
+        const formattedDate = nextYearDate.toISOString().split('T')[0];
+        nextDateInput.value = formattedDate;
+      }
+    }
+
+    // Helper to increment certificate number (handles pure numbers and cases like 1001/A)
+    function incrementCertificateNumber(baseCertNo, increment) {
+      if (!isNaN(Number(baseCertNo))) {
+        return String(Number(baseCertNo) + increment);
+      } else {
+        const match = baseCertNo.match(/^(\d+)(.*)$/);
+        if (match) {
+          return (Number(match[1]) + increment) + match[2];
+        } else {
+          return baseCertNo; // fallback, can't increment
+        }
+      }
+    }
+
+    // Helper to draw all details except table (for multipage table), and add all images
+    function drawHeader(doc, details, Yalign, withImages) {
+      if (withImages) {
+        // Header Image
+        if (headerImgB64) doc.addImage(headerImgB64, 'PNG', 3, 3, 210, 30);
+      }
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(23);
+      doc.text("TEST REPORT FOR CUBE MOULD", doc.internal.pageSize.getWidth() / 2, Yalign, { align: 'center' });
+      doc.text(`${details.size}`, doc.internal.pageSize.getWidth() / 2, Yalign+=7, { align: 'center' });
+
+      doc.setFontSize(12);
+      doc.text(`DATE:-${details.calibrationDate}`, 155, Yalign += 10);
+      doc.text(`REF NO                        :-     SI-${details.certificateNumber}`, 14, Yalign);
+      doc.text(`NAME OF PARTY        :-     ${details.partyName}`, 14, Yalign += 10);
+      doc.text(`EQUIPMENT NAME     :-     CUBE MOULD (${details.size})`, 14, Yalign += 10);
+      doc.text(`NEXT DUE DATE        :-     ${details.nextCalibrationDate}`, 14, Yalign += 10);
+      doc.text(`SITE LOCATION          :-     ${details.siteLocation}`, 14, Yalign += 10);
+      return Yalign + 10; // next Y for table
+    }
+
+    // Add footer, stamp, sign images (every page)
+    function addFooterImages(doc) {
+      if (footerImgB64) doc.addImage(footerImgB64, 'PNG', 0, 255, 210, 27);
+      if (stampImgB64)  doc.addImage(stampImgB64,  'PNG', 100, 217, 35, 35);
+      if (signImgB64)   doc.addImage(signImgB64,   'PNG', 160, 232, 40, 10);
+    }
+
+    // Certificate details with table broken across pages (max 10 rows per page)
+    function addCertificateDetails(doc, details) {
+      let qty = parseInt(details.quantity);
+      if (isNaN(qty) || qty <= 0) {
+        alert("Please enter a valid number of cubes.");
+        return;
+      }
+      // Parse size into [height, length, width]
+      let [height, length, width] = details.size.split("x").map(s => s.trim());
+      if (!length) length = "";
+      if (!height) height = "";
+      if (!width) width = "";
+      const headers = [["SR.NO", "LENGTH", "HEIGHT", "WIDTH"]];
+      const allRows = [];
+      for (let i = 1; i <= qty; i++) {
+        allRows.push([i, height, length, width]);
+      }
+      const pageCount = Math.ceil(allRows.length / 10);
+      for (let page = 0; page < pageCount; page++) {
+        if (page > 0) doc.addPage();
+        let pageRows = allRows.slice(page * 10, page * 10 + 10);
+        // Increment certificateNumber for each page
+        let refNo = incrementCertificateNumber(details.certificateNumber, page);
+        let pageDetails = { ...details, certificateNumber: refNo };
+        let tableY = drawHeader(doc, pageDetails, 50, true);
+        doc.autoTable({
+          head: headers,
+          body: pageRows,
+          startY: tableY + 1,
+          styles: {
+            fontSize: 12,
+            lineColor: [0, 0, 0],
+            textColor: [0, 0, 0],
+            lineWidth: 0.2,
+            halign: 'center',
+            valign: 'middle'
+          },
+          headStyles: {
+            fontSize: 15,
+            fillColor: [255, 255, 255],
+            textColor: [0, 0, 0],
+            lineColor: [0, 0, 0],
+            lineWidth: 0.2,
+            halign: 'center',
+            valign: 'middle'
+          },
+          alternateRowStyles: {
+            fillColor: [255, 255, 255]
+          }
+        });
+        let tableEndY = doc.autoTable.previous.finalY;
+        doc.setFontSize(12);
+        doc.text("CALIBRATED BY: YOGESH B JOSHI", 14, tableEndY + 10);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(12);
+        doc.text("FOR, SHREEJI INSTRUMENTS", 145, 230);
+        doc.text("PROPRIETOR", 170, 245);
+        addFooterImages(doc);
+      }
+    }
+
+    async function savePDFWithLocation(pdfDocument, defaultFileName) {
+      try {
+        const fileHandle = await window.showSaveFilePicker({
+          suggestedName: defaultFileName,
+          types: [
+            {
+              description: 'PDF Files',
+              accept: { 'application/pdf': ['.pdf'] },
+            },
+          ],
+        });
+        const writableStream = await fileHandle.createWritable();
+        await writableStream.write(pdfDocument);
+        await writableStream.close();
+        console.log('PDF saved successfully!');
+      } catch (error) {
+        console.error('Error saving PDF:', error);
+      }
+    }
+
+    // Preview the generated certificate
+    async function preview() {
+      if (!document.getElementById("calibrationForm").reportValidity()) return;
+      await prepareImages();
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const details = getFormDetails();
+      addCertificateDetails(doc, details);
+      // PDF Preview
+      const pdfBlob = doc.output('blob');
+      const pdfURL = URL.createObjectURL(pdfBlob);
+      const previewFrame = document.createElement('iframe');
+      previewFrame.style.width = "100%";
+      previewFrame.style.height = "600px";
+      previewFrame.src = pdfURL;
+      const container = document.querySelector('.container');
+      const existingPreview = document.querySelector('iframe');
+      if (existingPreview) container.removeChild(existingPreview);
+      container.appendChild(previewFrame);
+    }
+
+    // Generate PDF with letterhead
+    async function generatePDF() {
+      if (!document.getElementById("calibrationForm").reportValidity()) return;
+      await prepareImages();
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const details = getFormDetails();
+      addCertificateDetails(doc, details);
+      const pdfBlob = doc.output('blob');
+      await savePDFWithLocation(pdfBlob, `CubeMould_${details.certificateNumber}.pdf`);
+    }
+
+    // Generate PDF without letterhead (removes header image only)
+    async function generatePDFblankpg() {
+      if (!document.getElementById("calibrationForm").reportValidity()) return;
+      await prepareImages();
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const details = getFormDetails();
+      // Draw header without header image
+      function drawHeaderNoImg(doc, details, Yalign) {
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(23);
+        doc.text("TEST REPORT FOR CUBE MOULD", doc.internal.pageSize.getWidth() / 2, Yalign, { align: 'center' });
+        doc.text(`${details.size}`, doc.internal.pageSize.getWidth() / 2, Yalign+=7, { align: 'center' });
+        doc.setFontSize(12);
+        doc.text(`DATE:-${details.calibrationDate}`, 155, Yalign += 10);
+        doc.text(`REF NO                        :-     SI-${details.certificateNumber}`, 14, Yalign);
+        doc.text(`NAME OF PARTY        :-     ${details.partyName}`, 14, Yalign += 10);
+        doc.text(`EQUIPMENT NAME     :-     CUBE MOULD (${details.size})`, 14, Yalign += 10);
+        doc.text(`NEXT DUE DATE        :-     ${details.nextCalibrationDate}`, 14, Yalign += 10);
+        doc.text(`SITE LOCATION          :-     ${details.siteLocation}`, 14, Yalign += 10);
+        return Yalign + 10; // next Y for table
+      }
+      let qty = parseInt(details.quantity);
+      if (isNaN(qty) || qty <= 0) {
+        alert("Please enter a valid number of cubes.");
+        return;
+      }
+      let [height, length, width] = details.size.split("x").map(s => s.trim());
+      if (!length) length = "";
+      if (!height) height = "";
+      if (!width) width = "";
+      const headers = [["SR.NO", "LENGTH", "HEIGHT", "WIDTH"]];
+      const allRows = [];
+      for (let i = 1; i <= qty; i++) {
+        allRows.push([i, height, length, width]);
+      }
+      const pageCount = Math.ceil(allRows.length / 10);
+      for (let page = 0; page < pageCount; page++) {
+        if (page > 0) doc.addPage();
+        let pageRows = allRows.slice(page * 10, page * 10 + 10);
+        // Increment certificateNumber for each page
+        let refNo = incrementCertificateNumber(details.certificateNumber, page);
+        let pageDetails = { ...details, certificateNumber: refNo };
+        let tableY = drawHeaderNoImg(doc, pageDetails, 50);
+        doc.autoTable({
+          head: headers,
+          body: pageRows,
+          startY: tableY + 1,
+          styles: {
+            fontSize: 12,
+            lineColor: [0, 0, 0],
+            textColor: [0, 0, 0],
+            lineWidth: 0.2,
+            halign: 'center',
+            valign: 'middle'
+          },
+          headStyles: {
+            fontSize: 15,
+            fillColor: [255, 255, 255],
+            textColor: [0, 0, 0],
+            lineColor: [0, 0, 0],
+            lineWidth: 0.2,
+            halign: 'center',
+            valign: 'middle'
+          },
+          alternateRowStyles: {
+            fillColor: [255, 255, 255]
+          }
+        });
+        let tableEndY = doc.autoTable.previous.finalY;
+        doc.setFontSize(12);
+        doc.text("CALIBRATED BY: YOGESH B JOSHI", 14, tableEndY + 10);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(12);
+        doc.text("FOR, SHREEJI INSTRUMENTS", 145, 230);
+        doc.text("PROPRIETOR", 170, 245);
+        addFooterImages(doc);
+      }
+      const pdfBlob = doc.output('blob');
+      await savePDFWithLocation(pdfBlob, `CubeMould_${details.certificateNumber}_blank.pdf`);
+    }
+  </script>
+</body>
+</html>
