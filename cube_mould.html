@@ -271,8 +271,19 @@
       doc.text(`NAME OF PARTY        :-     ${details.partyName}`, 14, Yalign += 10);
       doc.text(`EQUIPMENT NAME     :-     CUBE MOULD (${details.size})`, 14, Yalign += 10);
       doc.text(`NEXT DUE DATE        :-     ${details.nextCalibrationDate}`, 14, Yalign += 10);
-      doc.text(`SITE LOCATION          :-     ${details.siteLocation}`, 14, Yalign += 10);
-      return Yalign + 10; // next Y for table
+
+      // --- Site Location with wrapping (only value, not prefix) ---
+      const siteLocPrefix = "SITE LOCATION          :-     ";
+      const prefixWidth = doc.getTextWidth(siteLocPrefix);
+      const maxWidth = 180 - prefixWidth; // adjust as needed according to your layout
+      const siteLocLines = doc.splitTextToSize(details.siteLocation, maxWidth);
+      doc.text(siteLocPrefix + (siteLocLines[0] || ""), 14, Yalign += 10);
+      for (let i = 1; i < siteLocLines.length; i++) {
+        doc.text(siteLocLines[i], 14 + prefixWidth , Yalign +=4);
+      }
+      Yalign += ((siteLocLines.length - 1)+5) ;
+      // --- end of Site Location wrapping ---
+      return Yalign; // next Y for table
     }
 
     // Add footer, stamp, sign images (every page)
@@ -289,15 +300,15 @@
         alert("Please enter a valid number of cubes.");
         return;
       }
-      // Parse size into [height, length, width]
-      let [height, length, width] = details.size.split("x").map(s => s.trim());
+      // Parse size into [length, height, width]
+      let [length, height, width] = details.size.split("x").map(s => s.trim());
       if (!length) length = "";
       if (!height) height = "";
       if (!width) width = "";
       const headers = [["SR.NO", "LENGTH", "HEIGHT", "WIDTH"]];
       const allRows = [];
       for (let i = 1; i <= qty; i++) {
-        allRows.push([i, height, length, width]);
+        allRows.push([i, length, height, width]);
       }
       const pageCount = Math.ceil(allRows.length / 10);
       for (let page = 0; page < pageCount; page++) {
@@ -399,7 +410,6 @@
     // Generate PDF without letterhead (removes header image only)
     async function generatePDFblankpg() {
       if (!document.getElementById("calibrationForm").reportValidity()) return;
-      await prepareImages();
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
       const details = getFormDetails();
@@ -415,22 +425,34 @@
         doc.text(`NAME OF PARTY        :-     ${details.partyName}`, 14, Yalign += 10);
         doc.text(`EQUIPMENT NAME     :-     CUBE MOULD (${details.size})`, 14, Yalign += 10);
         doc.text(`NEXT DUE DATE        :-     ${details.nextCalibrationDate}`, 14, Yalign += 10);
-        doc.text(`SITE LOCATION          :-     ${details.siteLocation}`, 14, Yalign += 10);
-        return Yalign + 10; // next Y for table
+
+         // --- Site Location with wrapping (only value, not prefix) ---
+      const siteLocPrefix = "SITE LOCATION          :-     ";
+      const prefixWidth = doc.getTextWidth(siteLocPrefix);
+      const maxWidth = 180 - prefixWidth; // adjust as needed according to your layout
+      const siteLocLines = doc.splitTextToSize(details.siteLocation, maxWidth);
+      doc.text(siteLocPrefix + (siteLocLines[0] || ""), 14, Yalign += 10);
+      for (let i = 1; i < siteLocLines.length; i++) {
+        doc.text(siteLocLines[i], 14 + prefixWidth , Yalign +=4);
+      }
+      Yalign += ((siteLocLines.length - 1)+5) ;
+      // --- end of Site Location wrapping ---
+      return Yalign; // next Y for table
       }
       let qty = parseInt(details.quantity);
       if (isNaN(qty) || qty <= 0) {
         alert("Please enter a valid number of cubes.");
         return;
       }
-      let [height, length, width] = details.size.split("x").map(s => s.trim());
+      // Parse size into [length, height, width]
+      let [length, height, width] = details.size.split("x").map(s => s.trim());
       if (!length) length = "";
       if (!height) height = "";
       if (!width) width = "";
       const headers = [["SR.NO", "LENGTH", "HEIGHT", "WIDTH"]];
       const allRows = [];
       for (let i = 1; i <= qty; i++) {
-        allRows.push([i, height, length, width]);
+        allRows.push([i, length, height, width]);
       }
       const pageCount = Math.ceil(allRows.length / 10);
       for (let page = 0; page < pageCount; page++) {
@@ -472,7 +494,7 @@
         doc.setFontSize(12);
         doc.text("FOR, SHREEJI INSTRUMENTS", 145, 230);
         doc.text("PROPRIETOR", 170, 245);
-        addFooterImages(doc);
+     
       }
       const pdfBlob = doc.output('blob');
       await savePDFWithLocation(pdfBlob, `CubeMould_${details.certificateNumber}_blank.pdf`);
