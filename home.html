@@ -7,6 +7,9 @@
   <meta name="description" content="Welcome to Shreeji Instruments - Create Calibration Certificates Easily.">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="icon" type="img/png" href="logo.png" style="border-radius:30%;" />
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="firebase-app.js"></script>
   <title>Shreeji Instruments</title>
   <style>
     * {
@@ -168,6 +171,21 @@
       color: #f0f0f0;
       background-color: #00796b;
     }
+    .button{
+      width: 20%;
+      padding: 12px;
+      margin: 1%;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    .button:hover{
+      background-color: #45a049;
+    }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
@@ -182,6 +200,7 @@
       <li><a href="#footer">About</a></li>
       <li><a href="contactUs.html">Contact Us</a></li>
     </ul>
+    <button class="button" onclick="logout()">Logout</button>
   </nav>
   <header> SMART CALIBRATION CERTIFICATE GENERATOR. </header>
   <div class="search-bar-container">
@@ -246,10 +265,6 @@
      <div class="card">
       <a href="try.html">try</a>
     </div>
-    <div class="card">
-      <a href="AuthenticationTry.html">try</a>
-    </div>
-    
   </div>
    <div class="fulllebcard card">
       <a href="full_leb.html">Full Lab</a>
@@ -273,6 +288,24 @@
   </footer>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
   <script>
+
+
+ // 🔐 Protect the page
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        document.getElementById('user-info').innerText = "Logged in as: " + user.phoneNumber;
+      } else {
+        // Redirect back if not logged in
+        window.location.href = "index.html";
+      }
+    });
+
+    function logout() {
+      firebase.auth().signOut().then(() => {
+        window.location.href = "index.html";
+      });
+    }
+    
     // Move Icon on Search Bar Focus
     function moveIcon() {
       const icon = document.getElementById('search-icon');
