@@ -173,14 +173,6 @@
         </select>
       </div>  
       <div class="title_input_pair">
-        <label for="serialNo">Serial No:</label>
-        <input type="text" id="serialNo" required>
-      </div>
-      <div class="title_input_pair">
-        <label for="capacity">Capacity:</label>
-        <input type="text" id="capacity" required>
-      </div>
-      <div class="title_input_pair">
         <label for="siteLocation">Site Location:</label>
         <input type="text" id="siteLocation" required>
       </div>
@@ -201,10 +193,8 @@
         certificateNumber: document.getElementById("certificateNumber").value,
         calibrationDate: document.getElementById("calibrationDate").value.split("-").reverse().join("/"),
         siteLocation: document.getElementById("siteLocation").value,
-Z        size: document.getElementById("size").value,
+        size: document.getElementById("size").value,
         partyname: document.getElementById("partyname").value,
-        serialNo: document.getElementById("serialNo").value,
-        capacity: document.getElementById("capacity").value,
         nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/"),
       };
     }
@@ -286,10 +276,9 @@ async function savePDFWithLocation(pdfDocument, defaultFileName) {
       doc.text(`DATE: ${details.calibrationDate}`, 140, Yalign+=15);
       doc.text(`REF NO                         :     SI-${details.certificateNumber}`, 14, Yalign);
       doc.text(`NAME OF PARTY         :     ${details.partyname}`, 14, Yalign+=15);
-      doc.text(`EQUIPMENT NAME      :     MEASURING CYLINDER`, 14, Yalign+=15);
-      doc.text(`SERIAL NO / MAKE      :     ${details.serialNo} / ${details.size}`, 14, Yalign+=15);
+      doc.text(`EQUIPMENT NAME      :     MEASURING CYLINDER  (${details.size})`, 14, Yalign+=15);
+      doc.text(`SERIAL NO                  :     ${details.certificateNumber} `, 14, Yalign+=15);
       doc.text(`SITE LOCATION           :     ${details.siteLocation}`, 14, Yalign+=15);
-      doc.text(`CAPACITY                    :     ${details.capacity}`, 14, Yalign+=15);
       doc.text(`NEXT DUE DATE          :     ${details.nextCalibrationDate}`, 14, Yalign+=15);
       doc.text(`CALIBRATION BY        :     YOGESH BHAI`, 14, Yalign+=15);
 
