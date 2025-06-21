@@ -13,6 +13,7 @@
       flex-direction: column;
       align-items: center;
       margin: 0;
+      padding-right: 280px; /* Side dock space */
     }
     nav {
       background-color: #00796b;
@@ -22,6 +23,10 @@
       justify-content: space-between;
       align-items: center;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
     }
     nav h1 {
       color: white;
@@ -46,30 +51,81 @@
     nav ul li a:hover {
       color: #ffccbc;
     }
-     /* Style for the back button */
+    .side-dock {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 260px;
+      height: 100vh;
+      background: linear-gradient(135deg, #00796b, #004d40);
+      box-shadow: -4px 0 15px rgba(0, 0, 0, 0.2);
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      padding: 80px 20px 20px 20px;
+      overflow-y: auto;
+    }
+    .side-dock h3 {
+      color: white;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 18px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+      padding-bottom: 10px;
+    }
+    .dock-button {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 15px;
+      background: linear-gradient(135deg, #26a69a, #00695c);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .dock-button:hover {
+      background: linear-gradient(135deg, #2dd4bf, #0d9488);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+    .dock-button:active {
+      transform: translateY(0);
+    }
+    .dock-button.sticker-btn {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+    }
+    .dock-button.sticker-btn:hover {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    }
     .back-button {
-            position: absolute;
-            display: block;
-            top: 100px; /* Adjust based on the height of the navigation bar */
-            right: 20px; /* Align to the right */
-            padding: 10px 20px;
-            margin: auto;
-            background-color: #00796b;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 25px;
-            z-index: 1000; /* Ensure it's above other elements */
-        }
-
-        .back-button:hover {
-            background-color: #22b55d;
-        }
+      position: fixed;
+      top: 80px;
+      left: 20px;
+      padding: 10px 20px;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      z-index: 1000;
+      transition: background-color 0.3s ease;
+    }
+    .back-button:hover {
+      background-color: #22b55d;
+    }
     .container {
       background-color: white;
       padding: 20px;
-      margin: 20px 0;
+      margin: 100px 0 20px 0;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       max-width: 800px;
@@ -82,14 +138,12 @@
       color: #00796b;
     }
     .date{
-            display: inline-flex;
-            gap: 100px;
-        }
-        .date .title_input_pair{
-            display: inline;
-            
-        }
-
+      display: inline-flex;
+      gap: 100px;
+    }
+    .date .title_input_pair{
+      display: inline;
+    }
     .title_input_pair {
       display: flex;
       flex-direction: column;
@@ -107,25 +161,77 @@
       font-size: 16px;
       margin-bottom: 10px;
     }
-    .button2 {
-      width: calc(50% - 10px);
-      padding: 12px;
-      margin: 5px;
+    #stickerPreviewFrame {
+      width: 100%;
+      max-width: 400px;
+      height: 300px;
+      border: 2px solid #00796b;
+      margin: 16px auto 0 auto;
+      display: none;
+      border-radius: 8px;
+    }
+    #downloadStickerBtn {
+      display: none;
+      margin: 10px auto;
       background-color: #00796b;
       color: white;
       border: none;
-      cursor: pointer;
-      font-size: 16px;
+      padding: 12px 24px;
       border-radius: 4px;
-      transition: background-color 0.3s ease;
+      font-size: 16px;
+      cursor: pointer;
+      width: 200px;
     }
-    .button2:hover {
+    #downloadStickerBtn:hover {
       background-color: #45a049;
     }
-    .button-group {
-      display: flex;
-      /* flex-wrap: wrap; */
-      justify-content: space-between;
+    .sticker-section {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .sticker-preview-container {
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    .unsaved-reminder {
+      color: #c0392b;
+      text-align: center;
+      font-weight: bold;
+      margin: 10px 0 0 0;
+      font-size: 16px;
+      display: none;
+    }
+    @media (max-width: 1200px) {
+      body {
+        padding-right: 0;
+      }
+      .side-dock {
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+      }
+      .side-dock.open {
+        transform: translateX(0);
+      }
+      .dock-toggle {
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        background: #00796b;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        z-index: 1001;
+        display: block;
+      }
+    }
+    @media (min-width: 1201px) {
+      .dock-toggle {
+        display: none;
+      }
     }
   </style>
 </head>
@@ -141,110 +247,182 @@
       <li><a href="contactUs.html">Contact Us</a></li>
     </ul>
   </nav>
-    <button class="back-button" onclick="window.history.back()"><< Back</button>
-  <div class="container">
-    <h2 class="centered">AUTO LEVEL CALIBRATION CERTIFICATE</h2>
-    <form id="calibrationForm">
-      <div class="title_input_pair">
-        <label for="certificateNumber">Certificate No:</label>
-        <input type="text" id="certificateNumber" required>
-      </div>
-      <div class="date">
+    <button class="back-button" onclick="goBackOrPromptSave()">← Back</button>
+    <button class="dock-toggle" onclick="toggleDock()">☰ Actions</button>
+    <div class="side-dock" id="sideDock">
+      <h3>Actions</h3>
+      <button class="dock-button" type="button" onclick="preview()">
+        📋 Preview Certificate
+      </button>
+      <button class="dock-button" type="button" onclick="generatePDF()">
+        📄 Download with Letterhead
+      </button>
+      <button class="dock-button" type="button" onclick="generatePDFblankpg()">
+        📝 Download without Letterhead
+      </button>
+      <button class="dock-button" type="button" onclick="printBlankCertificate()">
+        🖨️ Print without Letterhead
+      </button>
+      <button class="dock-button sticker-btn" type="button" onclick="generateInfoSticker()">
+        🏷️ Generate Info Sticker
+      </button>
+      <button class="dock-button" id="downloadStickerBtn" type="button" onclick="downloadSticker()" style="display: none;">
+        ⬇️ Download Sticker
+      </button>
+      <button class="dock-button" type="button" onclick="sharePDF()">
+        📤 Share PDF (With Letterhead)
+      </button>
+    </div>
+    <div class="container">
+      <h2 class="centered">AUTO LEVEL CALIBRATION CERTIFICATE</h2>
+      <form id="calibrationForm">
         <div class="title_input_pair">
+          <label for="certificateNumber">Certificate No:</label>
+          <input type="text" id="certificateNumber" required>
+        </div>
+        <div class="date">
+          <div class="title_input_pair">
             <label for="calibrationDate">Date of Calibration:</label>
             <input type="date" id="calibrationDate" onchange="calculateNextDate()" required>
-        </div>
-        <div class="title_input_pair">
+          </div>
+          <div class="title_input_pair">
             <label for="nextCalibrationDate">Next Suggested Date:</label>
             <input type="date" id="nextCalibrationDate" required>
+          </div>
         </div>
-      </div>
-      <div class="title_input_pair">
-        <label for="partyName">Name of Party:</label>
-        <input type="text" id="partyName" required>
-      </div>
-      <div class="title_input_pair">
-        <label for="make">Make:</label>
-        <input type="text" id="make" required>
-      </div>  
-       <div class="title_input_pair">
-        <label for="modelNo">MODEL No:</label>
-        <input type="text" id="modelNo" required>
-      </div>
-      <div class="title_input_pair">
-        <label for="serialNo">Serial No:</label>
-        <input type="text" id="serialNo" required>
-      </div>
-     
+        <div class="title_input_pair">
+          <label for="partyName">Name of Party:</label>
+          <input type="text" id="partyName" required>
+        </div>
+        <div class="title_input_pair">
+          <label for="make">Make:</label>
+          <input type="text" id="make" required>
+        </div>  
+        <div class="title_input_pair">
+          <label for="modelNo">MODEL No:</label>
+          <input type="text" id="modelNo" required>
+        </div>
+        <div class="title_input_pair">
+          <label for="serialNo">Serial No:</label>
+          <input type="text" id="serialNo" required>
+        </div>
+        <div class="unsaved-reminder" id="unsavedReminder">
+          <span>⚠️ Please save your certificate before leaving this page.</span>
+        </div>
+        <div class="sticker-section">
+          <div class="sticker-preview-container">
+            <h3 style="color: #00796b; margin-top: 0;">Info Sticker Preview</h3>
+            <iframe id="stickerPreviewFrame"></iframe>
+          </div>
+        </div>
+      </form>
+    </div>
 
-      <div class="button-group">
-      <button type="button" class="button2" onclick="preview()">Preview Calibration Certificate</button>
-      <button type="button" class="button2" onclick="generatePDF()">Download Certificate with Letterhead</button>
-      <button type="button" class="button2" onclick="generatePDFblankpg()">Download Certificate without Letterhead</button>
-      </div>
-    </form>
-  </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script>
-    // Function to fetch form details
-    function getFormDetails() {
-      return {
-        certificateNumber: document.getElementById("certificateNumber").value,
-        calibrationDate: document.getElementById("calibrationDate").value.split("-").reverse().join("/"),
-        partyName: document.getElementById("partyName").value,
-        make: document.getElementById("make").value,
-        serialNo: document.getElementById("serialNo").value,
-        modelNo: document.getElementById("modelNo").value,
-        nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/"),
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+      let stickerPdfBlob = null;
+      let pdfSaved = false;
+      function updateUnsavedReminder() {
+        const reminder = document.getElementById('unsavedReminder');
+        if (!pdfSaved) {
+          reminder.style.display = 'block';
+        } else {
+          reminder.style.display = 'none';
+        }
+      }
+      document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll("#calibrationForm input").forEach(input => {
+          input.addEventListener('input', () => {
+            pdfSaved = false;
+            updateUnsavedReminder();
+          });
+        });
+        updateUnsavedReminder();
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('calibrationDate').value = today;
+        calculateNextDate();
+      });
+      window.onbeforeunload = function(e) {
+        if (!pdfSaved) {
+          e.preventDefault();
+          e.returnValue = 'You have unsaved changes. Please save your calibration certificate before leaving!';
+          return e.returnValue;
+        }
       };
-    }
-    
-    function calculateNextDate() {
-           const calibrationDateInput = document.getElementById('calibrationDate');
-           const nextDateInput = document.getElementById('nextCalibrationDate');
-
-           const calibrationDate = new Date(calibrationDateInput.value);
-           if (!isNaN(calibrationDate)) {
-               const nextYearDate = new Date(calibrationDate);
-               nextYearDate.setFullYear(nextYearDate.getFullYear() + 1);
-               nextYearDate.setDate(nextYearDate.getDate() - 1); // Subtract 1 day
-
-               const formattedDate = nextYearDate.toISOString().split('T')[0];
-               nextDateInput.value = formattedDate;
-           }
-       }
-    
-    async function savePDFWithLocation(pdfDocument, defaultFileName) {
-  try {
-    // Open a file picker to let the user choose the location and file name
-    const fileHandle = await window.showSaveFilePicker({
-      suggestedName: defaultFileName,
-      types: [
-        {
-          description: 'PDF Files',
-          accept: { 'application/pdf': ['.pdf'] },
-        },
-      ],
-    });
-
-    // Create a writable stream for the file
-    const writableStream = await fileHandle.createWritable();
-
-    // Write the PDF data to the file
-    await writableStream.write(pdfDocument);
-
-    // Close the writable stream
-    await writableStream.close();
-
-    console.log('PDF saved successfully!');
-  } catch (error) {
-    console.error('Error saving PDF:', error);
-  }
-}
-    
-    // Function to add IMAGES In certificare
-    function addImg(doc, details)
+      function goBackOrPromptSave() {
+        if (!pdfSaved) {
+          updateUnsavedReminder();
+          if (confirm("⚠️ You have unsaved changes! Please save your calibration certificate before leaving.\n\nDo you want to save now?")) {
+            generatePDF();
+          }
+        } else {
+          window.history.back();
+        }
+      }
+      function toggleDock() {
+        const dock = document.getElementById('sideDock');
+        dock.classList.toggle('open');
+      }
+      function getFormDetails() {
+        return {
+          certificateNumber: document.getElementById("certificateNumber").value,
+          calibrationDate: document.getElementById("calibrationDate").value.split("-").reverse().join("/"),
+          partyName: document.getElementById("partyName").value,
+          make: document.getElementById("make").value,
+          serialNo: document.getElementById("serialNo").value,
+          modelNo: document.getElementById("modelNo").value,
+          nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/"),
+        };
+      }
+      function calculateNextDate() {
+        const calibrationDateInput = document.getElementById('calibrationDate');
+        const nextDateInput = document.getElementById('nextCalibrationDate');
+        const calibrationDate = new Date(calibrationDateInput.value);
+        if (!isNaN(calibrationDate)) {
+          const nextYearDate = new Date(calibrationDate);
+          nextYearDate.setFullYear(nextYearDate.getFullYear() + 1);
+          nextYearDate.setDate(nextYearDate.getDate() - 1);
+          const formattedDate = nextYearDate.toISOString().split('T')[0];
+          nextDateInput.value = formattedDate;
+        }
+      }
+      function isMobile() {
+        return /Mobi|Android/i.test(navigator.userAgent);
+      }
+      async function savePDFWithLocation(pdfDocument, defaultFileName) {
+        try {
+          if (window.showSaveFilePicker && !isMobile()) {
+            const fileHandle = await window.showSaveFilePicker({
+              suggestedName: defaultFileName,
+              types: [
+                {
+                  description: 'PDF Files',
+                  accept: { 'application/pdf': ['.pdf'] },
+                },
+              ],
+            });
+            const writableStream = await fileHandle.createWritable();
+            await writableStream.write(pdfDocument);
+            await writableStream.close();
+          } else {
+            // Mobile or no picker support: force download via anchor
+            const url = URL.createObjectURL(pdfDocument);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = defaultFileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(() => URL.revokeObjectURL(url), 100);
+          }
+          pdfSaved = true;
+          updateUnsavedReminder();
+          alert('PDF saved successfully!');
+        } catch (error) {
+          console.error('Error saving PDF:', error);
+        }
+      }
+      function addImg(doc, details)
      {
       const img = new Image();
       img.src = 'footer.jpeg';
@@ -253,7 +431,6 @@
       const img3 = new Image();
       img3.src = 'sign.jpeg';
       doc.addImage(img3, 'PNG', 160, 232, 40, 10);
-
 
       const img1 = new Image();
       img1.src = 'stamp.jpeg';
@@ -264,115 +441,188 @@
       doc.addImage(img2, 'PNG', 3, 3, 210, 30);
      }
 
-    function addCertificateDetails(doc, details)
-     {     
+      function addCertificateDetails(doc, details) {     
         let Yalign=48;
-
-       doc.setFontSize(15);
-      doc.setFont("helvetica", "bold");   
-      doc.text(`DATE:${details.calibrationDate}`, 155, Yalign);
-      doc.text(`REF No:SI-${details.certificateNumber}`, 10, Yalign)
-
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(25);
-      doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, Yalign+=15, { align: 'center' });
-      
-
-      doc.setFontSize(15);
-      doc.text(`FOR , ${details.make}  AUTO LEVEL`, doc.internal.pageSize.getWidth() / 2, Yalign+=7, {  align: 'center' });
-      doc.text(`MODLE : ${details.modelNo}  ,SR NO:- ${details.serialNo}`, doc.internal.pageSize. getWidth() / 2,Yalign+=7, { align: 'center' });
-      // Certificate Details
-      
-      doc.text(`NAME OF PARTY         :     ${details.partyName}`, 14, Yalign+=11);
-      doc.text(`EQUIPMENT NAME      :     AUTO LEVEL`, 14, Yalign+=9);
-      doc.text(`MAKE                            :     ${details.make}`, 14, Yalign+=9);
-      doc.text(`MODEL NO                   :     ${details.modelNo} `, 14, Yalign+=9);
-      doc.text(`SERIAL NO                   :     ${details.serialNo}`, 14, Yalign+=9);
-      doc.text(`DATE                             :     ${details.calibrationDate}`, 14, Yalign+=9);
-      doc.text(`NEXT DUE DATE          :     ${details.nextCalibrationDate}`, 14, Yalign+=9);
-
-      doc.setFontSize(12);
-      doc.text(`This is to certify that ${details.make} Automatic Level-${details.modelNo} Serial No ${details.serialNo} Been Checked `, 14, Yalign+=10);
-      doc.text(` By us as under One year warranty.`, 14, Yalign+=5);
-      doc.text(`1. Level was kept At a distance of 20 meter from staff-A and 30 meter from Staff-B, Which `, 14, Yalign+=10);
-      doc.text(`were ).Pre-fixed at same level in our workshop (permanent bench-mark of same elevation).`, 14, Yalign+=5);
-      doc.text(`2. Reading of Staff-A was taken as 1,600`, 14, Yalign+=10);
-      doc.text(`3. Reading of Staff-B was taken as 1,600 .`, 14, Yalign+=10);
-      doc.text(`Hence error is NIL (Within the tolerance Level). Therefore, instrument is found free from  `, 14, Yalign+=10);
-      doc.text(`collimation error as of Date.`, 14, Yalign+=5);
-
-      doc.text("FOR,SHREEJI INSTRUMENTS", 145, 230);
-      doc.text("PROPRIETOR", 170, 245);
-
-
-    }
-
-    // Preview the generated certificate
-    async function preview() {
-      if (!document.getElementById("calibrationForm").reportValidity()) return;
-
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-
-      // Fetch form details
-      const details = getFormDetails();
-
-      // Add certificate details using the reusable function
-      addCertificateDetails(doc, details);
-
-      addImg(doc, details);
-
-      // Generate preview
-      const pdfBlob = doc.output('blob');
-      const pdfURL = URL.createObjectURL(pdfBlob);
-      const previewFrame = document.createElement('iframe');
-      previewFrame.style.width = "100%";
-      previewFrame.style.height = "600px";
-      previewFrame.src = pdfURL;
-
-      // Clear previous preview and add new one
-      const container = document.querySelector('.container');
-      const existingPreview = document.querySelector('iframe');
-      if (existingPreview) container.removeChild(existingPreview);
-      container.appendChild(previewFrame);
-    }
-
-    // Generate PDF with letterhead
-    async function generatePDF() {
-      if (!document.getElementById("calibrationForm").reportValidity()) return;
-
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-
-      // Fetch form details
-      const details = getFormDetails();
-
-      // Add certificate details using the reusable function
-      addCertificateDetails(doc, details);
-
-      addImg(doc, details);
-     // Save PDF
-      const pdfBlob = doc.output('blob'); // Convert the PDF to a Blob
-      savePDFWithLocation(pdfBlob, `${details.serialNo} ${details.make} ${details.modelNo}.pdf`);
-    }
-
-    // Generate PDF without letterhead
-    async function generatePDFblankpg() {
-      if (!document.getElementById("calibrationForm").reportValidity()) return;
-
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-
-      // Fetch form details
-      const details = getFormDetails();
-
-      // Add certificate details using the reusable function
-      addCertificateDetails(doc, details);
-
-      // Save PDF
-      const pdfBlob = doc.output('blob'); // Convert the PDF to a Blob
-      savePDFWithLocation(pdfBlob, `${details.serialNo} ${details.make} ${details.modelNo}.pdf`);
-    }
-  </script>
+        doc.setFontSize(15);
+        doc.setFont("helvetica", "bold");   
+        doc.text(`DATE:${details.calibrationDate}`, 155, Yalign);
+        doc.text(`REF No:SI-${details.certificateNumber}`, 10, Yalign)
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(25);
+        doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, Yalign+=15, { align: 'center' });
+        doc.setFontSize(15);
+        doc.text(`FOR , ${details.make}  AUTO LEVEL`, doc.internal.pageSize.getWidth() / 2, Yalign+=7, {  align: 'center' });
+        doc.text(`MODLE : ${details.modelNo}  ,SR NO:- ${details.serialNo}`, doc.internal.pageSize. getWidth() / 2,Yalign+=7, { align: 'center' });
+        doc.text(`NAME OF PARTY         :     ${details.partyName}`, 14, Yalign+=11);
+        doc.text(`EQUIPMENT NAME      :     AUTO LEVEL`, 14, Yalign+=9);
+        doc.text(`MAKE                            :     ${details.make}`, 14, Yalign+=9);
+        doc.text(`MODEL NO                   :     ${details.modelNo} `, 14, Yalign+=9);
+        doc.text(`SERIAL NO                   :     ${details.serialNo}`, 14, Yalign+=9);
+        doc.text(`DATE                             :     ${details.calibrationDate}`, 14, Yalign+=9);
+        doc.text(`NEXT DUE DATE          :     ${details.nextCalibrationDate}`, 14, Yalign+=9);
+        doc.setFontSize(12);
+        doc.text(`This is to certify that ${details.make} Automatic Level-${details.modelNo} Serial No ${details.serialNo} Been Checked `, 14, Yalign+=10);
+        doc.text(` By us as under One year warranty.`, 14, Yalign+=5);
+        doc.text(`1. Level was kept At a distance of 20 meter from staff-A and 30 meter from Staff-B, Which `, 14, Yalign+=10);
+        doc.text(`were ).Pre-fixed at same level in our workshop (permanent bench-mark of same elevation).`, 14, Yalign+=5);
+        doc.text(`2. Reading of Staff-A was taken as 1,600`, 14, Yalign+=10);
+        doc.text(`3. Reading of Staff-B was taken as 1,600 .`, 14, Yalign+=10);
+        doc.text(`Hence error is NIL (Within the tolerance Level). Therefore, instrument is found free from  `, 14, Yalign+=10);
+        doc.text(`collimation error as of Date.`, 14, Yalign+=5);
+        doc.text("FOR,SHREEJI INSTRUMENTS", 145, 230);
+        doc.text("PROPRIETOR", 170, 245);
+      }
+      async function preview() {
+        if (!document.getElementById("calibrationForm").reportValidity()) return;
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        const details = getFormDetails();
+        addCertificateDetails(doc, details);
+        addImg(doc, details);
+        const pdfBlob = doc.output('blob');
+        const pdfURL = URL.createObjectURL(pdfBlob);
+        const previewFrame = document.createElement('iframe');
+        previewFrame.style.width = "100%";
+        previewFrame.style.height = "600px";
+        previewFrame.src = pdfURL;
+        const container = document.querySelector('.container');
+        const existingPreview = document.querySelector('iframe[style*="600px"]');
+        if (existingPreview) container.removeChild(existingPreview);
+        container.appendChild(previewFrame);
+      }
+      async function generatePDF() {
+        if (!document.getElementById("calibrationForm").reportValidity()) return;
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        const details = getFormDetails();
+        addCertificateDetails(doc, details);
+        addImg(doc, details);
+        const pdfBlob = doc.output('blob');
+        await savePDFWithLocation(pdfBlob, `${details.serialNo} ${details.make} ${details.modelNo}.pdf`);
+      }
+      async function generatePDFblankpg() {
+        if (!document.getElementById("calibrationForm").reportValidity()) return;
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        const details = getFormDetails();
+        addCertificateDetails(doc, details);
+        const pdfBlob = doc.output('blob');
+        await savePDFWithLocation(pdfBlob, `${details.serialNo} ${details.make} ${details.modelNo}.pdf`);
+      }
+      async function printBlankCertificate() {
+        if (!document.getElementById("calibrationForm").reportValidity()) return;
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        const details = getFormDetails();
+        addCertificateDetails(doc, details);
+        const pdfBlob = doc.output('blob');
+        const pdfURL = URL.createObjectURL(pdfBlob);
+        const printWindow = window.open(pdfURL, '_blank');
+        if (printWindow) {
+          printWindow.onload = function () { printWindow.print(); };
+        }
+      }
+      // --- Sticker logic ---
+      async function generateInfoSticker() {
+        const { jsPDF } = window.jspdf;
+        const width = 40 * 2.83465;
+        const height = 30 * 2.83465;
+        const doc = new jsPDF({
+          orientation: "landscape",
+          unit: "pt",
+          format: [width, height]
+        });
+        const details = getFormDetails();
+        const primaryBlue = [19, 52, 165];
+        const accentRed = [228, 34, 21];
+        doc.setDrawColor(...primaryBlue);
+        doc.setLineWidth(3);
+        doc.rect(5, 5, width - 10, height - 10);
+        const logoImg = new Image();
+        logoImg.src = "logo.jpeg";
+        await new Promise(resolve => { logoImg.onload = resolve; logoImg.onerror = resolve; });
+        if (logoImg.width) {
+          doc.addImage(logoImg, "JPEG", 20, 7, 5, 7);
+        }
+        doc.setFont("times", "bold");
+        doc.setFontSize(8);
+        doc.setTextColor(...accentRed);
+        doc.text("Shreeji Instruments", 32, 13);
+        doc.setFont("times", "normal");
+        doc.setFontSize(4);
+        doc.setTextColor(...primaryBlue);
+        doc.text("SALES • SERVICE • REPAIRING • CALIBRATIONS", width / 2, 18, { align: "center" });
+        const tableLeft = 15;
+        const tableTop = 20;
+        const tableWidth = width - 30;
+        const rowHeight = 14;
+        const labelWidth = tableWidth * 0.4;
+        const tableData = [
+          { label: "SERIAL NO.", value: details.serialNo || "N/A" },
+          { label: "MODEL", value: details.modelNo || "N/A" },
+          { label: "CALIB. DATE", value: details.calibrationDate || "N/A" },
+          { label: "NEXT DATE", value: details.nextCalibrationDate || "N/A" },
+        ];
+        doc.setDrawColor(0, 0, 0);
+        doc.setLineWidth(1);
+        doc.rect(tableLeft, tableTop, tableWidth, rowHeight * tableData.length);
+        tableData.forEach((row, index) => {
+          const rowY = tableTop + (index * rowHeight);
+          if (index > 0) doc.line(tableLeft, rowY, tableLeft + tableWidth, rowY);
+          doc.line(tableLeft + labelWidth, rowY, tableLeft + labelWidth, rowY + rowHeight);
+          doc.setFillColor(255, 255, 255);
+          doc.rect(tableLeft, rowY, labelWidth, rowHeight, 'F');
+          const labelY = rowY + rowHeight / 2 + 1;
+          const valueY = rowY + rowHeight / 2 + 1;
+          doc.setFont("times", "bold");
+          doc.setFontSize(4.5);
+          doc.setTextColor(...primaryBlue);
+          doc.text(row.label, tableLeft + 4, labelY, { baseline: 'middle' });
+          doc.setFont("times", "normal");
+          doc.setFontSize(4.5);
+          doc.setTextColor(0, 0, 0);
+          doc.text(row.value, tableLeft + labelWidth + 5, valueY, { baseline: 'middle' });
+        });
+        stickerPdfBlob = doc.output('blob');
+        const pdfURL = URL.createObjectURL(stickerPdfBlob);
+        const frame = document.getElementById("stickerPreviewFrame");
+        frame.src = pdfURL;
+        frame.style.display = "block";
+        const dockDownloadBtn = document.querySelector('.side-dock #downloadStickerBtn');
+        dockDownloadBtn.style.display = "block";
+        frame.scrollIntoView({ behavior: 'smooth' });
+      }
+      async function downloadSticker() {
+        if (!stickerPdfBlob) {
+          alert('Please generate the sticker first!');
+          return;
+        }
+        const details = getFormDetails();
+        const fileName = `InfoSticker_${details.serialNo || 'Unknown'}_${details.modelNo || 'Unknown'}.pdf`;
+        await savePDFWithLocation(stickerPdfBlob, fileName);
+      }
+      async function sharePDF() {
+        if (!document.getElementById("calibrationForm").reportValidity()) return;
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        addCertificateDetails(doc, getFormDetails());
+        addImg(doc, getFormDetails());
+        const pdfBlob = doc.output('blob');
+        const pdfFile = new File([pdfBlob], "certificate.pdf", { type: "application/pdf" });
+        if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+          try {
+            await navigator.share({
+              files: [pdfFile],
+              title: 'Calibration Certificate',
+              text: 'Here is your calibration certificate PDF.'
+            });
+          } catch (err) {
+            alert('Sharing cancelled or not supported.');
+          }
+        } else {
+          alert('Web Share API not supported or file sharing not available in your browser.');
+        }
+      }
+    </script>
 </body>
 </html>
