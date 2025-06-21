@@ -424,22 +424,25 @@
       }
     }
     // --- Certificate logic ---
-    function addImg(doc, details) {
-      doc.setFillColor(240, 240, 240);
-      doc.rect(0, 255, 210, 27, 'F');
-      doc.setTextColor(100, 100, 100);
-      doc.setFontSize(8);
-      doc.text('Footer Image Placeholder', 105, 268, { align: 'center' });
-      doc.rect(160, 232, 40, 10, 'F');
-      doc.setFontSize(6);
-      doc.text('Signature', 180, 238, { align: 'center' });
-      doc.rect(100, 217, 35, 35, 'F');
-      doc.setFontSize(6);
-      doc.text('Stamp', 117, 235, { align: 'center' });
-      doc.rect(3, 3, 210, 30, 'F');
-      doc.setFontSize(8);
-      doc.text('Header Image Placeholder', 108, 18, { align: 'center' });
-    }
+   function addImg(doc, details)
+     {
+      const img = new Image();
+      img.src = 'footer.jpeg';
+      doc.addImage(img, 'PNG', 0, 255, 210, 27);
+
+      const img3 = new Image();
+      img3.src = 'sign.jpeg';
+      doc.addImage(img3, 'PNG', 160, 232, 40, 10);
+
+      const img1 = new Image();
+      img1.src = 'stamp.jpeg';
+      doc.addImage(img1, 'PNG', 100, 217, 35, 35);
+
+      const img2 = new Image();
+      img2.src = 'header.jpeg';
+      doc.addImage(img2, 'PNG', 3, 3, 210, 30);
+     }
+
     function addCertificateDetails(doc, details) {
       doc.setFont("helvetica", "bold");
       let Yalign=48;
