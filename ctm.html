@@ -455,6 +455,8 @@
     </form>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- Ensure libraries are loaded before your script -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
     let stickerPdfBlob = null;
 let pdfSaved = false;
@@ -568,8 +570,96 @@ function showInputBoxes() {
   }
 }
 
-async function showpreview() {
-  if (!document.getElementById("calibrationForm").reportValidity()) return;
+async function generateInfoSticker() {
+  const { jsPDF } = window.jspdf;
+  const width = 40 * 2.83465;
+  const height = 30 * 2.83465;
+  const doc = new jsPDF({
+    orientation: "landscape",
+    unit: "pt",
+    format: [width, height]
+  });
+  const certificateNumber = document.getElementById("certificateNumber").value;
+  const capacity = document.getElementById("capacity").value;
+  const calibrationDateRaw = document.getElementById("calibrationDate").value;
+  const calibrationDate = calibrationDateRaw.split("-").reverse().join("/");
+  const nextCalibrationDateRaw = document.getElementById("nextCalibrationDate").value;
+  const nextCalibrationDate = nextCalibrationDateRaw.split("-").reverse().join("/");
+  const serialNo = document.getElementById("serialNo").value;
+  const modelNo = document.getElementById("operated").value;
+  const siteLocation = document.getElementById("siteLocation").value;
+  const primaryBlue = [19, 52, 165];
+  const accentRed = [228, 34, 21];
+  doc.setDrawColor(...primaryBlue);
+  doc.setLineWidth(3);
+  doc.rect(5, 5, width - 10, height - 10);
+  const logoImg = new Image();
+  logoImg.src = "logo.jpeg";
+  await new Promise(resolve => { logoImg.onload = resolve; logoImg.onerror = resolve; });
+  if (logoImg.width) {
+    doc.addImage(logoImg, "JPEG", 20, 7, 5, 7);
+  }
+  doc.setFont("times", "bold");
+  doc.setFontSize(8);
+  doc.setTextColor(...accentRed);
+  doc.text("Shreeji Instruments", 32, 13);
+  doc.setFont("times", "normal");
+  doc.setFontSize(4);
+  doc.setTextColor(...primaryBlue);
+  doc.text("SALES • SERVICE • REPAIRING • CALIBRATIONS", width / 2, 18, { align: "center" });
+  const tableLeft = 15;
+  const tableTop = 20;
+  const tableWidth = width - 30;
+  const rowHeight = 13;
+  const labelWidth = tableWidth * 0.4;
+  const tableData = [
+    { label: "SERIAL NO.", value: serialNo || "N/A" },
+    { label: "MODEL", value: capacity || "N/A" },
+    { label: "CALIB. DATE", value: calibrationDate || "N/A" },
+    { label: "NEXT DATE", value: nextCalibrationDate || "N/A" },
+   
+  ];
+  doc.setDrawColor(0, 0, 0);
+  doc.setLineWidth(1);
+  doc.rect(tableLeft, tableTop, tableWidth, rowHeight * tableData.length);
+  tableData.forEach((row, index) => {
+    const rowY = tableTop + (index * rowHeight);
+    if (index > 0) doc.line(tableLeft, rowY, tableLeft + tableWidth, rowY);
+    doc.line(tableLeft + labelWidth, rowY, tableLeft + labelWidth, rowY + rowHeight);
+    doc.setFillColor(255, 255, 255);
+    doc.rect(tableLeft, rowY, labelWidth, rowHeight, 'F');
+    const labelY = rowY + rowHeight / 2 + 1;
+    const valueY = rowY + rowHeight / 2 + 1;
+    doc.setFont("times", "bold");
+    doc.setFontSize(4.5);
+    doc.setTextColor(...primaryBlue);
+    doc.text(row.label, tableLeft + 4, labelY, { baseline: 'middle' });
+    doc.setFont("times", "normal");
+    doc.setFontSize(4.5);
+    doc.setTextColor(0, 0, 0);
+    doc.text(row.value, tableLeft + labelWidth + 5, valueY, { baseline: 'middle' });
+  });
+  stickerPdfBlob = doc.output('blob');
+  const pdfURL = URL.createObjectURL(stickerPdfBlob);
+  const frame = document.getElementById("stickerPreviewFrame");
+  frame.src = pdfURL;
+  frame.style.display = "block";
+  const dockDownloadBtn = document.querySelector('.side-dock #downloadStickerBtn');
+  dockDownloadBtn.style.display = "block";
+  frame.scrollIntoView({ behavior: 'smooth' });
+}
+
+async function downloadSticker() {
+  if (!stickerPdfBlob) {
+    alert('Please generate the sticker first!');
+    return;
+  }
+  const certificateNumber = document.getElementById("certificateNumber").value;
+  await savePDFWithLocation(stickerPdfBlob, `CTM_Sticker_${certificateNumber}.pdf`);
+}
+
+async function main(){
+  if (!document.getElementById("calibrationForm").reportValidity()) return null;
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
 
@@ -701,13 +791,23 @@ async function showpreview() {
   }
   else {
     alert("Select a appropriate proviring");
-    return;
+    return null;
   }
   doc.text(`CALIBRATION BY      :-   YOGESH BHAI`, 14, 225); 
   doc.setFontSize(12);
   doc.text("FOR,SHREEJI INSTRUMENTS", 145, 230);
   doc.text("PROPRIETOR", 170, 245);
 
+  return doc; // Return the doc object
+}
+
+// Fixed addImg function
+function addImg(doc, details) {
+  if (!doc) {
+    console.error('Document object is required for addImg function');
+    return;
+  }
+  
   const img = new Image();
   img.src = 'footer.jpeg';
   doc.addImage(img, 'PNG', 0, 255, 210, 27);
@@ -723,6 +823,14 @@ async function showpreview() {
   const img2 = new Image();
   img2.src = 'header.jpeg';
   doc.addImage(img2, 'PNG', 3, 3, 210, 30);
+}
+
+// Fixed showpreview function
+async function showpreview() {
+  const doc = await main(); // Get the doc object from main()
+  if (!doc) return; // Exit if main() failed
+  
+  addImg(doc); // Pass the doc object to addImg
 
   const pdfBlob = doc.output('blob');
   const pdfURL = URL.createObjectURL(pdfBlob);
@@ -737,36 +845,41 @@ async function showpreview() {
   container.appendChild(previewFrame);
 }
 
+// Fixed generatePDF function
 async function generatePDF() {
   if (!document.getElementById("calibrationForm").reportValidity()) return;
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-
-  // -- Use the same logic as showpreview to fill doc --
-  // (copy the above code, but instead of preview, save!)
-  // ... [same as showpreview up to doc.addImage(...)]
-  // [copy showpreview code up to image logic, then:]
-  // -- END IMAGE LOGIC --
-  // Then save:
+  
+  const doc = await main(); // Get the doc object from main()
+  if (!doc) return; // Exit if main() failed
+  
+  addImg(doc); // Pass the doc object to addImg
+  
   const pdfBlob = doc.output('blob');
   await savePDFWithLocation(pdfBlob, `CTM_${document.getElementById("certificateNumber").value}.pdf`);
 }
 
+// Fixed generatePDFWithoutLetterpad function
 async function generatePDFWithoutLetterpad() {
   if (!document.getElementById("calibrationForm").reportValidity()) return;
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  // -- Repeat doc filling logic from showpreview, but skip addImage() --
-  // ... [fill content]
+  
+  const doc = await main(); // Get the doc object from main()
+  if (!doc) return; // Exit if main() failed
+  
+  // Don't call addImg() for letterhead-free version
+  
   const pdfBlob = doc.output('blob');
   await savePDFWithLocation(pdfBlob, `CTM_${document.getElementById("certificateNumber").value}_no_letterhead.pdf`);
 }
 
+// Fixed printBlankCertificate function
 async function printBlankCertificate() {
   if (!document.getElementById("calibrationForm").reportValidity()) return;
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  // -- Repeat doc filling logic from generatePDFWithoutLetterpad --
+  
+  const doc = await main(); // Get the doc object from main()
+  if (!doc) return; // Exit if main() failed
+  
+  // Don't call addImg() for letterhead-free version
+  
   const pdfBlob = doc.output('blob');
   const pdfURL = URL.createObjectURL(pdfBlob);
   const printWindow = window.open(pdfURL, '_blank');
@@ -775,116 +888,31 @@ async function printBlankCertificate() {
   }
 }
 
-async function generateInfoSticker() {
-  const { jsPDF } = window.jspdf;
-  const width = 40 * 2.83465;
-  const height = 30 * 2.83465;
-  const doc = new jsPDF({
-    orientation: "landscape",
-    unit: "pt",
-    format: [width, height]
-  });
-  const certificateNumber = document.getElementById("certificateNumber").value;
-  const capacity = document.getElementById("capacity").value;
-  const calibrationDateRaw = document.getElementById("calibrationDate").value;
-  const calibrationDate = calibrationDateRaw.split("-").reverse().join("/");
-  const nextCalibrationDateRaw = document.getElementById("nextCalibrationDate").value;
-  const nextCalibrationDate = nextCalibrationDateRaw.split("-").reverse().join("/");
-  const serialNo = document.getElementById("serialNo").value;
-  const modelNo = document.getElementById("operated").value;
-  const siteLocation = document.getElementById("siteLocation").value;
-  const primaryBlue = [19, 52, 165];
-  const accentRed = [228, 34, 21];
-  doc.setDrawColor(...primaryBlue);
-  doc.setLineWidth(3);
-  doc.rect(5, 5, width - 10, height - 10);
-  const logoImg = new Image();
-  logoImg.src = "logo.jpeg";
-  await new Promise(resolve => { logoImg.onload = resolve; logoImg.onerror = resolve; });
-  if (logoImg.width) {
-    doc.addImage(logoImg, "JPEG", 20, 7, 5, 7);
-  }
-  doc.setFont("times", "bold");
-  doc.setFontSize(8);
-  doc.setTextColor(...accentRed);
-  doc.text("Shreeji Instruments", 32, 13);
-  doc.setFont("times", "normal");
-  doc.setFontSize(4);
-  doc.setTextColor(...primaryBlue);
-  doc.text("SALES • SERVICE • REPAIRING • CALIBRATIONS", width / 2, 18, { align: "center" });
-  const tableLeft = 15;
-  const tableTop = 20;
-  const tableWidth = width - 30;
-  const rowHeight = 13;
-  const labelWidth = tableWidth * 0.4;
-  const tableData = [
-    { label: "SERIAL NO.", value: serialNo || "N/A" },
-    { label: "MODEL", value: capacity || "N/A" },
-    { label: "CALIB. DATE", value: calibrationDate || "N/A" },
-    { label: "NEXT DATE", value: nextCalibrationDate || "N/A" },
-   
-  ];
-  doc.setDrawColor(0, 0, 0);
-  doc.setLineWidth(1);
-  doc.rect(tableLeft, tableTop, tableWidth, rowHeight * tableData.length);
-  tableData.forEach((row, index) => {
-    const rowY = tableTop + (index * rowHeight);
-    if (index > 0) doc.line(tableLeft, rowY, tableLeft + tableWidth, rowY);
-    doc.line(tableLeft + labelWidth, rowY, tableLeft + labelWidth, rowY + rowHeight);
-    doc.setFillColor(255, 255, 255);
-    doc.rect(tableLeft, rowY, labelWidth, rowHeight, 'F');
-    const labelY = rowY + rowHeight / 2 + 1;
-    const valueY = rowY + rowHeight / 2 + 1;
-    doc.setFont("times", "bold");
-    doc.setFontSize(4.5);
-    doc.setTextColor(...primaryBlue);
-    doc.text(row.label, tableLeft + 4, labelY, { baseline: 'middle' });
-    doc.setFont("times", "normal");
-    doc.setFontSize(4.5);
-    doc.setTextColor(0, 0, 0);
-    doc.text(row.value, tableLeft + labelWidth + 5, valueY, { baseline: 'middle' });
-  });
-  stickerPdfBlob = doc.output('blob');
-  const pdfURL = URL.createObjectURL(stickerPdfBlob);
-  const frame = document.getElementById("stickerPreviewFrame");
-  frame.src = pdfURL;
-  frame.style.display = "block";
-  const dockDownloadBtn = document.querySelector('.side-dock #downloadStickerBtn');
-  dockDownloadBtn.style.display = "block";
-  frame.scrollIntoView({ behavior: 'smooth' });
-}
-
-async function downloadSticker() {
-  if (!stickerPdfBlob) {
-    alert('Please generate the sticker first!');
-    return;
-  }
-  const certificateNumber = document.getElementById("certificateNumber").value;
-  await savePDFWithLocation(stickerPdfBlob, `CTM_Sticker_${certificateNumber}.pdf`);
-}
-
+// Fixed sharePDF function
 async function sharePDF() {
-  if (!document.getElementById("calibrationForm").reportValidity()) return;
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  // You may want to repeat your generatePDF logic here to fill the doc
-  // ... fill content
-  const pdfBlob = doc.output('blob');
-  const pdfFile = new File([pdfBlob], "certificate.pdf", { type: "application/pdf" });
-  if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
-    try {
-      await navigator.share({
-        files: [pdfFile],
-        title: 'Calibration Certificate',
-        text: 'Here is your calibration certificate PDF.'
-      });
-    } catch (err) {
-      alert('Sharing cancelled or not supported.');
-    }
-  } else {
-    alert('Web Share API not supported or file sharing not available in your browser.');
-  }
-}
-  </script>
+      if (!document.getElementById("calibrationForm").reportValidity()) return;
+      
+      const doc = await main(); // Get the doc object from main()
+      if (!doc) return; // Exit if main() failed
+      
+      addImg(doc); // Pass the doc object to addImg
+      
+      const pdfBlob = doc.output('blob');
+      const pdfFile = new File([pdfBlob], "certificate.pdf", { type: "application/pdf" });
+      if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+        try {
+          await navigator.share({
+            files: [pdfFile],
+            title: 'Calibration Certificate',
+            text: 'Here is your calibration certificate PDF.'
+          });
+        } catch (err) {
+          alert('Sharing cancelled or not supported.');
+        }
+      } else {
+        alert('Web Share API not supported or file sharing not available in your browser.');
+      }
+    }  
+    </script>
 </body>
 </html>
