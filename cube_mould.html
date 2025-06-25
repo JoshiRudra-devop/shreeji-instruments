@@ -13,6 +13,7 @@
       flex-direction: column;
       align-items: center;
       margin: 0;
+      padding-right: 280px; /* for dock */
     }
     nav {
       background-color: #00796b;
@@ -22,6 +23,10 @@
       justify-content: space-between;
       align-items: center;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
     }
     nav h1 {
       color: white;
@@ -46,20 +51,67 @@
     nav ul li a:hover {
       color: #ffccbc;
     }
+    .side-dock {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 260px;
+      height: 100vh;
+      background: linear-gradient(135deg, #00796b, #004d40);
+      box-shadow: -4px 0 15px rgba(0, 0, 0, 0.2);
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      padding: 80px 20px 20px 20px;
+      overflow-y: auto;
+    }
+    .side-dock h3 {
+      color: white;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 18px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+      padding-bottom: 10px;
+    }
+    .dock-button {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 15px;
+      background: linear-gradient(135deg, #26a69a, #00695c);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .dock-button:hover {
+      background: linear-gradient(135deg, #2dd4bf, #0d9488);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+    .dock-button:active {
+      transform: translateY(0);
+    }
     .back-button {
-      position: absolute;
-      display: block;
-      top: 100px;
-      right: 20px;
+      position: fixed;
+      top: 80px;
+      left: 20px;
       padding: 10px 20px;
-      margin: auto;
       background-color: #00796b;
       color: white;
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      font-size: 25px;
+      font-size: 16px;
       z-index: 1000;
+      transition: background-color 0.3s ease;
     }
     .back-button:hover {
       background-color: #22b55d;
@@ -67,7 +119,7 @@
     .container {
       background-color: white;
       padding: 20px;
-      margin: 20px 0;
+      margin: 100px 0 20px 0;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       max-width: 800px;
@@ -122,6 +174,44 @@
       display: flex;
       justify-content: space-between;
     }
+    .unsaved-reminder {
+      color: #c0392b;
+      text-align: center;
+      font-weight: bold;
+      margin: 10px 0 0 0;
+      font-size: 16px;
+      display: none;
+    }
+    @media (max-width: 1200px) {
+      body {
+        padding-right: 0;
+      }
+      .side-dock {
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+      }
+      .side-dock.open {
+        transform: translateX(0);
+      }
+      .dock-toggle {
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        background: #00796b;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        z-index: 1001;
+        display: block;
+      }
+    }
+    @media (min-width: 1201px) {
+      .dock-toggle {
+        display: none;
+      }
+    }
   </style>
 </head>
 <body>
@@ -131,44 +221,53 @@
       <h1 style="color: white; margin: 0;">SHREEJI INSTRUMENTS</h1>
     </a>
     <ul>
-      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html" onclick="goHomeOrPromptSave(); return false;">Home</a></li>
       <li><a href="#footer">About</a></li>
       <li><a href="contactUs.html">Contact Us</a></li>
     </ul>
   </nav>
-  <button class="back-button" onclick="window.history.back()">&lt;&lt; Back</button>
+  <button class="back-button" onclick="goBackOrPromptSave()">← Back</button>
+  <button class="dock-toggle" onclick="toggleDock()">☰ Actions</button>
+  <div class="side-dock" id="sideDock">
+    <h3>Actions</h3>
+    <button class="dock-button" type="button" onclick="preview()">📋 Preview Certificate</button>
+    <button class="dock-button" type="button" onclick="generatePDF()">📄 Download with Letterhead</button>
+    <button class="dock-button" type="button" onclick="generatePDFblankpg()">📝 Download without Letterhead</button>
+    <button class="dock-button" type="button" onclick="printBlankCertificate()">🖨️ Print without Letterhead</button>
+    <button class="dock-button" type="button" onclick="sharePDF()">📤 Share PDF (With Letterhead)</button>
+  </div>
   <div class="container">
     <h2 class="centered">CUBE MOULD CALIBRATION CERTIFICATE</h2>
     <form id="calibrationForm">
       <div class="title_input_pair">
         <label for="certificateNumber">Certificate No:</label>
-        <input type="text" id="certificateNumber" required>
+        <input type="text" id="certificateNumber" name="certificateNumber" required>
       </div>
       <div class="date">
         <div class="title_input_pair">
           <label for="calibrationDate">Date of Calibration:</label>
-          <input type="date" id="calibrationDate" onchange="calculateNextDate()" required>
+          <input type="date" id="calibrationDate" name="calibrationDate" onchange="calculateNextDate()" required>
         </div>
         <div class="title_input_pair">
           <label for="nextCalibrationDate">Next Suggested Date:</label>
-          <input type="date" id="nextCalibrationDate" required>
+          <input type="date" id="nextCalibrationDate" name="nextCalibrationDate" required>
         </div>
       </div>
       <div class="title_input_pair">
         <label for="partyName">Name of Party:</label>
-        <input type="text" id="partyName" required>
+        <input type="text" id="partyName" name="partyName" required>
       </div>
       <div class="title_input_pair">
         <label for="quantity">NO. OF CUBE</label>
-        <input type="number" id="quantity" required min="1">
+        <input type="number" id="quantity" name="quantity" required min="1">
       </div>
       <div class="title_input_pair">
         <label for="siteLocation">Site Location:</label>
-        <input type="text" id="siteLocation" required>
+        <input type="text" id="siteLocation" name="siteLocation" required>
       </div>
       <div class="title_input_pair">
         <label for="size">SIZE:</label>
-        <select id="size" required>
+        <select id="size" name="size" required>
           <option value="">Select Size</option>
           <option value="150MM x 150MM x 150MM">150MM x 150MM x 150MM</option>
           <option value="50MM x 50MM x 50MM">50MM x 50MM x 50MM</option>
@@ -177,6 +276,9 @@
           <option value="700MM x 100MM x  100MM ">BIM MOULD</option>
         </select>
       </div>
+      <div class="unsaved-reminder" id="unsavedReminder">
+        <span>⚠️ Please save your certificate before leaving this page.</span>
+      </div>
       <div class="button-group">
         <button type="button" class="button2" onclick="preview()">Preview Calibration Certificate</button>
         <button type="button" class="button2" onclick="generatePDF()">Download Certificate with Letterhead</button>
@@ -184,321 +286,523 @@
       </div>
     </form>
   </div>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
   <script>
-    // Helper to load an image and return a promise for base64
-    function loadImageToBase64(url) {
-      return new Promise((resolve, reject) => {
-        var img = new window.Image();
-        img.crossOrigin = "Anonymous";
-        img.onload = function () {
-          var canvas = document.createElement("canvas");
-          canvas.width = img.width;
-          canvas.height = img.height;
-          var ctx = canvas.getContext("2d");
-          ctx.drawImage(img, 0, 0);
-          resolve(canvas.toDataURL("image/png"));
-        };
-        img.onerror = reject;
-        img.src = url;
+// --- Improved Unsaved Data Handling for Cube Mould Calibration Form ---
+// - Only prompt user to save if they've changed or entered data except for date fields
+// - No prompt if form is untouched, all fields empty, or only date fields are filled
+// - Prompts on back, home, and tab close if unsaved changes exist
+
+let pdfSaved = false;
+let initialFormSnapshot = "";
+
+// Helper: Get a snapshot of all input/select values in the calibrationForm as a JSON string
+function getFormSnapshot() {
+  const form = document.getElementById("calibrationForm");
+  if (!form) return "";
+  const formData = new FormData(form);
+  let obj = {};
+  for (let [key, val] of formData.entries()) obj[key] = val;
+  return JSON.stringify(obj);
+}
+
+// Helper: Check if any field is filled or changed (not all empty and not equal to initial snapshot)
+// NEW LOGIC: If ALL fields except calibrationDate and nextCalibrationDate are empty, do NOT prompt
+function isFormDirty() {
+  const currentObj = JSON.parse(getFormSnapshot());
+  // List all field names in your form EXCEPT the date fields
+  const nonDateFields = ["certificateNumber", "partyName", "quantity", "siteLocation", "size"];
+  const allNonDateEmpty = nonDateFields.every(k => !currentObj[k] || currentObj[k].toString().trim() === "");
+  // If non-date fields are all empty, do not prompt
+  if (allNonDateEmpty) return false;
+
+  // Otherwise, compare snapshot as before
+  if (!initialFormSnapshot) return false;
+  return getFormSnapshot() !== initialFormSnapshot;
+}
+
+// Call this after saving PDF successfully (from savePDFWithLocation)
+function markFormSaved() {
+  pdfSaved = true;
+  initialFormSnapshot = getFormSnapshot();
+  updateUnsavedReminder();
+}
+
+// Update unsaved reminder UI
+function updateUnsavedReminder() {
+  const reminder = document.getElementById('unsavedReminder');
+  if (!reminder) return;
+  if (isFormDirty() && !pdfSaved) {
+    reminder.style.display = 'block';
+  } else {
+    reminder.style.display = 'none';
+  }
+}
+
+// Patch your savePDFWithLocation function to use this after successful save
+async function savePDFWithLocation(pdfDocument, defaultFileName) {
+  try {
+    if (window.showSaveFilePicker && !isMobile()) {
+      const fileHandle = await window.showSaveFilePicker({
+        suggestedName: defaultFileName,
+        types: [
+          {
+            description: 'PDF Files',
+            accept: { 'application/pdf': ['.pdf'] },
+          },
+        ],
       });
+      const writableStream = await fileHandle.createWritable();
+      await writableStream.write(pdfDocument);
+      await writableStream.close();
+    } else {
+      const url = URL.createObjectURL(pdfDocument);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = defaultFileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(url), 100);
     }
+    markFormSaved();
+    alert('PDF saved successfully!');
+  } catch (error) {
+    console.error('Error saving PDF:', error);
+  }
+}
 
-    // Collect all images to base64 (do this once for performance)
-    let headerImgB64, footerImgB64, stampImgB64, signImgB64;
-    async function prepareImages() {
-      if (!headerImgB64) headerImgB64 = await loadImageToBase64("header.jpeg");
-      if (!footerImgB64) footerImgB64 = await loadImageToBase64("footer.jpeg");
-      if (!stampImgB64)  stampImgB64  = await loadImageToBase64("stamp.jpeg");
-      if (!signImgB64)   signImgB64   = await loadImageToBase64("sign.jpeg");
+// On page load, take initial snapshot and setup event listeners
+document.addEventListener("DOMContentLoaded", function() {
+  initialFormSnapshot = getFormSnapshot();
+
+  // Listen to input changes to update unsaved reminder and pdfSaved
+  document.querySelectorAll("#calibrationForm input, #calibrationForm select").forEach(input => {
+    input.addEventListener('input', () => {
+      pdfSaved = false;
+      updateUnsavedReminder();
+    });
+  });
+
+  updateUnsavedReminder();
+
+  // Set today's date and next date
+  const today = new Date().toISOString().split('T')[0];
+  if (document.getElementById('calibrationDate')) {
+    document.getElementById('calibrationDate').value = today;
+    if (typeof calculateNextDate === "function") calculateNextDate();
+  }
+});
+
+// Only prompt if user actually made changes
+window.onbeforeunload = function(e) {
+  if (isFormDirty() && !pdfSaved) {
+    e.preventDefault();
+    e.returnValue = 'You have unsaved changes. Please save your calibration certificate before leaving!';
+    return e.returnValue;
+  }
+};
+
+// Only prompt on "Back" if user made changes
+function goBackOrPromptSave() {
+  if (isFormDirty() && !pdfSaved) {
+    updateUnsavedReminder();
+    if (confirm("⚠️ You have unsaved changes! Please save your calibration certificate before leaving.\n\nDo you want to save now?")) {
+      generatePDF();
     }
+  } else {
+    window.history.back();
+  }
+}
 
-    function getFormDetails() {
-      return {
-        certificateNumber: document.getElementById("certificateNumber").value,
-        calibrationDate: document.getElementById("calibrationDate").value.split("-").reverse().join("/"),
-        siteLocation: document.getElementById("siteLocation").value,
-        partyName: document.getElementById("partyName").value,
-        quantity: document.getElementById("quantity").value,
-        size: document.getElementById("size").value,
-        nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/")
-      };
+// For Home navigation (if you have a Home button), add onclick="goHomeOrPromptSave()" to it
+function goHomeOrPromptSave() {
+  if (isFormDirty() && !pdfSaved) {
+    updateUnsavedReminder();
+    if (confirm("⚠️ You have unsaved changes! Please save your calibration certificate before leaving.\n\nDo you want to save now?")) {
+      generatePDF();
     }
+  } else {
+    window.location.href = "index.html";
+  }
+}
 
-    function calculateNextDate() {
-      const calibrationDateInput = document.getElementById('calibrationDate');
-      const nextDateInput = document.getElementById('nextCalibrationDate');
-      const calibrationDate = new Date(calibrationDateInput.value);
-      if (!isNaN(calibrationDate)) {
-        const nextYearDate = new Date(calibrationDate);
-        nextYearDate.setFullYear(nextYearDate.getFullYear() + 1);
-        nextYearDate.setDate(nextYearDate.getDate() - 1); // Subtract 1 day
-        const formattedDate = nextYearDate.toISOString().split('T')[0];
-        nextDateInput.value = formattedDate;
-      }
+// --- Rest of Calibration Logic ---
+
+// IMAGE PRELOADING LOGIC
+let headerImgB64, footerImgB64, stampImgB64, signImgB64;
+async function prepareImages() {
+  if (!headerImgB64) headerImgB64 = await loadImageToBase64("header.jpeg");
+  if (!footerImgB64) footerImgB64 = await loadImageToBase64("footer.jpeg");
+  if (!stampImgB64)  stampImgB64  = await loadImageToBase64("stamp.jpeg");
+  if (!signImgB64)   signImgB64   = await loadImageToBase64("sign.jpeg");
+}
+function loadImageToBase64(url) {
+  return new Promise((resolve, reject) => {
+    var img = new window.Image();
+    img.crossOrigin = "Anonymous";
+    img.onload = function () {
+      var canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      var ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+      resolve(canvas.toDataURL("image/png"));
+    };
+    img.onerror = reject;
+    img.src = url;
+  });
+}
+
+function isMobile() {
+  return /Mobi|Android|IOS/i.test(navigator.userAgent);
+}
+
+function getFormDetails() {
+  return {
+    certificateNumber: document.getElementById("certificateNumber").value,
+    calibrationDate: document.getElementById("calibrationDate").value.split("-").reverse().join("/"),
+    siteLocation: document.getElementById("siteLocation").value,
+    partyName: document.getElementById("partyName").value,
+    quantity: document.getElementById("quantity").value,
+    size: document.getElementById("size").value,
+    nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/")
+  };
+}
+
+function calculateNextDate() {
+  const calibrationDateInput = document.getElementById('calibrationDate');
+  const nextDateInput = document.getElementById('nextCalibrationDate');
+  const calibrationDate = new Date(calibrationDateInput.value);
+  if (!isNaN(calibrationDate)) {
+    const nextYearDate = new Date(calibrationDate);
+    nextYearDate.setFullYear(nextYearDate.getFullYear() + 1);
+    nextYearDate.setDate(nextYearDate.getDate() - 1);
+    const formattedDate = nextYearDate.toISOString().split('T')[0];
+    nextDateInput.value = formattedDate;
+  }
+}
+
+function incrementCertificateNumber(baseCertNo, increment) {
+  if (!isNaN(Number(baseCertNo))) {
+    return String(Number(baseCertNo) + increment);
+  } else {
+    const match = baseCertNo.match(/^(\d+)(.*)$/);
+    if (match) {
+      return (Number(match[1]) + increment) + match[2];
+    } else {
+      return baseCertNo;
     }
+  }
+}
 
-    // Helper to increment certificate number (handles pure numbers and cases like 1001/A)
-    function incrementCertificateNumber(baseCertNo, increment) {
-      if (!isNaN(Number(baseCertNo))) {
-        return String(Number(baseCertNo) + increment);
-      } else {
-        const match = baseCertNo.match(/^(\d+)(.*)$/);
-        if (match) {
-          return (Number(match[1]) + increment) + match[2];
-        } else {
-          return baseCertNo; // fallback, can't increment
-        }
+function drawHeader(doc, details, Yalign, withImages) {
+  if (withImages && headerImgB64) doc.addImage(headerImgB64, 'PNG', 3, 3, 210, 30);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(23);
+  doc.text("TEST REPORT FOR CUBE MOULD", doc.internal.pageSize.getWidth() / 2, Yalign, { align: 'center' });
+  doc.text(`${details.size}`, doc.internal.pageSize.getWidth() / 2, Yalign+=7, { align: 'center' });
+
+  doc.setFontSize(12);
+  doc.text(`DATE:-${details.calibrationDate}`, 155, Yalign += 10);
+  doc.text(`REF NO                        :-     SI-${details.certificateNumber}`, 14, Yalign);
+  doc.text(`NAME OF PARTY        :-     ${details.partyName}`, 14, Yalign += 10);
+  doc.text(`EQUIPMENT NAME     :-     CUBE MOULD (${details.size})`, 14, Yalign += 10);
+  doc.text(`NEXT DUE DATE        :-     ${details.nextCalibrationDate}`, 14, Yalign += 10);
+
+  // --- Site Location with wrapping (only value, not prefix) ---
+  const siteLocPrefix = "SITE LOCATION          :-     ";
+  const prefixWidth = doc.getTextWidth(siteLocPrefix);
+  const maxWidth = 180 - prefixWidth;
+  const siteLocLines = doc.splitTextToSize(details.siteLocation, maxWidth);
+  doc.text(siteLocPrefix + (siteLocLines[0] || ""), 14, Yalign += 10);
+  for (let i = 1; i < siteLocLines.length; i++) {
+    doc.text(siteLocLines[i], 14 + prefixWidth , Yalign +=4);
+  }
+  Yalign += ((siteLocLines.length - 1)+5);
+  return Yalign;
+}
+
+function addFooterImages(doc) {
+  if (footerImgB64) doc.addImage(footerImgB64, 'PNG', 0, 255, 210, 27);
+  if (stampImgB64)  doc.addImage(stampImgB64,  'PNG', 100, 217, 35, 35);
+  if (signImgB64)   doc.addImage(signImgB64,   'PNG', 160, 232, 40, 10);
+}
+
+function addCertificateDetails(doc, details) {
+  let qty = parseInt(details.quantity);
+  if (isNaN(qty) || qty <= 0) {
+    alert("Please enter a valid number of cubes.");
+    return;
+  }
+  let [length, height, width] = details.size.split("x").map(s => s.trim());
+  if (!length) length = "";
+  if (!height) height = "";
+  if (!width) width = "";
+  const headers = [["SR.NO", "LENGTH", "HEIGHT", "WIDTH"]];
+  const allRows = [];
+  for (let i = 1; i <= qty; i++) {
+    allRows.push([i, length, height, width]);
+  }
+  const pageCount = Math.ceil(allRows.length / 10);
+  for (let page = 0; page < pageCount; page++) {
+    if (page > 0) doc.addPage();
+    let pageRows = allRows.slice(page * 10, page * 10 + 10);
+    let refNo = incrementCertificateNumber(details.certificateNumber, page);
+    let pageDetails = { ...details, certificateNumber: refNo };
+    let tableY = drawHeader(doc, pageDetails, 50, true);
+    doc.autoTable({
+      head: headers,
+      body: pageRows,
+      startY: tableY + 1,
+      styles: {
+        fontSize: 12,
+        lineColor: [0, 0, 0],
+        textColor: [0, 0, 0],
+        lineWidth: 0.2,
+        halign: 'center',
+        valign: 'middle'
+      },
+      headStyles: {
+        fontSize: 15,
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        lineColor: [0, 0, 0],
+        lineWidth: 0.2,
+        halign: 'center',
+        valign: 'middle'
+      },
+      alternateRowStyles: {
+        fillColor: [255, 255, 255]
       }
+    });
+    let tableEndY = doc.autoTable.previous.finalY;
+    doc.setFontSize(12);
+    doc.text("CALIBRATED BY: YOGESH B JOSHI", 14, tableEndY + 10);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.text("FOR, SHREEJI INSTRUMENTS", 145, 230);
+    doc.text("PROPRIETOR", 170, 245);
+    addFooterImages(doc);
+  }
+}
+
+async function preview() {
+  if (!document.getElementById("calibrationForm").reportValidity()) return;
+  await prepareImages();
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const details = getFormDetails();
+  addCertificateDetails(doc, details);
+
+  const pdfBlob = doc.output('blob');
+  const pdfURL = URL.createObjectURL(pdfBlob);
+  const previewFrame = document.createElement('iframe');
+  previewFrame.style.width = "100%";
+  previewFrame.style.height = "600px";
+  previewFrame.src = pdfURL;
+  const container = document.querySelector('.container');
+  const existingPreview = document.querySelector('iframe[style*="600px"]');
+  if (existingPreview) container.removeChild(existingPreview);
+  container.appendChild(previewFrame);
+}
+
+async function generatePDF() {
+  if (!document.getElementById("calibrationForm").reportValidity()) return;
+  await prepareImages();
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const details = getFormDetails();
+  addCertificateDetails(doc, details);
+  const pdfBlob = doc.output('blob');
+  await savePDFWithLocation(pdfBlob, `CubeMould_${details.certificateNumber}.pdf`);
+}
+
+async function generatePDFblankpg() {
+  if (!document.getElementById("calibrationForm").reportValidity()) return;
+  await prepareImages();
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const details = getFormDetails();
+  // draw header without header image
+  function drawHeaderNoImg(doc, details, Yalign) {
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(23);
+    doc.text("TEST REPORT FOR CUBE MOULD", doc.internal.pageSize.getWidth() / 2, Yalign, { align: 'center' });
+    doc.text(`${details.size}`, doc.internal.pageSize.getWidth() / 2, Yalign+=7, { align: 'center' });
+    doc.setFontSize(12);
+    doc.text(`DATE:-${details.calibrationDate}`, 155, Yalign += 10);
+    doc.text(`REF NO                        :-     SI-${details.certificateNumber}`, 14, Yalign);
+    doc.text(`NAME OF PARTY        :-     ${details.partyName}`, 14, Yalign += 10);
+    doc.text(`EQUIPMENT NAME     :-     CUBE MOULD (${details.size})`, 14, Yalign += 10);
+    doc.text(`NEXT DUE DATE        :-     ${details.nextCalibrationDate}`, 14, Yalign += 10);
+    const siteLocPrefix = "SITE LOCATION          :-     ";
+    const prefixWidth = doc.getTextWidth(siteLocPrefix);
+    const maxWidth = 180 - prefixWidth;
+    const siteLocLines = doc.splitTextToSize(details.siteLocation, maxWidth);
+    doc.text(siteLocPrefix + (siteLocLines[0] || ""), 14, Yalign += 10);
+    for (let i = 1; i < siteLocLines.length; i++) {
+      doc.text(siteLocLines[i], 14 + prefixWidth , Yalign +=4);
     }
-
-    // Helper to draw all details except table (for multipage table), and add all images
-    function drawHeader(doc, details, Yalign, withImages) {
-      if (withImages) {
-        // Header Image
-        if (headerImgB64) doc.addImage(headerImgB64, 'PNG', 3, 3, 210, 30);
+    Yalign += ((siteLocLines.length - 1)+5);
+    return Yalign;
+  }
+  let qty = parseInt(details.quantity);
+  if (isNaN(qty) || qty <= 0) {
+    alert("Please enter a valid number of cubes.");
+    return;
+  }
+  let [length, height, width] = details.size.split("x").map(s => s.trim());
+  if (!length) length = "";
+  if (!height) height = "";
+  if (!width) width = "";
+  const headers = [["SR.NO", "LENGTH", "HEIGHT", "WIDTH"]];
+  const allRows = [];
+  for (let i = 1; i <= qty; i++) {
+    allRows.push([i, length, height, width]);
+  }
+  const pageCount = Math.ceil(allRows.length / 10);
+  for (let page = 0; page < pageCount; page++) {
+    if (page > 0) doc.addPage();
+    let pageRows = allRows.slice(page * 10, page * 10 + 10);
+    let refNo = incrementCertificateNumber(details.certificateNumber, page);
+    let pageDetails = { ...details, certificateNumber: refNo };
+    let tableY = drawHeaderNoImg(doc, pageDetails, 50);
+    doc.autoTable({
+      head: headers,
+      body: pageRows,
+      startY: tableY + 1,
+      styles: {
+        fontSize: 12,
+        lineColor: [0, 0, 0],
+        textColor: [0, 0, 0],
+        lineWidth: 0.2,
+        halign: 'center',
+        valign: 'middle'
+      },
+      headStyles: {
+        fontSize: 15,
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        lineColor: [0, 0, 0],
+        lineWidth: 0.2,
+        halign: 'center',
+        valign: 'middle'
+      },
+      alternateRowStyles: {
+        fillColor: [255, 255, 255]
       }
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(23);
-      doc.text("TEST REPORT FOR CUBE MOULD", doc.internal.pageSize.getWidth() / 2, Yalign, { align: 'center' });
-      doc.text(`${details.size}`, doc.internal.pageSize.getWidth() / 2, Yalign+=7, { align: 'center' });
+    });
+    let tableEndY = doc.autoTable.previous.finalY;
+    doc.setFontSize(12);
+    doc.text("CALIBRATED BY: YOGESH B JOSHI", 14, tableEndY + 10);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.text("FOR, SHREEJI INSTRUMENTS", 145, 230);
+    doc.text("PROPRIETOR", 170, 245);
+  }
+  const pdfBlob = doc.output('blob');
+  await savePDFWithLocation(pdfBlob, `CubeMould_${details.certificateNumber}_blank.pdf`);
+}
 
-      doc.setFontSize(12);
-      doc.text(`DATE:-${details.calibrationDate}`, 155, Yalign += 10);
-      doc.text(`REF NO                        :-     SI-${details.certificateNumber}`, 14, Yalign);
-      doc.text(`NAME OF PARTY        :-     ${details.partyName}`, 14, Yalign += 10);
-      doc.text(`EQUIPMENT NAME     :-     CUBE MOULD (${details.size})`, 14, Yalign += 10);
-      doc.text(`NEXT DUE DATE        :-     ${details.nextCalibrationDate}`, 14, Yalign += 10);
-
-      // --- Site Location with wrapping (only value, not prefix) ---
-      const siteLocPrefix = "SITE LOCATION          :-     ";
-      const prefixWidth = doc.getTextWidth(siteLocPrefix);
-      const maxWidth = 180 - prefixWidth; // adjust as needed according to your layout
-      const siteLocLines = doc.splitTextToSize(details.siteLocation, maxWidth);
-      doc.text(siteLocPrefix + (siteLocLines[0] || ""), 14, Yalign += 10);
-      for (let i = 1; i < siteLocLines.length; i++) {
-        doc.text(siteLocLines[i], 14 + prefixWidth , Yalign +=4);
+async function printBlankCertificate() {
+  if (!document.getElementById("calibrationForm").reportValidity()) return;
+  await prepareImages();
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const details = getFormDetails();
+  // Use blank version logic
+  let qty = parseInt(details.quantity);
+  if (isNaN(qty) || qty <= 0) {
+    alert("Please enter a valid number of cubes.");
+    return;
+  }
+  let [length, height, width] = details.size.split("x").map(s => s.trim());
+  if (!length) length = "";
+  if (!height) height = "";
+  if (!width) width = "";
+  const headers = [["SR.NO", "LENGTH", "HEIGHT", "WIDTH"]];
+  const allRows = [];
+  for (let i = 1; i <= qty; i++) {
+    allRows.push([i, length, height, width]);
+  }
+  const pageCount = Math.ceil(allRows.length / 10);
+  for (let page = 0; page < pageCount; page++) {
+    if (page > 0) doc.addPage();
+    let pageRows = allRows.slice(page * 10, page * 10 + 10);
+    let refNo = incrementCertificateNumber(details.certificateNumber, page);
+    let pageDetails = { ...details, certificateNumber: refNo };
+    let tableY = drawHeader(doc, pageDetails, 50, false);
+    doc.autoTable({
+      head: headers,
+      body: pageRows,
+      startY: tableY + 1,
+      styles: {
+        fontSize: 12,
+        lineColor: [0, 0, 0],
+        textColor: [0, 0, 0],
+        lineWidth: 0.2,
+        halign: 'center',
+        valign: 'middle'
+      },
+      headStyles: {
+        fontSize: 15,
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        lineColor: [0, 0, 0],
+        lineWidth: 0.2,
+        halign: 'center',
+        valign: 'middle'
+      },
+      alternateRowStyles: {
+        fillColor: [255, 255, 255]
       }
-      Yalign += ((siteLocLines.length - 1)+5) ;
-      // --- end of Site Location wrapping ---
-      return Yalign; // next Y for table
+    });
+    let tableEndY = doc.autoTable.previous.finalY;
+    doc.setFontSize(12);
+    doc.text("CALIBRATED BY: YOGESH B JOSHI", 14, tableEndY + 10);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.text("FOR, SHREEJI INSTRUMENTS", 145, 230);
+    doc.text("PROPRIETOR", 170, 245);
+  }
+  const pdfBlob = doc.output('blob');
+  const pdfURL = URL.createObjectURL(pdfBlob);
+  const printWindow = window.open(pdfURL, '_blank');
+  if (printWindow) {
+    printWindow.onload = function () { printWindow.print(); };
+  }
+}
+
+async function sharePDF() {
+  if (!document.getElementById("calibrationForm").reportValidity()) return;
+  await prepareImages();
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const details = getFormDetails();
+  addCertificateDetails(doc, details);
+  const pdfBlob = doc.output('blob');
+  const pdfFile = new File([pdfBlob], "CubeMould_Certificate.pdf", { type: "application/pdf" });
+  if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+    try {
+      await navigator.share({
+        files: [pdfFile],
+        title: 'Cube Mould Calibration Certificate',
+        text: 'Here is your Cube Mould calibration certificate PDF.'
+      });
+    } catch (err) {
+      alert('Sharing cancelled or not supported.');
     }
+  } else {
+    alert('Web Share API not supported or file sharing not available in your browser.');
+  }
+}
 
-    // Add footer, stamp, sign images (every page)
-    function addFooterImages(doc) {
-      if (footerImgB64) doc.addImage(footerImgB64, 'PNG', 0, 255, 210, 27);
-      if (stampImgB64)  doc.addImage(stampImgB64,  'PNG', 100, 217, 35, 35);
-      if (signImgB64)   doc.addImage(signImgB64,   'PNG', 160, 232, 40, 10);
-    }
-
-    // Certificate details with table broken across pages (max 10 rows per page)
-    function addCertificateDetails(doc, details) {
-      let qty = parseInt(details.quantity);
-      if (isNaN(qty) || qty <= 0) {
-        alert("Please enter a valid number of cubes.");
-        return;
-      }
-      // Parse size into [length, height, width]
-      let [length, height, width] = details.size.split("x").map(s => s.trim());
-      if (!length) length = "";
-      if (!height) height = "";
-      if (!width) width = "";
-      const headers = [["SR.NO", "LENGTH", "HEIGHT", "WIDTH"]];
-      const allRows = [];
-      for (let i = 1; i <= qty; i++) {
-        allRows.push([i, length, height, width]);
-      }
-      const pageCount = Math.ceil(allRows.length / 10);
-      for (let page = 0; page < pageCount; page++) {
-        if (page > 0) doc.addPage();
-        let pageRows = allRows.slice(page * 10, page * 10 + 10);
-        // Increment certificateNumber for each page
-        let refNo = incrementCertificateNumber(details.certificateNumber, page);
-        let pageDetails = { ...details, certificateNumber: refNo };
-        let tableY = drawHeader(doc, pageDetails, 50, true);
-        doc.autoTable({
-          head: headers,
-          body: pageRows,
-          startY: tableY + 1,
-          styles: {
-            fontSize: 12,
-            lineColor: [0, 0, 0],
-            textColor: [0, 0, 0],
-            lineWidth: 0.2,
-            halign: 'center',
-            valign: 'middle'
-          },
-          headStyles: {
-            fontSize: 15,
-            fillColor: [255, 255, 255],
-            textColor: [0, 0, 0],
-            lineColor: [0, 0, 0],
-            lineWidth: 0.2,
-            halign: 'center',
-            valign: 'middle'
-          },
-          alternateRowStyles: {
-            fillColor: [255, 255, 255]
-          }
-        });
-        let tableEndY = doc.autoTable.previous.finalY;
-        doc.setFontSize(12);
-        doc.text("CALIBRATED BY: YOGESH B JOSHI", 14, tableEndY + 10);
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(12);
-        doc.text("FOR, SHREEJI INSTRUMENTS", 145, 230);
-        doc.text("PROPRIETOR", 170, 245);
-        addFooterImages(doc);
-      }
-    }
-
-    async function savePDFWithLocation(pdfDocument, defaultFileName) {
-      try {
-        const fileHandle = await window.showSaveFilePicker({
-          suggestedName: defaultFileName,
-          types: [
-            {
-              description: 'PDF Files',
-              accept: { 'application/pdf': ['.pdf'] },
-            },
-          ],
-        });
-        const writableStream = await fileHandle.createWritable();
-        await writableStream.write(pdfDocument);
-        await writableStream.close();
-        console.log('PDF saved successfully!');
-      } catch (error) {
-        console.error('Error saving PDF:', error);
-      }
-    }
-
-    // Preview the generated certificate
-    async function preview() {
-      if (!document.getElementById("calibrationForm").reportValidity()) return;
-      await prepareImages();
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      const details = getFormDetails();
-      addCertificateDetails(doc, details);
-      // PDF Preview
-      const pdfBlob = doc.output('blob');
-      const pdfURL = URL.createObjectURL(pdfBlob);
-      const previewFrame = document.createElement('iframe');
-      previewFrame.style.width = "100%";
-      previewFrame.style.height = "600px";
-      previewFrame.src = pdfURL;
-      const container = document.querySelector('.container');
-      const existingPreview = document.querySelector('iframe');
-      if (existingPreview) container.removeChild(existingPreview);
-      container.appendChild(previewFrame);
-    }
-
-    // Generate PDF with letterhead
-    async function generatePDF() {
-      if (!document.getElementById("calibrationForm").reportValidity()) return;
-      await prepareImages();
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      const details = getFormDetails();
-      addCertificateDetails(doc, details);
-      const pdfBlob = doc.output('blob');
-      await savePDFWithLocation(pdfBlob, `CubeMould_${details.certificateNumber}.pdf`);
-    }
-
-    // Generate PDF without letterhead (removes header image only)
-    async function generatePDFblankpg() {
-      if (!document.getElementById("calibrationForm").reportValidity()) return;
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      const details = getFormDetails();
-      // Draw header without header image
-      function drawHeaderNoImg(doc, details, Yalign) {
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(23);
-        doc.text("TEST REPORT FOR CUBE MOULD", doc.internal.pageSize.getWidth() / 2, Yalign, { align: 'center' });
-        doc.text(`${details.size}`, doc.internal.pageSize.getWidth() / 2, Yalign+=7, { align: 'center' });
-        doc.setFontSize(12);
-        doc.text(`DATE:-${details.calibrationDate}`, 155, Yalign += 10);
-        doc.text(`REF NO                        :-     SI-${details.certificateNumber}`, 14, Yalign);
-        doc.text(`NAME OF PARTY        :-     ${details.partyName}`, 14, Yalign += 10);
-        doc.text(`EQUIPMENT NAME     :-     CUBE MOULD (${details.size})`, 14, Yalign += 10);
-        doc.text(`NEXT DUE DATE        :-     ${details.nextCalibrationDate}`, 14, Yalign += 10);
-
-         // --- Site Location with wrapping (only value, not prefix) ---
-      const siteLocPrefix = "SITE LOCATION          :-     ";
-      const prefixWidth = doc.getTextWidth(siteLocPrefix);
-      const maxWidth = 180 - prefixWidth; // adjust as needed according to your layout
-      const siteLocLines = doc.splitTextToSize(details.siteLocation, maxWidth);
-      doc.text(siteLocPrefix + (siteLocLines[0] || ""), 14, Yalign += 10);
-      for (let i = 1; i < siteLocLines.length; i++) {
-        doc.text(siteLocLines[i], 14 + prefixWidth , Yalign +=4);
-      }
-      Yalign += ((siteLocLines.length - 1)+5) ;
-      // --- end of Site Location wrapping ---
-      return Yalign; // next Y for table
-      }
-      let qty = parseInt(details.quantity);
-      if (isNaN(qty) || qty <= 0) {
-        alert("Please enter a valid number of cubes.");
-        return;
-      }
-      // Parse size into [length, height, width]
-      let [length, height, width] = details.size.split("x").map(s => s.trim());
-      if (!length) length = "";
-      if (!height) height = "";
-      if (!width) width = "";
-      const headers = [["SR.NO", "LENGTH", "HEIGHT", "WIDTH"]];
-      const allRows = [];
-      for (let i = 1; i <= qty; i++) {
-        allRows.push([i, length, height, width]);
-      }
-      const pageCount = Math.ceil(allRows.length / 10);
-      for (let page = 0; page < pageCount; page++) {
-        if (page > 0) doc.addPage();
-        let pageRows = allRows.slice(page * 10, page * 10 + 10);
-        // Increment certificateNumber for each page
-        let refNo = incrementCertificateNumber(details.certificateNumber, page);
-        let pageDetails = { ...details, certificateNumber: refNo };
-        let tableY = drawHeaderNoImg(doc, pageDetails, 50);
-        doc.autoTable({
-          head: headers,
-          body: pageRows,
-          startY: tableY + 1,
-          styles: {
-            fontSize: 12,
-            lineColor: [0, 0, 0],
-            textColor: [0, 0, 0],
-            lineWidth: 0.2,
-            halign: 'center',
-            valign: 'middle'
-          },
-          headStyles: {
-            fontSize: 15,
-            fillColor: [255, 255, 255],
-            textColor: [0, 0, 0],
-            lineColor: [0, 0, 0],
-            lineWidth: 0.2,
-            halign: 'center',
-            valign: 'middle'
-          },
-          alternateRowStyles: {
-            fillColor: [255, 255, 255]
-          }
-        });
-        let tableEndY = doc.autoTable.previous.finalY;
-        doc.setFontSize(12);
-        doc.text("CALIBRATED BY: YOGESH B JOSHI", 14, tableEndY + 10);
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(12);
-        doc.text("FOR, SHREEJI INSTRUMENTS", 145, 230);
-        doc.text("PROPRIETOR", 170, 245);
-     
-      }
-      const pdfBlob = doc.output('blob');
-      await savePDFWithLocation(pdfBlob, `CubeMould_${details.certificateNumber}_blank.pdf`);
-    }
+function toggleDock() {
+  const dock = document.getElementById('sideDock');
+  dock.classList.toggle('open');
+}
   </script>
 </body>
 </html>
