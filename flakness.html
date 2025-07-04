@@ -343,8 +343,16 @@
     doc.text(`EQUIPMENT NAME     :-     FLAKNESS GAUGE`, 14, Yalign+=10);
     doc.text(`SERIAL NO:- SI-${details.certificateNumber}`, 150, Yalign);
     doc.text(`AS PER IS                    :-     IS 2386-1`, 14, Yalign+=10);
-    doc.text(`SITE LOCATION          :-     ${details.siteLocation}`, 14, Yalign+=10);
-       
+     // --- Site Location with wrapping (only value, not prefix) ---
+      const siteLocPrefix = "SITE LOCATION          :-     ";
+      const prefixWidth = doc.getTextWidth(siteLocPrefix);
+      const maxWidth = 180 - prefixWidth; // adjust as needed according to your layout
+      const siteLocLines = doc.splitTextToSize(details.siteLocation, maxWidth);
+      doc.text(siteLocPrefix + (siteLocLines[0] || ""), 14, Yalign += 10);
+      for (let i = 1; i < siteLocLines.length; i++) {
+        doc.text(siteLocLines[i], 14 + prefixWidth , Yalign +=4);
+      }
+      Yalign += ((siteLocLines.length - 1)+5) ;
     const tableStartY =100;
     // Result container
     const sieveData = [
