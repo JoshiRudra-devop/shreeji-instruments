@@ -263,7 +263,8 @@ async function addCertificateDetails(details){
 
   doc.setFontSize(10);
   doc.setFont("helvetica", "bold");
-  let RING=String(details.ring);
+  let RING=String(${details.ring});
+  console.log(RING);
 
   if(RING==="1000KN"){
     doc.text(`CALIBRATION INSTRUMENT 1000KN`, 14, 120);  
