@@ -492,12 +492,8 @@ async function generatePDF() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
 
-  // -- Use the same logic as showpreview to fill doc --
-  // (copy the above code, but instead of preview, save!)
-  // ... [same as showpreview up to doc.addImage(...)]
-  // [copy showpreview code up to image logic, then:]
-  // -- END IMAGE LOGIC --
-  // Then save:
+  addcertificateDetails(doc);
+   addImg(doc);
   const pdfBlob = doc.output('blob');
   await savePDFWithLocation(pdfBlob, `CTM_${document.getElementById("certificateNumber").value}.pdf`);
 }
@@ -506,8 +502,7 @@ async function generatePDFWithoutLetterpad() {
   if (!document.getElementById("calibrationForm").reportValidity()) return;
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
-  // -- Repeat doc filling logic from showpreview, but skip addImage() --
-  // ... [fill content]
+  addcertificateDetails(doc);
   const pdfBlob = doc.output('blob');
   await savePDFWithLocation(pdfBlob, `CTM_${document.getElementById("certificateNumber").value}_no_letterhead.pdf`);
 }
@@ -516,7 +511,7 @@ async function printBlankCertificate() {
   if (!document.getElementById("calibrationForm").reportValidity()) return;
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
-  // -- Repeat doc filling logic from generatePDFWithoutLetterpad --
+   addcertificateDetails(doc);
   const pdfBlob = doc.output('blob');
   const pdfURL = URL.createObjectURL(pdfBlob);
   const printWindow = window.open(pdfURL, '_blank');
@@ -619,8 +614,8 @@ async function sharePDF() {
   if (!document.getElementById("calibrationForm").reportValidity()) return;
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
-  // You may want to repeat your generatePDF logic here to fill the doc
-  // ... fill content
+   addcertificateDetails(doc);
+   addImg(doc);
   const pdfBlob = doc.output('blob');
   const pdfFile = new File([pdfBlob], "certificate.pdf", { type: "application/pdf" });
   if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
