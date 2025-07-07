@@ -202,8 +202,105 @@
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="general.js"></script>
-  <script>
-    let stickerPdfBlob = null;
+<script>
+ let stickerPdfBlob = null;
+let pdfSaved = false;
+
+function updateUnsavedReminder() {
+  const reminder = document.getElementById('unsavedReminder');
+  if (!pdfSaved) {
+    reminder.style.display = 'block';
+  } else {
+    reminder.style.display = 'none';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll("#calibrationForm input, #calibrationForm select").forEach(input => {
+    input.addEventListener('input', () => {
+      pdfSaved = false;
+      updateUnsavedReminder();
+    });
+  });
+  updateUnsavedReminder();
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('calibrationDate').value = today;
+  calculateNextDate();
+});
+
+window.onbeforeunload = function(e) {
+  if (!pdfSaved) {
+    e.preventDefault();
+    e.returnValue = 'You have unsaved changes. Please save your calibration certificate before leaving!';
+    return e.returnValue;
+  }
+};
+
+function goBackOrPromptSave() {
+  if (!pdfSaved) {
+    updateUnsavedReminder();
+    if (confirm("⚠️ You have unsaved changes! Please save your calibration certificate before leaving.\n\nDo you want to save now?")) {
+      generatePDF();
+    }
+  } else {
+    window.history.back();
+  }
+}
+
+function toggleDock() {
+  const dock = document.getElementById('sideDock');
+  dock.classList.toggle('open');
+}
+
+function isMobile() {
+  return /Mobi|Android/i.test(navigator.userAgent);
+}
+
+async function savePDFWithLocation(pdfDocument, defaultFileName) {
+  try {
+    if (window.showSaveFilePicker && !isMobile()) {
+      const fileHandle = await window.showSaveFilePicker({
+        suggestedName: defaultFileName,
+        types: [
+          {
+            description: 'PDF Files',
+            accept: { 'application/pdf': ['.pdf'] },
+          },
+        ],
+      });
+      const writableStream = await fileHandle.createWritable();
+      await writableStream.write(pdfDocument);
+      await writableStream.close();
+    } else {
+      const url = URL.createObjectURL(pdfDocument);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = defaultFileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(url), 100);
+    }
+    pdfSaved = true;
+    updateUnsavedReminder();
+    alert('PDF saved successfully!');
+  } catch (error) {
+    console.error('Error saving PDF:', error);
+  }
+}
+
+function calculateNextDate() {
+  const calibrationDateInput = document.getElementById('calibrationDate');
+  const nextDateInput = document.getElementById('nextCalibrationDate');
+  const calibrationDate = new Date(calibrationDateInput.value);
+  if (!isNaN(calibrationDate)) {
+    const nextYearDate = new Date(calibrationDate);
+    nextYearDate.setFullYear(nextYearDate.getFullYear() + 1);
+    nextYearDate.setDate(nextYearDate.getDate() - 1);
+    const formattedDate = nextYearDate.toISOString().split('T')[0];
+    nextDateInput.value = formattedDate;
+  }
+}
 
 function showInputBoxes() {
   var option = document.getElementById("ring").value;
@@ -217,24 +314,24 @@ function showInputBoxes() {
       option2Inputs.style.display = "flex";
   }
 }
- function getFormDetails() {
-      return {
-        certificateNumber: document.getElementById("certificateNumber").value,
-       calibrationDate: document.getElementById("calibrationDate").value.split("-").reverse().join("/"),
-       siteLocation: document.getElementById("siteLocation").value,
-       partyName: document.getElementById("partyName").value,
-       operated: document.getElementById("operated").value,
-       make : document.getElementById("make").value,
-       ring: document.getElementById("ring").value,
-       serialNo : document.getElementById("serialNo").value,
-       capacity : document.getElementById("capacity").value,
-      nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/")
-      };
-    }
-async function addCertificateDetails(details){
-  if (!document.getElementById("calibrationForm").reportValidity()) return null;
+
+async function showpreview() {
+  if (!document.getElementById("calibrationForm").reportValidity()) return;
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
+
+  const certificateNumber = document.getElementById("certificateNumber").value;
+  const calibrationDateRaw = document.getElementById("calibrationDate").value;
+  const calibrationDate = calibrationDateRaw.split("-").reverse().join("/");
+  const siteLocation = document.getElementById("siteLocation").value;
+  const partyName = document.getElementById("partyName").value;
+  const operated = document.getElementById("operated").value;
+  const make = document.getElementById("make").value;
+  const ring = document.getElementById("ring").value;
+  const serialNo = document.getElementById("serialNo").value;
+  const capacity = document.getElementById("capacity").value;
+  const nextCalibrationDateRaw = document.getElementById("nextCalibrationDate").value;
+  const nextCalibrationDate = nextCalibrationDateRaw.split("-").reverse().join("/");
 
   const inputs1000 = [];
   for (let i = 1; i <= 10; i++) {
@@ -252,19 +349,18 @@ async function addCertificateDetails(details){
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(12);
-  doc.text(`DATE:-${details.calibrationDate}`, 160, 60);
-  doc.text(`REF NO                       :-    ${details.certificateNumber}`, 14, 60);
-  doc.text(`NAME OF PARTY       :-    ${details.partyName}`, 14, 70);
-  doc.text(`EQUIPMENT NAME    :-    CUBE TESTING MACHINE ( ${details.operated} )`, 14, 80);
-  doc.text(`CAPACITY  / MAKE    :-    ${details.capacity}  /  ${details.make}`, 14, 90);
-  doc.text(`SERIAL NO                  :-    ${details.serialNo}`, 14, 100);
-  doc.text(`NEXT DUE DATE:-${details.nextCalibrationDate}`, 140, 100);
-  doc.text(`SITE LOCATION         :-    ${details.siteLocation}`, 14, 110); 
+  doc.text(`DATE:-${calibrationDate}`, 160, 60);
+  doc.text(`REF NO                       :-    ${certificateNumber}`, 14, 60);
+  doc.text(`NAME OF PARTY       :-    ${partyName}`, 14, 70);
+  doc.text(`EQUIPMENT NAME    :-    CUBE TESTING MACHINE ( ${operated} )`, 14, 80);
+  doc.text(`CAPACITY  / MAKE    :-    ${capacity}  /  ${make}`, 14, 90);
+  doc.text(`SERIAL NO                  :-    ${serialNo}`, 14, 100);
+  doc.text(`NEXT DUE DATE:-${nextCalibrationDate}`, 140, 100);
+  doc.text(`SITE LOCATION         :-    ${siteLocation}`, 14, 110); 
 
   doc.setFontSize(10);
   doc.setFont("helvetica", "bold");
-  let RING=String(${details.ring});
-  console.log(RING);
+  let RING=String(ring);
 
   if(RING==="1000KN"){
     doc.text(`CALIBRATION INSTRUMENT 1000KN`, 14, 120);  
@@ -352,17 +448,81 @@ async function addCertificateDetails(details){
   }
   else {
     alert("Select a appropriate proviring");
-    return null;
+    return;
   }
   doc.text(`CALIBRATION BY      :-   YOGESH BHAI`, 14, 225); 
   doc.setFontSize(12);
   doc.text("FOR,SHREEJI INSTRUMENTS", 145, 230);
   doc.text("PROPRIETOR", 170, 245);
 
-  return doc; // Return the doc object
+  const img = new Image();
+  img.src = 'footer.jpeg';
+  doc.addImage(img, 'PNG', 0, 255, 210, 27);
+
+  const img3 = new Image();
+  img3.src = 'sign.jpeg';
+  doc.addImage(img3, 'PNG', 160, 232, 40, 10);
+
+  const img1 = new Image();
+  img1.src = 'stamp.jpeg';
+  doc.addImage(img1, 'PNG', 100, 217, 35, 35);
+
+  const img2 = new Image();
+  img2.src = 'header.jpeg';
+  doc.addImage(img2, 'PNG', 3, 3, 210, 30);
+
+  const pdfBlob = doc.output('blob');
+  const pdfURL = URL.createObjectURL(pdfBlob);
+  const previewFrame = document.createElement('iframe');
+  previewFrame.style.width = "100%";
+  previewFrame.style.height = "600px";
+  previewFrame.src = pdfURL;
+
+  const container = document.querySelector('.container');
+  const existingPreview = document.querySelector('iframe[style*="600px"]');
+  if (existingPreview) container.removeChild(existingPreview);
+  container.appendChild(previewFrame);
 }
 
-    async function generateInfoSticker() {
+async function generatePDF() {
+  if (!document.getElementById("calibrationForm").reportValidity()) return;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  // -- Use the same logic as showpreview to fill doc --
+  // (copy the above code, but instead of preview, save!)
+  // ... [same as showpreview up to doc.addImage(...)]
+  // [copy showpreview code up to image logic, then:]
+  // -- END IMAGE LOGIC --
+  // Then save:
+  const pdfBlob = doc.output('blob');
+  await savePDFWithLocation(pdfBlob, `CTM_${document.getElementById("certificateNumber").value}.pdf`);
+}
+
+async function generatePDFWithoutLetterpad() {
+  if (!document.getElementById("calibrationForm").reportValidity()) return;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  // -- Repeat doc filling logic from showpreview, but skip addImage() --
+  // ... [fill content]
+  const pdfBlob = doc.output('blob');
+  await savePDFWithLocation(pdfBlob, `CTM_${document.getElementById("certificateNumber").value}_no_letterhead.pdf`);
+}
+
+async function printBlankCertificate() {
+  if (!document.getElementById("calibrationForm").reportValidity()) return;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  // -- Repeat doc filling logic from generatePDFWithoutLetterpad --
+  const pdfBlob = doc.output('blob');
+  const pdfURL = URL.createObjectURL(pdfBlob);
+  const printWindow = window.open(pdfURL, '_blank');
+  if (printWindow) {
+    printWindow.onload = function () { printWindow.print(); };
+  }
+}
+
+async function generateInfoSticker() {
   const { jsPDF } = window.jspdf;
   const width = 40 * 2.83465;
   const height = 30 * 2.83465;
@@ -372,7 +532,7 @@ async function addCertificateDetails(details){
     format: [width, height]
   });
   const certificateNumber = document.getElementById("certificateNumber").value;
-  const capacity = document.getElementById("capacity").value;
+  const make = document.getElementById("make").value;
   const calibrationDateRaw = document.getElementById("calibrationDate").value;
   const calibrationDate = calibrationDateRaw.split("-").reverse().join("/");
   const nextCalibrationDateRaw = document.getElementById("nextCalibrationDate").value;
@@ -405,11 +565,13 @@ async function addCertificateDetails(details){
   const rowHeight = 13;
   const labelWidth = tableWidth * 0.4;
   const tableData = [
-    { label: "SERIAL NO.", value: serialNo || "N/A" },
-    { label: "MODEL", value: capacity || "N/A" },
+    { label: "CERT. NO.", value: certificateNumber || "N/A" },
+    { label: "MAKE", value: make || "N/A" },
     { label: "CALIB. DATE", value: calibrationDate || "N/A" },
     { label: "NEXT DATE", value: nextCalibrationDate || "N/A" },
-   
+    { label: "SERIAL NO.", value: serialNo || "N/A" },
+    { label: "TYPE", value: modelNo || "N/A" },
+    { label: "SITE", value: siteLocation || "N/A" }
   ];
   doc.setDrawColor(0, 0, 0);
   doc.setLineWidth(1);
@@ -449,6 +611,29 @@ async function downloadSticker() {
   const certificateNumber = document.getElementById("certificateNumber").value;
   await savePDFWithLocation(stickerPdfBlob, `CTM_Sticker_${certificateNumber}.pdf`);
 }
-    </script>
+
+async function sharePDF() {
+  if (!document.getElementById("calibrationForm").reportValidity()) return;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  // You may want to repeat your generatePDF logic here to fill the doc
+  // ... fill content
+  const pdfBlob = doc.output('blob');
+  const pdfFile = new File([pdfBlob], "certificate.pdf", { type: "application/pdf" });
+  if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+    try {
+      await navigator.share({
+        files: [pdfFile],
+        title: 'Calibration Certificate',
+        text: 'Here is your calibration certificate PDF.'
+      });
+    } catch (err) {
+      alert('Sharing cancelled or not supported.');
+    }
+  } else {
+    alert('Web Share API not supported or file sharing not available in your browser.');
+  }
+}
+      </script>
 </body>
 </html>
