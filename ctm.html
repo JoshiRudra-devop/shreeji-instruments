@@ -217,94 +217,6 @@ function showInputBoxes() {
       option2Inputs.style.display = "flex";
   }
 }
-
-async function generateInfoSticker() {
-  const { jsPDF } = window.jspdf;
-  const width = 40 * 2.83465;
-  const height = 30 * 2.83465;
-  const doc = new jsPDF({
-    orientation: "landscape",
-    unit: "pt",
-    format: [width, height]
-  });
-  const certificateNumber = document.getElementById("certificateNumber").value;
-  const capacity = document.getElementById("capacity").value;
-  const calibrationDateRaw = document.getElementById("calibrationDate").value;
-  const calibrationDate = calibrationDateRaw.split("-").reverse().join("/");
-  const nextCalibrationDateRaw = document.getElementById("nextCalibrationDate").value;
-  const nextCalibrationDate = nextCalibrationDateRaw.split("-").reverse().join("/");
-  const serialNo = document.getElementById("serialNo").value;
-  const modelNo = document.getElementById("operated").value;
-  const siteLocation = document.getElementById("siteLocation").value;
-  const primaryBlue = [19, 52, 165];
-  const accentRed = [228, 34, 21];
-  doc.setDrawColor(...primaryBlue);
-  doc.setLineWidth(3);
-  doc.rect(5, 5, width - 10, height - 10);
-  const logoImg = new Image();
-  logoImg.src = "logo.jpeg";
-  await new Promise(resolve => { logoImg.onload = resolve; logoImg.onerror = resolve; });
-  if (logoImg.width) {
-    doc.addImage(logoImg, "JPEG", 20, 7, 5, 7);
-  }
-  doc.setFont("times", "bold");
-  doc.setFontSize(8);
-  doc.setTextColor(...accentRed);
-  doc.text("Shreeji Instruments", 32, 13);
-  doc.setFont("times", "normal");
-  doc.setFontSize(4);
-  doc.setTextColor(...primaryBlue);
-  doc.text("SALES • SERVICE • REPAIRING • CALIBRATIONS", width / 2, 18, { align: "center" });
-  const tableLeft = 15;
-  const tableTop = 20;
-  const tableWidth = width - 30;
-  const rowHeight = 13;
-  const labelWidth = tableWidth * 0.4;
-  const tableData = [
-    { label: "SERIAL NO.", value: serialNo || "N/A" },
-    { label: "MODEL", value: capacity || "N/A" },
-    { label: "CALIB. DATE", value: calibrationDate || "N/A" },
-    { label: "NEXT DATE", value: nextCalibrationDate || "N/A" },
-   
-  ];
-  doc.setDrawColor(0, 0, 0);
-  doc.setLineWidth(1);
-  doc.rect(tableLeft, tableTop, tableWidth, rowHeight * tableData.length);
-  tableData.forEach((row, index) => {
-    const rowY = tableTop + (index * rowHeight);
-    if (index > 0) doc.line(tableLeft, rowY, tableLeft + tableWidth, rowY);
-    doc.line(tableLeft + labelWidth, rowY, tableLeft + labelWidth, rowY + rowHeight);
-    doc.setFillColor(255, 255, 255);
-    doc.rect(tableLeft, rowY, labelWidth, rowHeight, 'F');
-    const labelY = rowY + rowHeight / 2 + 1;
-    const valueY = rowY + rowHeight / 2 + 1;
-    doc.setFont("times", "bold");
-    doc.setFontSize(4.5);
-    doc.setTextColor(...primaryBlue);
-    doc.text(row.label, tableLeft + 4, labelY, { baseline: 'middle' });
-    doc.setFont("times", "normal");
-    doc.setFontSize(4.5);
-    doc.setTextColor(0, 0, 0);
-    doc.text(row.value, tableLeft + labelWidth + 5, valueY, { baseline: 'middle' });
-  });
-  stickerPdfBlob = doc.output('blob');
-  const pdfURL = URL.createObjectURL(stickerPdfBlob);
-  const frame = document.getElementById("stickerPreviewFrame");
-  frame.src = pdfURL;
-  frame.style.display = "block";
-  const dockDownloadBtn = document.querySelector('.side-dock #downloadStickerBtn');
-  dockDownloadBtn.style.display = "block";
-  frame.scrollIntoView({ behavior: 'smooth' });
-}
-
-async function downloadSticker() {
-  if (!stickerPdfBlob) {
-    alert('Please generate the sticker first!');
-    return;
-  }
-  const certificateNumber = document.getElementById("certificateNumber").value;
-  await savePDFWithLocation(stickerPdfBlob, `CTM_Sticker_${certificateNumber}.pdf`);
-}
  function getFormDetails() {
       return {
         certificateNumber: document.getElementById("certificateNumber").value,
@@ -447,6 +359,94 @@ async function addCertificateDetails(details){
   doc.text("PROPRIETOR", 170, 245);
 
   return doc; // Return the doc object
+}
+
+    async function generateInfoSticker() {
+  const { jsPDF } = window.jspdf;
+  const width = 40 * 2.83465;
+  const height = 30 * 2.83465;
+  const doc = new jsPDF({
+    orientation: "landscape",
+    unit: "pt",
+    format: [width, height]
+  });
+  const certificateNumber = document.getElementById("certificateNumber").value;
+  const capacity = document.getElementById("capacity").value;
+  const calibrationDateRaw = document.getElementById("calibrationDate").value;
+  const calibrationDate = calibrationDateRaw.split("-").reverse().join("/");
+  const nextCalibrationDateRaw = document.getElementById("nextCalibrationDate").value;
+  const nextCalibrationDate = nextCalibrationDateRaw.split("-").reverse().join("/");
+  const serialNo = document.getElementById("serialNo").value;
+  const modelNo = document.getElementById("operated").value;
+  const siteLocation = document.getElementById("siteLocation").value;
+  const primaryBlue = [19, 52, 165];
+  const accentRed = [228, 34, 21];
+  doc.setDrawColor(...primaryBlue);
+  doc.setLineWidth(3);
+  doc.rect(5, 5, width - 10, height - 10);
+  const logoImg = new Image();
+  logoImg.src = "logo.jpeg";
+  await new Promise(resolve => { logoImg.onload = resolve; logoImg.onerror = resolve; });
+  if (logoImg.width) {
+    doc.addImage(logoImg, "JPEG", 20, 7, 5, 7);
+  }
+  doc.setFont("times", "bold");
+  doc.setFontSize(8);
+  doc.setTextColor(...accentRed);
+  doc.text("Shreeji Instruments", 32, 13);
+  doc.setFont("times", "normal");
+  doc.setFontSize(4);
+  doc.setTextColor(...primaryBlue);
+  doc.text("SALES • SERVICE • REPAIRING • CALIBRATIONS", width / 2, 18, { align: "center" });
+  const tableLeft = 15;
+  const tableTop = 20;
+  const tableWidth = width - 30;
+  const rowHeight = 13;
+  const labelWidth = tableWidth * 0.4;
+  const tableData = [
+    { label: "SERIAL NO.", value: serialNo || "N/A" },
+    { label: "MODEL", value: capacity || "N/A" },
+    { label: "CALIB. DATE", value: calibrationDate || "N/A" },
+    { label: "NEXT DATE", value: nextCalibrationDate || "N/A" },
+   
+  ];
+  doc.setDrawColor(0, 0, 0);
+  doc.setLineWidth(1);
+  doc.rect(tableLeft, tableTop, tableWidth, rowHeight * tableData.length);
+  tableData.forEach((row, index) => {
+    const rowY = tableTop + (index * rowHeight);
+    if (index > 0) doc.line(tableLeft, rowY, tableLeft + tableWidth, rowY);
+    doc.line(tableLeft + labelWidth, rowY, tableLeft + labelWidth, rowY + rowHeight);
+    doc.setFillColor(255, 255, 255);
+    doc.rect(tableLeft, rowY, labelWidth, rowHeight, 'F');
+    const labelY = rowY + rowHeight / 2 + 1;
+    const valueY = rowY + rowHeight / 2 + 1;
+    doc.setFont("times", "bold");
+    doc.setFontSize(4.5);
+    doc.setTextColor(...primaryBlue);
+    doc.text(row.label, tableLeft + 4, labelY, { baseline: 'middle' });
+    doc.setFont("times", "normal");
+    doc.setFontSize(4.5);
+    doc.setTextColor(0, 0, 0);
+    doc.text(row.value, tableLeft + labelWidth + 5, valueY, { baseline: 'middle' });
+  });
+  stickerPdfBlob = doc.output('blob');
+  const pdfURL = URL.createObjectURL(stickerPdfBlob);
+  const frame = document.getElementById("stickerPreviewFrame");
+  frame.src = pdfURL;
+  frame.style.display = "block";
+  const dockDownloadBtn = document.querySelector('.side-dock #downloadStickerBtn');
+  dockDownloadBtn.style.display = "block";
+  frame.scrollIntoView({ behavior: 'smooth' });
+}
+
+async function downloadSticker() {
+  if (!stickerPdfBlob) {
+    alert('Please generate the sticker first!');
+    return;
+  }
+  const certificateNumber = document.getElementById("certificateNumber").value;
+  await savePDFWithLocation(stickerPdfBlob, `CTM_Sticker_${certificateNumber}.pdf`);
 }
     </script>
 </body>
