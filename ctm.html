@@ -308,8 +308,7 @@ async function downloadSticker() {
  function getFormDetails() {
       return {
         certificateNumber: document.getElementById("certificateNumber").value,
-        calibrationDateRaw: document.getElementById("calibrationDate").value,
-       calibrationDate:calibrationDateRaw.split("-").reverse().join("/"),
+       calibrationDate: document.getElementById("calibrationDate").value.split("-").reverse().join("/"),
        siteLocation: document.getElementById("siteLocation").value,
        partyName: document.getElementById("partyName").value,
        operated: document.getElementById("operated").value,
@@ -317,8 +316,7 @@ async function downloadSticker() {
        ring: document.getElementById("ring").value,
        serialNo : document.getElementById("serialNo").value,
        capacity : document.getElementById("capacity").value,
-       nextCalibrationDateRaw : document.getElementById("nextCalibrationDate").value,
-       nextCalibrationDate : nextCalibrationDateRaw.split("-").reverse().join("/"),
+      nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/")
       };
     }
 async function main(details){
