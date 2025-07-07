@@ -331,7 +331,7 @@ function showInputBoxes() {
       img2.src = 'header.jpeg';
       doc.addImage(img2, 'PNG', 3, 3, 210, 30);
     }
-async function addcertificateDetails(){
+async function addcertificateDetails(doc, details){
   const certificateNumber = document.getElementById("certificateNumber").value;
   const calibrationDateRaw = document.getElementById("calibrationDate").value;
   const calibrationDate = calibrationDateRaw.split("-").reverse().join("/");
@@ -472,7 +472,7 @@ async function preview() {
   if (!document.getElementById("calibrationForm").reportValidity()) return;
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
-  addcertificateDetails();
+  addcertificateDetails(doc);
    addImg(doc);
   const pdfBlob = doc.output('blob');
   const pdfURL = URL.createObjectURL(pdfBlob);
