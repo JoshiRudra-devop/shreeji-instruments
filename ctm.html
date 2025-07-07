@@ -321,7 +321,7 @@ async function downloadSticker() {
        nextCalibrationDate : nextCalibrationDateRaw.split("-").reverse().join("/"),
       };
     }
-async function main(doc,details){
+async function main(details){
   if (!document.getElementById("calibrationForm").reportValidity()) return null;
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
