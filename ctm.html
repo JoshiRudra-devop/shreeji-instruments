@@ -319,7 +319,7 @@ async function downloadSticker() {
       nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/")
       };
     }
-async function main(details){
+async function addCertificateDetails(details){
   if (!document.getElementById("calibrationForm").reportValidity()) return null;
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
