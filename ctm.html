@@ -252,18 +252,18 @@ async function addCertificateDetails(details){
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(12);
-  doc.text(`DATE:-${calibrationDate}`, 160, 60);
-  doc.text(`REF NO                       :-    ${certificateNumber}`, 14, 60);
-  doc.text(`NAME OF PARTY       :-    ${partyName}`, 14, 70);
-  doc.text(`EQUIPMENT NAME    :-    CUBE TESTING MACHINE ( ${operated} )`, 14, 80);
-  doc.text(`CAPACITY  / MAKE    :-    ${capacity}  /  ${make}`, 14, 90);
-  doc.text(`SERIAL NO                  :-    ${serialNo}`, 14, 100);
-  doc.text(`NEXT DUE DATE:-${nextCalibrationDate}`, 140, 100);
-  doc.text(`SITE LOCATION         :-    ${siteLocation}`, 14, 110); 
+  doc.text(`DATE:-${details.calibrationDate}`, 160, 60);
+  doc.text(`REF NO                       :-    ${details.certificateNumber}`, 14, 60);
+  doc.text(`NAME OF PARTY       :-    ${details.partyName}`, 14, 70);
+  doc.text(`EQUIPMENT NAME    :-    CUBE TESTING MACHINE ( ${details.operated} )`, 14, 80);
+  doc.text(`CAPACITY  / MAKE    :-    ${details.capacity}  /  ${details.make}`, 14, 90);
+  doc.text(`SERIAL NO                  :-    ${details.serialNo}`, 14, 100);
+  doc.text(`NEXT DUE DATE:-${details.nextCalibrationDate}`, 140, 100);
+  doc.text(`SITE LOCATION         :-    ${details.siteLocation}`, 14, 110); 
 
   doc.setFontSize(10);
   doc.setFont("helvetica", "bold");
-  let RING=String(ring);
+  let RING=String(details.ring);
 
   if(RING==="1000KN"){
     doc.text(`CALIBRATION INSTRUMENT 1000KN`, 14, 120);  
