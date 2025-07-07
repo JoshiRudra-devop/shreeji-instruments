@@ -20,6 +20,31 @@
     </ul>
   </nav>
   <button class="back-button" onclick="window.history.back()"><< Back</button>
+    \ <button class="dock-toggle" onclick="toggleDock()">☰ Actions</button>
+  <div class="side-dock" id="sideDock">
+    <h3>Actions</h3>
+    <button class="dock-button" type="button" onclick="preview()">
+      📋 Preview Certificate
+    </button>
+    <button class="dock-button" type="button" onclick="generatePDF()">
+      📄 Download with Letterhead
+    </button>
+    <button class="dock-button" type="button" onclick="generatePDFblankpg()">
+      📝 Download without Letterhead
+    </button>
+    <button class="dock-button" type="button" onclick="printBlankCertificate()">
+      🖨️ Print without Letterhead
+    </button>
+    <button class="dock-button sticker-btn" type="button" onclick="generateInfoSticker()">
+      🏷️ Generate Info Sticker
+    </button>
+    <button class="dock-button" id="downloadStickerBtn" type="button" onclick="downloadSticker()" style="display: none;">
+      ⬇️ Download Sticker
+    </button>
+    <button class="dock-button" type="button" onclick="sharePDF()">
+      📤 Share PDF (With Letterhead)
+    </button>
+  </div>
   <div class="container">
     <h2 class="centered">CALIBRATION CERTIFICATE</h2>
     <form id="calibrationForm">
