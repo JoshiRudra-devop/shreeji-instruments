@@ -313,13 +313,25 @@ function showInputBoxes() {
   } else if (option === "2000KN") {
       option2Inputs.style.display = "flex";
   }
-}
+} 
+  function addImg(doc, details) {
+      const img = new Image();
+      img.src = 'footer.jpeg';
+      doc.addImage(img, 'PNG', 0, 255, 210, 27);
 
-async function preview() {
-  if (!document.getElementById("calibrationForm").reportValidity()) return;
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
+      const img3 = new Image();
+      img3.src = 'sign.jpeg';
+      doc.addImage(img3, 'PNG', 160, 232, 40, 10);
 
+      const img1 = new Image();
+      img1.src = 'stamp.jpeg';
+      doc.addImage(img1, 'PNG', 100, 217, 35, 35);
+
+      const img2 = new Image();
+      img2.src = 'header.jpeg';
+      doc.addImage(img2, 'PNG', 3, 3, 210, 30);
+    }
+async function addcertificateDetails(){
   const certificateNumber = document.getElementById("certificateNumber").value;
   const calibrationDateRaw = document.getElementById("calibrationDate").value;
   const calibrationDate = calibrationDateRaw.split("-").reverse().join("/");
@@ -455,22 +467,13 @@ async function preview() {
   doc.text("FOR,SHREEJI INSTRUMENTS", 145, 230);
   doc.text("PROPRIETOR", 170, 245);
 
-  const img = new Image();
-  img.src = 'footer.jpeg';
-  doc.addImage(img, 'PNG', 0, 255, 210, 27);
-
-  const img3 = new Image();
-  img3.src = 'sign.jpeg';
-  doc.addImage(img3, 'PNG', 160, 232, 40, 10);
-
-  const img1 = new Image();
-  img1.src = 'stamp.jpeg';
-  doc.addImage(img1, 'PNG', 100, 217, 35, 35);
-
-  const img2 = new Image();
-  img2.src = 'header.jpeg';
-  doc.addImage(img2, 'PNG', 3, 3, 210, 30);
-
+}
+async function preview() {
+  if (!document.getElementById("calibrationForm").reportValidity()) return;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  addcertificateDetails();
+   addImg(doc);
   const pdfBlob = doc.output('blob');
   const pdfURL = URL.createObjectURL(pdfBlob);
   const previewFrame = document.createElement('iframe');
