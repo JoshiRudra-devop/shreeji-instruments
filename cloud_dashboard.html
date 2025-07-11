@@ -66,14 +66,12 @@
       margin-bottom: 20px;
       color: #00796b;
     }
-    
     .search-container {
       margin-bottom: 20px;
       display: flex;
       gap: 10px;
       align-items: center;
     }
-    
     .search-input {
       flex: 1;
       padding: 12px;
@@ -81,12 +79,10 @@
       border-radius: 5px;
       font-size: 16px;
     }
-    
     .search-input:focus {
       outline: none;
       border-color: #00796b;
     }
-    
     .refresh-btn {
       background: #00796b;
       color: white;
@@ -97,11 +93,9 @@
       cursor: pointer;
       transition: background 0.3s;
     }
-    
     .refresh-btn:hover {
       background: #26a69a;
     }
-    
     .cert-table {
       width: 100%;
       border-collapse: collapse;
@@ -127,11 +121,9 @@
     .cert-table tr:last-child td {
       border-bottom: none;
     }
-    
     .cert-table tr:hover {
       background-color: #b2dfdb;
     }
-    
     .cert-link-btn {
       background: #00796b;
       color: white;
@@ -155,30 +147,25 @@
     .edit-btn:hover {
       background: #d97706;
     }
-    
     .delete-btn {
       background: #dc2626;
       color: #fff;
     }
-    
     .delete-btn:hover {
       background: #b91c1c;
     }
-    
     .no-data-msg {
       text-align: center;
       font-size: 18px;
       color: #d32f2f;
       margin: 40px 0;
     }
-    
     .loading-msg {
       text-align: center;
       font-size: 18px;
       color: #00796b;
       margin: 40px 0;
     }
-    
     .stats-container {
       display: flex;
       justify-content: space-around;
@@ -187,33 +174,27 @@
       padding: 15px;
       border-radius: 8px;
     }
-    
     .stat-item {
       text-align: center;
     }
-    
     .stat-number {
       font-size: 24px;
       font-weight: bold;
       color: #00796b;
     }
-    
     .stat-label {
       font-size: 14px;
       color: #666;
     }
-    
     .action-buttons {
       display: flex;
       flex-wrap: wrap;
       gap: 5px;
     }
-    
     .date-column {
       font-size: 14px;
       color: #666;
     }
-    
     .modal {
       display: none;
       position: fixed;
@@ -224,7 +205,6 @@
       height: 100%;
       background-color: rgba(0,0,0,0.5);
     }
-    
     .modal-content {
       background-color: white;
       margin: 15% auto;
@@ -234,11 +214,9 @@
       max-width: 400px;
       text-align: center;
     }
-    
     .modal-buttons {
       margin-top: 20px;
     }
-    
     .modal-btn {
       padding: 10px 20px;
       margin: 0 10px;
@@ -247,49 +225,195 @@
       cursor: pointer;
       font-size: 16px;
     }
-    
     .modal-btn-confirm {
       background-color: #dc2626;
       color: white;
     }
-    
     .modal-btn-cancel {
       background-color: #6b7280;
       color: white;
     }
-    
     @media (max-width: 800px) {
-      body {
-        padding-right: 0;
-      }
-      
-      .container {
-        padding: 10px;
-        margin: 100px 10px 20px;
-      }
-      
-      .cert-table th, .cert-table td {
-        font-size: 14px;
-        padding: 10px 5px;
-      }
-      
-      .cert-link-btn {
-        font-size: 13px;
-        padding: 7px 10px;
-      }
-      
-      .search-container {
-        flex-direction: column;
-      }
-      
-      .stats-container {
-        flex-direction: column;
-        gap: 10px;
-      }
-      
-      .action-buttons {
-        justify-content: center;
-      }
+      body { padding-right: 0; }
+      .container { padding: 10px; margin: 100px 10px 20px; }
+      .cert-table th, .cert-table td { font-size: 14px; padding: 10px 5px; }
+      .cert-link-btn { font-size: 13px; padding: 7px 10px; }
+      .search-container { flex-direction: column; }
+      .stats-container { flex-direction: column; gap: 10px; }
+      .action-buttons { justify-content: center; }
+    }
+    /* Sidebar Styles */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 380px;
+      height: 100vh;
+      background: linear-gradient(135deg, #e8f5e8 0%, #f0f8ff 100%);
+      box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+      transition: right 0.3s ease;
+      z-index: 1001;
+      overflow-y: auto;
+      border-left: 3px solid #00796b;
+    }
+    .sidebar.open { right: 0; }
+    .sidebar-header {
+      background: #00796b;
+      color: white;
+      padding: 15px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .sidebar-title {
+      margin: 0;
+      font-size: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .close-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 3px;
+      transition: background 0.3s;
+    }
+    .close-btn:hover {
+      background: rgba(255,255,255,0.2);
+    }
+    .sidebar-content {
+      padding: 20px;
+    }
+    .sort-section {
+      margin-bottom: 30px;
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .sort-section h3 {
+      margin: 0 0 15px 0;
+      color: #00796b;
+      font-size: 16px;
+      border-bottom: 2px solid #e0f2f1;
+      padding-bottom: 8px;
+    }
+    .sort-list {
+      max-height: 250px;
+      overflow-y: auto;
+      border: 1px solid #e0e0e0;
+      border-radius: 5px;
+    }
+    .sidebar-filter-btn {
+      background: #fff;
+      border: 2px solid #00796b;
+      border-radius: 6px;
+      color: #00796b;
+      font-weight: 600;
+      font-size: 15px;
+      margin: 6px 0;
+      padding: 10px 12px;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .sidebar-filter-btn:hover, .sidebar-filter-btn.active {
+      background: #00796b;
+      color: #fff;
+    }
+    .sort-item-count {
+      background: #00796b;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-left: 10px;
+    }
+    .highlight {
+      background: #ffeb3b !important;
+      color: #333 !important;
+    }
+    .no-results {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+      font-style: italic;
+    }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      z-index: 1000;
+    }
+    .overlay.show { display: block; }
+    .toggle-btn {
+      position: fixed;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
+      background: #00796b;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: all 0.3s;
+      z-index: 1000;
+    }
+    .toggle-btn:hover {
+      background: #26a69a;
+      transform: translateY(-50%) scale(1.1);
+    }
+    .toggle-btn.sidebar-open { right: 400px; }
+    .search-in-sidebar {
+      margin-bottom: 20px;
+    }
+    .search-in-sidebar input {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    .search-in-sidebar input:focus {
+      outline: none;
+      border-color: #00796b;
+    }
+    .stats-mini {
+      background: #00796b;
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .stats-mini h4 {
+      margin: 0 0 5px 0;
+      font-size: 14px;
+    }
+    .stats-mini .number {
+      font-size: 24px;
+      font-weight: bold;
+    }
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; right: -100%; }
+      .toggle-btn.sidebar-open { right: 20px; }
     }
   </style>
 </head>
@@ -307,10 +431,54 @@
       <li><a href="contactUs.html">Contact Us</a></li>
     </ul>
   </nav>
-
+  <!-- Toggle Button -->
+  <button class="toggle-btn" id="toggleSidebar">📊</button>
+  <!-- Overlay -->
+  <div class="overlay" id="overlay"></div>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2 class="sidebar-title">
+        Certificate Analytics
+        <button class="close-btn" id="closeSidebar">×</button>
+      </h2>
+    </div>
+    <div class="sidebar-content">
+      <!-- Mini Stats -->
+      <div class="stats-mini">
+        <h4>Total Certificates</h4>
+        <div class="number" id="totalCertsSidebar">0</div>
+        <hr style="border: 0; border-top: 1px solid #fff; margin: 10px 0;">
+        <h4 style="font-size:13px;">Top 5 Companies</h4>
+        <ol id="topCompaniesSidebar" style="margin:0; padding-left: 18px; font-size:13px; text-align:left;"></ol>
+      </div>
+      <!-- Clear Filter Button -->
+      <button class="refresh-btn" style="width:100%;margin-bottom:8px;" onclick="clearAllFilters()">Clear Filter</button>
+      <!-- Instrument Filter Button -->
+      <button class="refresh-btn" style="width:100%;margin-bottom:8px;" onclick="showInstrumentFilter()">Filter by Instrument Type</button>
+      <!-- Search in Sidebar -->
+      <div class="search-in-sidebar">
+        <input type="text" id="sidebarSearch" placeholder="Search in lists...">
+      </div>
+      <!-- Company Names (Alphabetically) -->
+      <div class="sort-section">
+        <h3>🏢 Companies (A-Z)</h3>
+        <div class="sort-list" id="companyList"></div>
+      </div>
+      <!-- Instrument Categories -->
+      <div class="sort-section">
+        <h3>🔧 Instrument Categories</h3>
+        <div class="sort-list" id="instrumentList"></div>
+      </div>
+      <!-- Recent Uploads -->
+      <div class="sort-section">
+        <h3>🕑 Recent Uploads</h3>
+        <div class="sort-list" id="recentUploadsSidebar"></div>
+      </div>
+    </div>
+  </div>
   <div class="container">
     <h2 class="centered">All Uploaded Certificates</h2>
-    
     <!-- Stats Container -->
     <div class="stats-container">
       <div class="stat-item">
@@ -326,13 +494,11 @@
         <div class="stat-label">This Week</div>
       </div>
     </div>
-    
     <!-- Search and Controls -->
     <div class="search-container">
       <input type="text" class="search-input" id="searchInput" placeholder="Search by certificate number or party name...">
       <button class="refresh-btn" id="refreshBtn">🔄 Refresh</button>
     </div>
-    
     <table class="cert-table" id="certTable">
       <thead>
         <tr>
@@ -350,7 +516,6 @@
       </tbody>
     </table>
   </div>
-
   <!-- Delete Confirmation Modal -->
   <div id="deleteModal" class="modal">
     <div class="modal-content">
@@ -363,39 +528,20 @@
       </div>
     </div>
   </div>
-
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
-
   <script>
     // Firebase Configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyB5LBbG8EZtE0iVecwpk7QYpmPhAY5Y5R4",
-  authDomain: "shreeji-instruments.firebaseapp.com",
-  projectId: "shreeji-instruments",
-  storageBucket: "shreeji-instruments.firebasestorage.app",
-  messagingSenderId: "714355376623",
-  appId: "1:714355376623:web:ff4d29899b4012568c761a"
-};
-
-
-// ---- CLOUDINARY UPLOAD (REPLACE with your values) ----
-async function uploadPDFtoCloudinary(pdfBlob, fileName) {
-  const url = `https://api.cloudinary.com/v1_1/deread6ss/auto/upload`;
-  const formData = new FormData();
-  formData.append("file", pdfBlob, fileName);
-  formData.append("upload_preset", "shreeji_instruments");
-  const response = await fetch(url, {
-    method: "POST",
-    body: formData
-  });
-  if (!response.ok) throw new Error("Cloudinary upload failed");
-  return await response.json(); // .secure_url
-}
-
-
+    const firebaseConfig = {
+      apiKey: "AIzaSyB5LBbG8EZtE0iVecwpk7QYpmPhAY5Y5R4",
+      authDomain: "shreeji-instruments.firebaseapp.com",
+      projectId: "shreeji-instruments",
+      storageBucket: "shreeji-instruments.firebasestorage.app",
+      messagingSenderId: "714355376623",
+      appId: "1:714355376623:web:ff4d29899b4012568c761a"
+    };
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
@@ -403,75 +549,232 @@ async function uploadPDFtoCloudinary(pdfBlob, fileName) {
 
     // Global variables
     let allCertificates = [];
+    let companyData = [];
+    let instrumentData = [];
     let filteredCertificates = [];
     let deleteDocId = null;
+    let currentInstrumentFilter = null;
 
-    // Initialize page
     document.addEventListener('DOMContentLoaded', function() {
       setupEventListeners();
       fetchCertificates();
     });
 
-    // Setup event listeners
     function setupEventListeners() {
-      const searchInput = document.getElementById('searchInput');
-      const refreshBtn = document.getElementById('refreshBtn');
-      const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
-      const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-
-      searchInput.addEventListener('input', handleSearch);
-      refreshBtn.addEventListener('click', fetchCertificates);
-      cancelDeleteBtn.addEventListener('click', hideDeleteModal);
-      confirmDeleteBtn.addEventListener('click', confirmDelete);
-
-      // Close modal when clicking outside
+      document.getElementById('searchInput').addEventListener('input', handleSearch);
+      document.getElementById('refreshBtn').addEventListener('click', fetchCertificates);
+      document.getElementById('cancelDeleteBtn').addEventListener('click', hideDeleteModal);
+      document.getElementById('confirmDeleteBtn').addEventListener('click', confirmDelete);
+      document.getElementById('toggleSidebar').addEventListener('click', openSidebar);
+      document.getElementById('closeSidebar').addEventListener('click', closeSidebarPanel);
+      document.getElementById('overlay').addEventListener('click', closeSidebarPanel);
+      document.getElementById('sidebarSearch').addEventListener('input', handleSidebarSearch);
       document.getElementById('deleteModal').addEventListener('click', function(e) {
-        if (e.target === this) {
+        if (e.target === this) hideDeleteModal();
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          closeSidebarPanel();
           hideDeleteModal();
         }
+        if (e.ctrlKey && e.key === 'b') {
+          e.preventDefault();
+          openSidebar();
+        }
+        if (e.ctrlKey && e.key === 'f') {
+          e.preventDefault();
+          document.getElementById('searchInput').focus();
+        }
+        if (e.key === 'F5' || (e.ctrlKey && e.key === 'r')) {
+          e.preventDefault();
+          fetchCertificates();
+        }
       });
+      // Sidebar filter button delegation
+      document.getElementById('sidebar').addEventListener('click', function(e) {
+        if (e.target.classList.contains('sidebar-filter-btn')) {
+          const type = e.target.getAttribute('data-filter-type');
+          const value = e.target.getAttribute('data-filter-value');
+          if (type && value) applySidebarFilter(type, value);
+          closeSidebarPanel();
+        }
+      });
+    }
+
+    function openSidebar() {
+      document.getElementById('sidebar').classList.add('open');
+      document.getElementById('overlay').classList.add('show');
+      document.getElementById('toggleSidebar').classList.add('sidebar-open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeSidebarPanel() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('overlay').classList.remove('show');
+      document.getElementById('toggleSidebar').classList.remove('sidebar-open');
+      document.body.style.overflow = 'auto';
     }
 
     // Fetch all certificates from Firebase
     async function fetchCertificates() {
       const tbody = document.getElementById('certTableBody');
       tbody.innerHTML = `<tr><td colspan="5" class="loading-msg">Loading certificates...</td></tr>`;
-      
       try {
         const snapshot = await db.collection('certificates').orderBy('createdAt', 'desc').get();
-        
         allCertificates = [];
         snapshot.forEach(doc => {
-          allCertificates.push({
-            id: doc.id,
-            ...doc.data()
-          });
+          allCertificates.push({ id: doc.id, ...doc.data() });
         });
-
         filteredCertificates = [...allCertificates];
+        processData();
+        renderAllLists();
+        updateSidebarStats();
         renderCertificates();
         updateStats();
-
       } catch (error) {
         console.error('Error fetching certificates:', error);
         tbody.innerHTML = `<tr><td colspan="5" class="no-data-msg">Error loading certificates.</td></tr>`;
       }
     }
 
-    // Render certificates in the table
-    function renderCertificates() {
-      const tbody = document.getElementById('certTableBody');
-      
-      if (filteredCertificates.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="no-data-msg">No certificates found.</td></tr>`;
+    // Process and organize data
+    function processData() {
+      const companyMap = new Map();
+      const instrumentMap = new Map();
+      allCertificates.forEach(cert => {
+        // Company processing
+        const company = (cert.partyName || 'Unknown Company').trim();
+        if (companyMap.has(company)) companyMap.get(company).push(cert);
+        else companyMap.set(company, [cert]);
+        // Instrument processing
+        const instrument = cert.instrumentType || cert.equipment || 'Unknown Instrument';
+        if (instrumentMap.has(instrument)) instrumentMap.get(instrument).push(cert);
+        else instrumentMap.set(instrument, [cert]);
+      });
+      companyData = Array.from(companyMap.entries())
+        .map(([name, certs]) => ({
+          name,
+          count: certs.length,
+          certificates: certs,
+          lastUpdated: getLatestDate(certs)
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name));
+      instrumentData = Array.from(instrumentMap.entries())
+        .map(([instrument, certs]) => ({
+          instrument,
+          count: certs.length,
+          certificates: certs,
+          lastUpdated: getLatestDate(certs)
+        }))
+        .sort((a, b) => b.count - a.count);
+    }
+
+    function getLatestDate(certificates) {
+      return certificates.reduce((latest, cert) => {
+        const certDate = cert.createdAt && cert.createdAt.toDate ? cert.createdAt.toDate() : new Date(cert.createdAt);
+        return certDate > latest ? certDate : latest;
+      }, new Date(0));
+    }
+
+    function renderAllLists() {
+      renderCompanyList();
+      renderInstrumentList();
+      renderRecentUploadsSidebar();
+    }
+
+    function renderCompanyList() {
+      const container = document.getElementById('companyList');
+      if (companyData.length === 0) {
+        container.innerHTML = '<div class="no-results">No companies found</div>';
         return;
       }
+      let html = '';
+      companyData.forEach(company => {
+        html += `
+          <button class="sidebar-filter-btn" 
+            data-filter-type="company" 
+            data-filter-value="${company.name}">
+            ${company.name} <span class="sort-item-count">${company.count}</span>
+          </button>
+        `;
+      });
+      container.innerHTML = html;
+    }
 
+    function renderInstrumentList() {
+      const container = document.getElementById('instrumentList');
+      if (instrumentData.length === 0) {
+        container.innerHTML = '<div class="no-results">No instruments found</div>';
+        return;
+      }
+      let html = '';
+      instrumentData.forEach(instrument => {
+        html += `
+          <button class="sidebar-filter-btn" 
+            data-filter-type="instrument" 
+            data-filter-value="${instrument.instrument}">
+            ${instrument.instrument} <span class="sort-item-count">${instrument.count}</span>
+          </button>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    function renderRecentUploadsSidebar() {
+      const recentCerts = allCertificates
+        .slice(0, 3)
+        .map(cert => `
+          <div class="sidebar-filter-btn" style="background:#e0f2f1;color:#222;cursor:pointer;"
+            onclick="openPDF('${cert.downloadUrl}')">
+            <span>${cert.certificateNumber || 'N/A'}<br><small>${cert.partyName || ''}</small></span>
+          </div>
+        `)
+        .join('');
+      document.getElementById('recentUploadsSidebar').innerHTML = recentCerts || '<div class="no-results">No recent uploads</div>';
+    }
+
+    function renderTopCompaniesSidebar() {
+      const topCompanies = companyData
+        .slice(0, 5)
+        .map(c => `<li>${c.name} <span style="color:#00796b;font-weight:600;">(${c.count})</span></li>`)
+        .join('');
+      document.getElementById('topCompaniesSidebar').innerHTML = topCompanies || '<li>No data</li>';
+    }
+
+    function updateSidebarStats() {
+      document.getElementById('totalCertsSidebar').textContent = allCertificates.length;
+      renderTopCompaniesSidebar();
+    }
+
+    function formatDate(timestamp) {
+      if (!timestamp) return 'N/A';
+      let date;
+      if (timestamp.toDate) date = timestamp.toDate();
+      else if (timestamp instanceof Date) date = timestamp;
+      else date = new Date(timestamp);
+      return date.toLocaleDateString('en-IN', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    // Main Table Rendering
+    function renderCertificates() {
+      const tbody = document.getElementById('certTableBody');
+      let backHtml = '';
+      if (currentInstrumentFilter) {
+        backHtml = `<tr><td colspan="5"><button class="refresh-btn" onclick="showInstrumentFilter()">⬅️ Back to Instruments</button></td></tr>`;
+      }
+      if (filteredCertificates.length === 0) {
+        tbody.innerHTML = backHtml + `<tr><td colspan="5" class="no-data-msg">No certificates found.</td></tr>`;
+        return;
+      }
       let rowsHTML = '';
       filteredCertificates.forEach(cert => {
         const createdDate = formatDate(cert.createdAt);
         const updatedDate = cert.updatedAt ? formatDate(cert.updatedAt) : 'Never';
-        
         rowsHTML += `
           <tr>
             <td><strong>${cert.certificateNumber || 'N/A'}</strong></td>
@@ -488,58 +791,114 @@ async function uploadPDFtoCloudinary(pdfBlob, fileName) {
           </tr>
         `;
       });
-      
-      tbody.innerHTML = rowsHTML;
+      tbody.innerHTML = backHtml + rowsHTML;
     }
 
-    // Format date for display
-    function formatDate(timestamp) {
-      if (!timestamp) return 'N/A';
-      
-      let date;
-      if (timestamp.toDate) {
-        date = timestamp.toDate();
-      } else if (timestamp instanceof Date) {
-        date = timestamp;
-      } else {
-        date = new Date(timestamp);
+    // Sidebar search
+    function handleSidebarSearch() {
+      const searchTerm = document.getElementById('sidebarSearch').value.toLowerCase();
+      filterSidebarList('companyList', companyData, searchTerm, 'name');
+      filterSidebarList('instrumentList', instrumentData, searchTerm, 'instrument');
+    }
+    function filterSidebarList(containerId, data, searchTerm, fieldName) {
+      const container = document.getElementById(containerId);
+      if (!searchTerm) {
+        if (containerId === 'companyList') renderCompanyList();
+        else if (containerId === 'instrumentList') renderInstrumentList();
+        return;
       }
-      
-      return date.toLocaleDateString('en-IN', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
+      const filteredData = data.filter(item => item[fieldName].toLowerCase().includes(searchTerm));
+      if (filteredData.length === 0) {
+        container.innerHTML = '<div class="no-results">No matches found</div>';
+        return;
+      }
+      let html = '';
+      filteredData.forEach(item => {
+        const name = item[fieldName];
+        const highlightedName = name.replace(
+          new RegExp(`(${searchTerm})`, 'gi'),
+          '<span class="highlight">$1</span>'
+        );
+        html += `
+          <button class="sidebar-filter-btn" data-filter-type="${fieldName === 'name' ? 'company' : fieldName}" data-filter-value="${name}">
+            ${highlightedName} <span class="sort-item-count">${item.count}</span>
+          </button>
+        `;
       });
+      container.innerHTML = html;
     }
 
-    // Update statistics
+    // Sidebar filter logic
+    function applySidebarFilter(type, value) {
+      currentInstrumentFilter = null;
+      if (type === 'company') {
+        filteredCertificates = allCertificates.filter(cert => (cert.partyName || '').trim() === value);
+        document.querySelector('.centered').textContent = `Company: ${value}`;
+      } else if (type === 'instrument') {
+        filteredCertificates = allCertificates.filter(cert =>
+          (cert.instrumentType || cert.equipment || 'Unknown Instrument') === value
+        );
+        currentInstrumentFilter = value;
+        document.querySelector('.centered').textContent = `Instrument: ${value}`;
+      }
+      renderCertificates();
+    }
+
+    // Instrument Drill-down Functions
+    function showInstrumentFilter() {
+      currentInstrumentFilter = null;
+      document.querySelector('.centered').textContent = 'Choose Instrument Type';
+      const container = document.getElementById('certTableBody');
+      let html = `
+        <tr><td colspan="5">
+          <div style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center;">
+            ${instrumentData.map(inst => `
+              <button class="sidebar-filter-btn" style="min-width:160px;" onclick="selectInstrument('${inst.instrument}')">
+                ${inst.instrument} <span class="sort-item-count">${inst.count}</span>
+              </button>
+            `).join('')}
+          </div>
+        </td></tr>
+      `;
+      container.innerHTML = html;
+    }
+    function selectInstrument(instrumentName) {
+      currentInstrumentFilter = instrumentName;
+      filteredCertificates = allCertificates.filter(cert =>
+        (cert.instrumentType || cert.equipment || 'Unknown Instrument') === instrumentName
+      );
+      renderCertificates();
+      document.querySelector('.centered').textContent = `Instrument: ${instrumentName}`;
+    }
+    function clearAllFilters() {
+      currentInstrumentFilter = null;
+      filteredCertificates = [...allCertificates];
+      renderCertificates();
+      document.querySelector('.centered').textContent = 'All Uploaded Certificates';
+    }
+
+    // Stats
     function updateStats() {
       const total = allCertificates.length;
       const now = new Date();
       const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-      const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
-
+      const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay());
       const thisMonth = allCertificates.filter(cert => {
         const certDate = cert.createdAt && cert.createdAt.toDate ? cert.createdAt.toDate() : new Date(cert.createdAt);
         return certDate >= startOfMonth;
       }).length;
-
       const thisWeek = allCertificates.filter(cert => {
         const certDate = cert.createdAt && cert.createdAt.toDate ? cert.createdAt.toDate() : new Date(cert.createdAt);
         return certDate >= startOfWeek;
       }).length;
-
       document.getElementById('totalCerts').textContent = total;
       document.getElementById('thisMonth').textContent = thisMonth;
       document.getElementById('thisWeek').textContent = thisWeek;
     }
-
-    // Handle search
+    // Search main table
     function handleSearch(event) {
       const searchTerm = event.target.value.toLowerCase().trim();
-      
+      currentInstrumentFilter = null;
       if (searchTerm === '') {
         filteredCertificates = [...allCertificates];
       } else {
@@ -549,92 +908,65 @@ async function uploadPDFtoCloudinary(pdfBlob, fileName) {
           return certNumber.includes(searchTerm) || partyName.includes(searchTerm);
         });
       }
-      
       renderCertificates();
     }
-
-    // Open PDF in new tab
+    // PDF, Edit, Delete
     function openPDF(url) {
-      if (url) {
-        window.open(url, '_blank');
-      } else {
-        alert('PDF not available');
-      }
+      if (url) window.open(url, '_blank');
+      else alert('PDF not available');
     }
-
-    // Edit certificate
     function editCertificate(docId) {
       window.location.href = `cube_mould_cloud.html?edit=${encodeURIComponent(docId)}`;
     }
-
-    // Show delete confirmation modal
     function showDeleteModal(docId, certNumber, partyName) {
       deleteDocId = docId;
-      document.getElementById('deleteModalCertInfo').textContent = 
+      document.getElementById('deleteModalCertInfo').textContent =
         `Certificate: ${certNumber} - ${partyName}`;
       document.getElementById('deleteModal').style.display = 'block';
     }
-
-    // Hide delete modal
     function hideDeleteModal() {
       document.getElementById('deleteModal').style.display = 'none';
       deleteDocId = null;
     }
-
-    // Confirm delete
+    // Delete PDF from Cloudinary
+    async function deletePDFFromCloudinary(publicId) {
+      // This is a placeholder. In production, do this server-side for security!
+      return true;
+    }
     async function confirmDelete() {
       if (!deleteDocId) return;
-
       try {
-        // Find the certificate to get file info
         const certToDelete = allCertificates.find(cert => cert.id === deleteDocId);
-        
-        // Delete from Firestore
         await db.collection('certificates').doc(deleteDocId).delete();
-        
-        // Delete file from Storage if it exists
-        if (certToDelete && certToDelete.fileName) {
+        if (certToDelete && certToDelete.downloadUrl) {
           try {
-            const fileRef = storage.ref().child('certificates/' + certToDelete.fileName);
-            await fileRef.delete();
-          } catch (storageError) {
-            console.warn('Could not delete file from storage:', storageError);
+            const publicId = extractPublicIdFromCloudinaryUrl(certToDelete.downloadUrl);
+            if (publicId) await deletePDFFromCloudinary(publicId);
+          } catch (cloudinaryError) {
+            console.warn('Could not delete file from Cloudinary:', cloudinaryError);
           }
         }
-
         hideDeleteModal();
         alert('Certificate deleted successfully!');
-        fetchCertificates(); // Refresh the list
-
+        fetchCertificates();
       } catch (error) {
         console.error('Error deleting certificate:', error);
         alert('Error deleting certificate');
         hideDeleteModal();
       }
     }
-
-    // Keyboard shortcuts
-    document.addEventListener('keydown', function(event) {
-      // Escape key to close modal
-      if (event.key === 'Escape') {
-        hideDeleteModal();
+    function extractPublicIdFromCloudinaryUrl(url) {
+      try {
+        const parts = url.split('/');
+        const filename = parts[parts.length - 1];
+        return filename.split('.')[0];
+      } catch (error) {
+        console.error('Error extracting public_id:', error);
+        return null;
       }
-      
-      // Ctrl+F to focus search
-      if (event.ctrlKey && event.key === 'f') {
-        event.preventDefault();
-        document.getElementById('searchInput').focus();
-      }
-      
-      // F5 or Ctrl+R to refresh
-      if (event.key === 'F5' || (event.ctrlKey && event.key === 'r')) {
-        event.preventDefault();
-        fetchCertificates();
-      }
-    });
-
-    // Auto-refresh every 5 minutes
-    setInterval(fetchCertificates, 5 * 60 * 1000);
+    }
+    // Auto-refresh every 1 minutes
+    setInterval(fetchCertificates, 1 * 60 * 1000);
   </script>
 </body>
 </html>
