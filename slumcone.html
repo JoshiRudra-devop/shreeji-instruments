@@ -46,6 +46,26 @@
     nav ul li a:hover {
       color: #ffccbc;
     }
+      /* Style for the back button */
+    .back-button {
+            position: absolute;
+            display: block;
+            top: 100px; /* Adjust based on the height of the navigation bar */
+            right: 20px; /* Align to the right */
+            padding: 10px 20px;
+            margin: auto;
+            background-color: #00796b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 25px;
+            z-index: 1000; /* Ensure it's above other elements */
+        }
+
+        .back-button:hover {
+            background-color: #22b55d;
+        }
     .container {
       background-color: white;
       padding: 20px;
@@ -87,7 +107,7 @@
       font-size: 16px;
       margin-bottom: 10px;
     }
-    button {
+    .button2 {
       width: calc(50% - 10px);
       padding: 12px;
       margin: 5px;
@@ -99,7 +119,7 @@
       border-radius: 4px;
       transition: background-color 0.3s ease;
     }
-    button:hover {
+    .button2:hover {
       background-color: #45a049;
     }
     .button-group {
@@ -110,14 +130,18 @@
   </style>
 </head>
 <body>
-  <nav>
-    <h1 style="color: white;">Shreeji Instruments</h1>
+ <nav>
+    <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
+      <img src="https://github.com/JoshiRudra-devop/shreeji-instruments/blob/main/logo.png?raw=true" alt="Company Logo" style="width: 40px; border-radius:30%; height: 40px; margin-right: 10px;">
+      <h1 style="color: white; margin: 0;">SHREEJI INSTRUMENTS</h1>
+    </a>
     <ul>
       <li><a href="index.html">Home</a></li>
-      <li><a href="#">About</a></li>
-      <li><a href="#">Contact</a></li>
+      <li><a href="#footer">About</a></li>
+      <li><a href="contactUs.html">Contact Us</a></li>
     </ul>
   </nav>
+  <button class="back-button" onclick="window.history.back()"><< Back</button>
   <div class="container">
     <h2 class="centered">SLUMCONE CALIBRATION CERTIFICATE</h2>
     <form id="calibrationForm">
@@ -128,7 +152,7 @@
       <div class="date">
           <div class="title_input_pair">
               <label for="calibrationDate">Date of Calibration:</label>
-              <input type="date" id="calibrationDate" required>
+              <input type="date" id="calibrationDate" onchange="calculateNextDate()" required>
           </div>
           <div class="title_input_pair">
               <label for="nextCalibrationDate">Next Suggested Date:</label>
@@ -149,9 +173,9 @@
       </div>
       
       <div class="button-group">
-        <button type="button" onclick="preview()">Preview Calibration Certificate</button>
-        <button type="button" onclick="generatePDF()">Download Certificate with Letterhead</button>
-        <button type="button" onclick="generatePDFblankpg()">Download Certificate without Letterhead</button>
+        <button type="button" class="button2" onclick="preview()">Preview Calibration Certificate</button>
+        <button type="button" class="button2" onclick="generatePDF()">Download Certificate with Letterhead</button>
+        <button type="button" class="button2" onclick="generatePDFblankpg()">Download Certificate without Letterhead</button>
         </div>
     </form>
   </div>
@@ -172,7 +196,48 @@
         nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/"),
       };
     }
+    function calculateNextDate() {
+           const calibrationDateInput = document.getElementById('calibrationDate');
+           const nextDateInput = document.getElementById('nextCalibrationDate');
 
+           const calibrationDate = new Date(calibrationDateInput.value);
+           if (!isNaN(calibrationDate)) {
+               const nextYearDate = new Date(calibrationDate);
+               nextYearDate.setFullYear(nextYearDate.getFullYear() + 1);
+               nextYearDate.setDate(nextYearDate.getDate() - 1); // Subtract 1 day
+
+               const formattedDate = nextYearDate.toISOString().split('T')[0];
+               nextDateInput.value = formattedDate;
+           }
+       }
+
+async function savePDFWithLocation(pdfDocument, defaultFileName) {
+  try {
+    // Open a file picker to let the user choose the location and file name
+    const fileHandle = await window.showSaveFilePicker({
+      suggestedName: defaultFileName,
+      types: [
+        {
+          description: 'PDF Files',
+          accept: { 'application/pdf': ['.pdf'] },
+        },
+      ],
+    });
+
+    // Create a writable stream for the file
+    const writableStream = await fileHandle.createWritable();
+
+    // Write the PDF data to the file
+    await writableStream.write(pdfDocument);
+
+    // Close the writable stream
+    await writableStream.close();
+
+    console.log('PDF saved successfully!');
+  } catch (error) {
+    console.error('Error saving PDF:', error);
+  }
+}
     // Function to add common certificate details
     function addImg(doc, details)
      {
@@ -186,7 +251,7 @@
       
       const img1 = new Image();
       img1.src = 'stamp.jpeg';
-      doc.addImage(img1, 'PNG', 90, 207, 40, 40);
+      doc.addImage(img1, 'PNG', 100, 217, 35, 35);
 
       const img2 = new Image();
       img2.src = 'header.jpeg';
@@ -195,34 +260,35 @@
 
     function addCertificateDetails(doc, details)
      {
+      let Yalign=50;
         doc.setFont("helvetica", "bold");
         doc.setFontSize(25);
-        doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, 50, { align: 'center' });
+        doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, Yalign, { align: 'center' });
 
-        doc.setFontSize(10);
-        doc.text("SHREEJI INSTRUMENTS: Calibration laboratory certifies that the instrument has been inspected, tested,", 12, 60);
-        doc.text("and calibrated in accordance with documented procedures using measuring and test equipment traceable", 12, 65);
-        doc.text("to international standards.", 12, 70);
-          let hori_axis=70;
+        doc.setFontSize(12);
+      doc.text("SHREEJI INSTRUMENTS: Calibration laboratory certifies that the instrument has been inspected,", 12, Yalign+=15);
+      doc.text("tested,and calibrated in accordance with documented procedures using measuring and test", 12, Yalign+=7);
+      doc.text("equipment traceable to international standards.", 12, Yalign+=7);
+          let hori_axis=(Yalign+=5);
         doc.text("From the below test this is to certify that the Slump test apparatus is meeting necessary requirements as", 12, hori_axis+=9);
         doc.text("per IS: 7320-1974 within the permissible limit. ", 12, hori_axis+=5);
 
      
         doc.setFontSize(12);
         // Certificate Details
-        doc.text(`REF NO:SI-${details.certificateNumber}`, 14, hori_axis+=10);
-        doc.text(`Date: ${details.calibrationDate}`, 140, hori_axis);
-        doc.text(`Name of Party         :     ${details.partyName}`, 14, hori_axis+=10);
-        doc.text(`Instrument Name    :     SLUMCONE `, 14, hori_axis+=10);
-        doc.text(`Serial No / Make      :     ${details.certificateNumber} / ${details.make}`, 14, hori_axis+=10);
-        doc.text(`Site Location           :     ${details.siteLocation}`, 14, hori_axis+=10);
-        doc.text(`Next Due Date         :     ${details.nextCalibrationDate}`, 14, hori_axis+=10);
+        doc.text(`REF NO                       :     SI-${details.certificateNumber}`, 14, hori_axis+=10);
+        doc.text(`DATE: ${details.calibrationDate}`, 155, hori_axis);
+        doc.text(`NAME OF PARTY       :     ${details.partyName}`, 14, hori_axis+=10);
+        doc.text(`EQUIPMENT NAME    :     SLUMCONE `, 14, hori_axis+=10);
+        doc.text(`SERIAL NO / MAKE    :     ${details.certificateNumber} / ${details.make}`, 14, hori_axis+=10);
+        doc.text(`SITE LOCATION          :     ${details.siteLocation}`, 14, hori_axis+=10);
+        doc.text(`NEXT DUE DATE         :     ${details.nextCalibrationDate}`, 14, hori_axis+=10);
         doc.text("SPECIFICATIONS:-", doc.internal.pageSize.getWidth() / 2, hori_axis+=10, { align: 'center' });
 
 const data = [
     [ "TOP DIA", "100 + 3.0 - 1.5"," 100.10"],
     [ "BOTTOM DIA", "200 + 3.0 - 1.5","200.80" ],
-    [ "HEIGHT", "300 + 3.0 - 1.5","300.40" ],
+    [ "HEIGHT", "300 + 1.5 - 1.5","300.40" ],
 ];
 
 doc.autoTable({
@@ -231,6 +297,7 @@ doc.autoTable({
         startY: hori_axis + 5,
         styles: { 
           fontSize: 12 ,
+          textColor:[0,0,0],
           lineColor:[87, 86, 85],
           lineWidth: 0.2,
           halign: 'center',  // horizontal align to center
@@ -253,12 +320,12 @@ doc.autoTable({
 // Add calibrated by
 doc.setFontSize(12);
 doc.text("CALIBRATED BY: YOGESH B JOSHI", 14, tableStartY2+=10);
-doc.setFontSize(10);
+doc.setFontSize(12);
  
 
 
-        doc.text("FOR, Shreeji Instruments", 145, 230);
-        doc.text("Proprietor", 170, 245);
+        doc.text("FOR, SHREEJI INSTRUMENTS", 145, 230);
+        doc.text("PROPRIETOR", 170, 247);
 
     }
 
@@ -306,8 +373,9 @@ doc.setFontSize(10);
       addCertificateDetails(doc, details);
 
       addImg(doc, details);
-      // Save PDF
-      setTimeout(() => doc.save(`${details.certificateNumber}_Calibration_Certificate.pdf`), 500);
+//    Save PDF
+     const pdfBlob = doc.output('blob'); // Convert the PDF to a Blob
+      savePDFWithLocation(pdfBlob, `${details.serialNo} ${details.make} ${details.modelNo}.pdf`);
     }
 
     // Generate PDF without letterhead
@@ -323,8 +391,9 @@ doc.setFontSize(10);
       // Add certificate details using the reusable function
       addCertificateDetails(doc, details);
 
-      // Save PDF without letterhead/footer
-      setTimeout(() => doc.save(`${details.certificateNumber}_Calibration_Certificate_Without_Letterhead.pdf`), 500);
+      // Save PDF
+     const pdfBlob = doc.output('blob'); // Convert the PDF to a Blob
+      savePDFWithLocation(pdfBlob, `${details.serialNo} ${details.make} ${details.modelNo}.pdf`);
     }
   </script>
 </body>

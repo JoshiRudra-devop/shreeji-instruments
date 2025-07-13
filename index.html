@@ -5,7 +5,11 @@
   <meta name="theme-color" content="#000000" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Welcome to Shreeji Instruments - Create Calibration Certificates Easily.">
-  <link rel="icon" type="img/png" href="logo.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="icon" type="img/png" href="logo.png" style="border-radius:30%;" />
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="firebase-app.js"></script>
   <title>Shreeji Instruments</title>
   <style>
     * {
@@ -15,12 +19,11 @@
     }
     body {
       font-family: 'Arial', sans-serif;
-      background-color: #1E1E1E;
-      color: #EAEAEA;
+      background-color: #f0f0f0;
       margin: 0 10px;
     }
     nav {
-      background-color: #22b55d;
+      background-color: #00796b;
       padding: 10px 20px;
       display: flex;
       justify-content: space-between;
@@ -38,10 +41,13 @@
       text-decoration: none;
       color: white;
       font-weight: bold;
-      transition: color 0.3s ease;
+      transition: color 0.3s ease, background-color 0.3s ease;
+      padding: 5px 10px;
+      border-radius: 5px;
     }
     nav ul li a:hover {
       color: #ffccbc;
+      background-color: #22b55d;
     }
     header {
       background: url('https://via.placeholder.com/1200x400') no-repeat center center/cover;
@@ -49,8 +55,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
-      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+      color: #00796b;
+      text-shadow: 2px 2px 8px rgba(143, 141, 141, 0.7);
       font-size: 32px;
       font-weight: bold;
       text-align: center;
@@ -103,7 +109,7 @@
       padding: 40px 10px;
     }
     .card {
-      background: #333333;
+      background: #dddddd;
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
       text-align: center;
@@ -112,11 +118,11 @@
     }
     .card:hover {
       transform: translateY(-8px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 8px 20px rgba(100, 96, 96, 0.7);
     }
     .card a {
       text-decoration: none;
-      background-color: #22b55d;
+      background-color: #00796b;
       color: white;
       padding: 15px 25px;
       border-radius: 5px;
@@ -126,7 +132,59 @@
       margin-top: 15px;
     }
     .card a:hover {
-      background-color: #004d40;
+      background-color: #22b55d;
+    }
+    footer {
+      background-color: #f0f0f0;
+      padding: 20px;
+      text-align: center;
+      margin-top: 40px;
+      border-top: 2px solid #00796b;
+    }
+    footer .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 15px 0;
+    }
+    footer .social-icons a {
+      font-size: 24px;
+      transition: color 0.3s ease;
+    }
+    footer .social-icons a:hover {
+      color: #22b55d;
+    }
+    footer p {
+      margin: 10px 0;
+    }
+    footer a {
+      color: #00796b;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    footer a:hover {
+      color: #22b55d;
+    }
+    .copyright {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #f0f0f0;
+      background-color: #00796b;
+    }
+    .button{
+      width: 20%;
+      padding: 12px;
+      margin: 1%;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    .button:hover{
+      background-color: #45a049;
     }
     .full_lebcard a{
       text-decoration: none;
@@ -149,17 +207,23 @@
     }
 
   </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
   <nav>
-    <h1 style="color: white;">Shreeji Instruments</h1>
+    <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
+      <img src="https://github.com/JoshiRudra-devop/shreeji-instruments/blob/main/logo.png?raw=true" alt="Company Logo" style="width: 40px; border-radius:30%; height: 40px; margin-right: 10px;">
+      <h1 style="color: white; margin: 0;">SHREEJI INSTRUMENTS</h1>
+    </a>
     <ul>
-      <li><a href="#">Home</a></li>
-      <li><a href="#">About</a></li>
-      <li><a href="#">Contact</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#footer">About</a></li>
+      <li><a href="cloud_dashboard.html">Dashboard </a></li>
+      <li><a href="contactUs.html">Contact Us</a></li>
     </ul>
+    
   </nav>
-  <header>You Can Create Calibration Certificates Easily</header>
+  <header> SMART CALIBRATION CERTIFICATE GENERATOR. </header>
   <div class="search-bar-container">
     <div class="search-icon" id="search-icon">
       🔍
@@ -168,56 +232,106 @@
   </div>
   <div class="container">
     <div class="card">
-      <a href="general.html">General Formate</a>
-    </div>
-    <div class="card">
-      <a href="ctm.html">Cube Testing Machine</a>
-    </div>
-    <div class="card">
-      <a href="seives.html">Sieves</a>
-    </div>
-    <div class="card">
       <a href="autolevel.html">Auto Level </a>
     </div>
     <div class="card">
-      <a href="TS.html">Total Station</a>
+      <a href="aggregate_impact.html">Aggregate Impact Value App</a>
     </div>
-    <div class="card">
-      <a href="full_leb.html">Full Lab</a>
-    </div>
-    <div class="card">
-      <a href="flakness.html">Flakness Gauge</a>
-    </div>
-    <div class="card">
-      <a href="elogation.html">Elongation Gauge</a>
-    </div>
-    <div class="card">
-      <a href="slumcone.html">Slumcone</a>
-    </div>
-    <div class="card">
-      <a href="digital_thermo.html">Digital Thermometer</a>
-    </div>
-    <div class="card">
-      <a href="water_bath.html">Water Bath</a>
-    </div>
-    <div class="card">
-      <a href="oven.html">Electrical Hot Air Oven</a>
-    </div>
-    <div class="card">
-      <a href="weigh_batcher.html">Weigh Batcher</a>
+     <div class="card">
+      <a href="ctm.html">Cube Testing Machine</a>
     </div>
     <div class="card">
       <a href="conpenitometer.html">Cone Penitometer</a>
     </div>
     <div class="card">
-      <a href="aggregate_impact.html">Aggregate Impact Value App</a>
+      <a href="cube_mould.html"> Cube Mould</a>
+    </div>
+    <div class="card">
+      <a href="digital_thermo.html">Digital Thermometer</a>
+    </div>
+    <div class="card">
+      <a href="elogation.html">Elongation Gauge</a>
+    </div>
+    <div class="card">
+      <a href="oven.html">Electrical Hot Air Oven</a>
+    </div>
+    <div class="card">
+      <a href="flakness.html">Flakness Gauge</a>
+    </div>
+    <div class="card">
+      <a href="general.html">General Formate</a>
+    </div>
+    <div class="card">
+      <a href="measuring_cylinder.html">Measuring Cylinder</a>
+    </div>
+    <div class="card">
+      <a href="rapid.html">Rapid Moisture Meter </a>
+    </div>
+    <div class="card">
+      <a href="seives.html">Sieves</a>
+    </div>
+     <div class="card">
+      <a href="slumcone.html">Slumcone</a>
+    </div>
+    <div class="card">
+      <a href="TS.html">Total Station</a>
+    </div>
+   
+    <div class="card">
+      <a href="water_bath.html">Water Bath</a>
+    </div>
+     <div class="card">
+      <a href="weight_balance.html">Weight Balance</a>
+    </div>
+    <div class="card">
+      <a href="weigh_batcher.html">Weigh Batcher</a>
+    </div>
+     <div class="card">
+      <a href="cloud_cubeTry.html">Cloud cube mould</a>
     </div>
   </div>
-  <div class="full_lebcard card">
-    <a href="full_leb.html">Full Leb</a>
-  </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+
+   <div class="fulllebcard card">
+      <a href="full_leb.html">Full Lab</a>
+    </div>
+  <footer id="footer">
+    <div class="social-icons">
+      <a href="https://www.facebook.com/profile.php?id=100064984329642&mibextid=ZbWKwL" target="_blank"><i class="fab fa-facebook-f"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="https://maps.app.goo.gl/oNEbQerty7R3vzC88?g_st=aw" target="_blank"><i class="fa fa-map-pin"></i></a>
+      <a href="https://wa.me/919904904610" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    </div>
+    <img src="https://github.com/JoshiRudra-devop/shreeji-instruments/blob/main/logo.png?raw=true" alt="Company Logo" style="width: 50px;border-radius: 50%; height: 50px; margin-bottom: 10px;">
+    <p style="color:#00796b"> <b> SHREEJI INSTRUMENTS</b></p>
+    <p><i class="fa fa-map-marker"></i> Ghodasar, Ahmedabad, Gujarat. 380050</p>
+    <p >|  <i class="fa fa-user-circle"></i> : +91 99049-04610 , +91 93282-01463 ,+91 93771-96244 | </p>
+     <p>|  Email: shreejiinstrument83@yahoo.com  |</p>
+    <p><a href="https://www.shreejiinstruments.com" target="_blank"> <i class="fa fa-globe"></i> | Visit our official website |</a></p>
+    <div class="copyright">
+      &copy; 2025 Shreeji Instruments. All rights reserved.
+    </div>
+  </footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
   <script>
+
+
+ // 🔐 Protect the page
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        document.getElementById('user-info').innerText = "Logged in as: " + user.phoneNumber;
+      } else {
+        // Redirect back if not logged in
+        window.location.href = "index.html";
+      }
+    });
+
+    function logout() {
+      firebase.auth().signOut().then(() => {
+        window.location.href = "index.html";
+      });
+    }
+    
     // Move Icon on Search Bar Focus
     function moveIcon() {
       const icon = document.getElementById('search-icon');

@@ -112,11 +112,14 @@
 </head>
 <body>
   <nav>
-    <h1>Shreeji Instruments</h1>
+    <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
+      <img src="https://github.com/JoshiRudra-devop/shreeji-instruments/blob/main/logo.png?raw=true" alt="Company Logo" style="width: 40px; border-radius:30%; height: 40px; margin-right: 10px;">
+      <h1 style="color: white; margin: 0;">SHREEJI INSTRUMENTS</h1>
+    </a>
     <ul>
       <li><a href="index.html">Home</a></li>
-      <li><a href="#">About</a></li>
-      <li><a href="#">Contact</a></li>
+      <li><a href="#footer">About</a></li>
+      <li><a href="contactUs.html">Contact Us</a></li>
     </ul>
   </nav>
   <div class="container">
@@ -129,7 +132,7 @@
         <div class="date">
                     <div class="title_input_pair">
                         <label for="calibrationDate">Date of Calibration:</label>
-                        <input type="date" id="calibrationDate" required>
+                        <input type="date" id="calibrationDate" onchange="calculateNextDate()" required>
                     </div>
                     <div class="title_input_pair">
                         <label for="nextCalibrationDate">Next Suggested Date:</label>
@@ -193,7 +196,21 @@
         sieveSize: document.getElementById("sieveSize").value,
       };
     }
-   
+   function calculateNextDate() {
+           const calibrationDateInput = document.getElementById('calibrationDate');
+           const nextDateInput = document.getElementById('nextCalibrationDate');
+
+           const calibrationDate = new Date(calibrationDateInput.value);
+           if (!isNaN(calibrationDate)) {
+               const nextYearDate = new Date(calibrationDate);
+               nextYearDate.setFullYear(nextYearDate.getFullYear() + 1);
+               nextYearDate.setDate(nextYearDate.getDate() - 1); // Subtract 1 day
+
+               const formattedDate = nextYearDate.toISOString().split('T')[0];
+               nextDateInput.value = formattedDate;
+           }
+       }
+
     function addTestResultRow() {
       const testResults = document.getElementById('testResults');
       const currentRows = testResults.getElementsByClassName('test-result').length;
@@ -206,7 +223,33 @@
       row.innerHTML = `<input type="text" placeholder="Sieves NUMBER" required>`;
       testResults.appendChild(row);
     }
+async function savePDFWithLocation(pdfDocument, defaultFileName) {
+  try {
+    // Open a file picker to let the user choose the location and file name
+    const fileHandle = await window.showSaveFilePicker({
+      suggestedName: defaultFileName,
+      types: [
+        {
+          description: 'PDF Files',
+          accept: { 'application/pdf': ['.pdf'] },
+        },
+      ],
+    });
 
+    // Create a writable stream for the file
+    const writableStream = await fileHandle.createWritable();
+
+    // Write the PDF data to the file
+    await writableStream.write(pdfDocument);
+
+    // Close the writable stream
+    await writableStream.close();
+
+    console.log('PDF saved successfully!');
+  } catch (error) {
+    console.error('Error saving PDF:', error);
+  }
+}
     function addImg(doc) {
       const img = new Image();
       img.src = 'footer.jpeg';
@@ -218,31 +261,33 @@
 
       const img1 = new Image();
       img1.src = 'stamp.jpeg';
-      doc.addImage(img1, 'PNG', 90, 207, 40, 40);
+      doc.addImage(img1, 'PNG', 100, 217, 35, 35);
 
       const img2 = new Image();
       img2.src = 'header.jpeg';
       doc.addImage(img2, 'PNG', 3, 3, 210, 30);
     }
     
-    function addCertificateDetails(doc, details) {
+    function addCertificateDetails(doc, details)
+     {
+      let Yalign=50;
       doc.setFont("helvetica", "bold");
       doc.setFontSize(25);   
-      doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth()/2, 40, { align: 'center' });
+      doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth()/2, Yalign, { align: 'center' });
 
       doc.setFont("helvetica", "bold"); 
       doc.setFontSize(12);  
     
-      doc.text(`NAME OF PARTY           :     ${details.partyName}`, 14, 45);
-      doc.text(`REF NO: SI-${details.certificateNumber}`, 140, 50);
-      doc.text(`EQUIPMENT NAME        :     TEST SEIVES`, 14, 50);
-      doc.text(`SITE LOCATION             :     ${details.siteLocation}`, 14, 55);
-      doc.text(`CALIBRATION DATE      :     ${details.calibrationDate}`, 14, 60);
-      doc.text(`NEXT DUE DATE            :     ${details.nextCalibrationDate}`, 14, 65);
+      doc.text(`NAME OF PARTY           :-     ${details.partyName}`, 14, Yalign+=5);
+      doc.text(`REF NO:- SI-${details.certificateNumber}`, 140, Yalign+=5);
+      doc.text(`EQUIPMENT NAME        :-     TEST SEIVES`, 14, Yalign);
+      doc.text(`SITE LOCATION             :-     ${details.siteLocation}`, 14, Yalign+=5);
+      doc.text(`CALIBRATION DATE     :-     ${details.calibrationDate}`, 14, Yalign+=5);
+      doc.text(`NEXT DUE DATE            :-     ${details.nextCalibrationDate}`, 14, Yalign+=5);
 
       doc.setFont("helvetica", "bold");
       doc.setFontSize(14);   
-      doc.text("Test Results", doc.internal.pageSize.getWidth()/2, 70, { align: 'center' });
+      doc.text("Test Results", doc.internal.pageSize.getWidth()/2, Yalign+=5, { align: 'center' });
 
       const testResults = [];
       let sr_no = 1;
@@ -255,7 +300,7 @@
       doc.autoTable({
         head: [['SR NO.', 'MAKE', 'SEIVE', 'SEIVE SIZE', 'RESULT']],
         body: testResults,
-        startY: 75,
+        startY: Yalign+=3,
         styles: { 
           fontSize: 8 ,
           textColor: [0,0,0],
@@ -280,21 +325,23 @@
       });
 
       let yPosition = doc.autoTable.previous.finalY + 3;
-      doc.setFontSize(8);
+      doc.setFontSize(9);
       doc.setFont("helvetica", "bold");
-      doc.text("*REMARKS:-", 14, yPosition); yPosition += 5;
+      doc.text("*REMARKS:-", doc.internal.pageSize.getWidth()/2, yPosition+=2, { align: 'center' }); yPosition += 5;
       doc.setFont("helvetica", "bold"); 
-
+      doc.setFontSize(8);
       doc.text("•THESE RESULTS ARE OBTAINED AT THE TIME OF CALIBRATION.", 14, yPosition); yPosition += 5;
       doc.text("•ANY HAND WRITTEN CORRECTION (EXCEPT @ OR PHOTOCOPIES OF THE REPORT INVALIDATES THIS CERTIFICATE).", 14, yPosition); yPosition += 5;
       doc.text("•ENVIRONMENT CONDITION DURING CALIBRATION: 20 + 2.C, 40 TO 60% RH.", 14, yPosition); yPosition += 5;
       doc.text("•THE UNCERTAINTIES ARE FOR A CONFIDENCE PROBABILITY OF NOT LESS THAN 95%. ", 14, yPosition); yPosition += 5;
       doc.text("•REFERENCE CALIBRATION METHOD NO: NCQC/CM/102.", 14, yPosition); yPosition += 5;
-      doc.text("•REFERENCE STANDARD NO.IS-2-1960.", 14, yPosition); yPosition += 5;
+      doc.text("•REFERENCE STANDARD NO.IS-2-1960.", 14, yPosition); yPosition += 7;
 
       doc.setFont("helvetica", "bold");
-      doc.text("*DETAILS OF OUR MASTER INSTRUMENT THROUGH WHICH SEIVES ARE CALIBRATED", 14, yPosition); yPosition += 5;
-      doc.setFont("helvetica", "bold"); 
+      doc.setFontSize(9);
+      doc.text("*DETAILS OF OUR MASTER INSTRUMENT THROUGH WHICH SEIVES ARE CALIBRATED", doc.internal.pageSize.getWidth()/2, yPosition, { align: 'center' }); yPosition += 7;
+      doc.setFont("helvetica", "bold");       
+      doc.setFontSize(8);
 
       doc.text("NAME :DIGITAL VERNIAR CALIPER", 14, yPosition); yPosition += 5;
       doc.text(`SERIAL NO  :ACCUPLUS/13-200`, 124, yPosition);
@@ -305,10 +352,10 @@
       doc.text('LABORATORY "IDEMI CALIBRATION LABORATORY."', 14, yPosition); yPosition += 5;
       doc.text('CERTIFICATE NUMBER:-62', 14, yPosition); yPosition += 5;
       
-      doc.setFont("helvetica", "BOLD"); 
+      doc.setFont("helvetica", "bold"); 
       doc.setFontSize(12); 
-      doc.text("FOR, Shreeji Instruments", 145, 230);
-      doc.text("Proprietor", 170, 245);
+      doc.text("FOR, SHREEJI INSTRUMENTS", 145, 230);
+      doc.text("PROPRIETOR", 170, 245);
     }
 
     async function preview() {
@@ -344,7 +391,9 @@
       addCertificateDetails(doc, details);
       addImg(doc);
 
-      setTimeout(() => doc.save(`${details.certificateNumber}_Calibration_Certificate.pdf`), 500);
+        // Save PDF
+     const pdfBlob = doc.output('blob'); // Convert the PDF to a Blob
+      savePDFWithLocation(pdfBlob, `${details.serialNo} ${details.make} ${details.modelNo}.pdf`);
     }
 
     async function generatePDFblankpg() {
@@ -356,7 +405,9 @@
       const details = getFormDetails();
       addCertificateDetails(doc, details);
 
-      setTimeout(() => doc.save(`${details.certificateNumber}_Calibration.pdf`), 500);
+      // Save PDF
+     const pdfBlob = doc.output('blob'); // Convert the PDF to a Blob
+      savePDFWithLocation(pdfBlob, `${details.serialNo} ${details.make} ${details.modelNo}.pdf`);
     }
   </script>
 </body>

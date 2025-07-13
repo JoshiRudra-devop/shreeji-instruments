@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="img/png" href="logo.png" />
+  <title>Weight Balance Calibration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+    }
+    nav {
+      background-color: #00796b;
+      width: 100%;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    nav h1 {
+      color: white;
+      margin: 0;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+      padding: 0;
+      margin: 0;
+    }
+    nav ul li {
+      display: inline;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+    nav ul li a:hover {
+      color: #ffccbc;
+    }
+    .back-button {
+      position: absolute;
+      display: block;
+      top: 100px;
+      right: 20px;
+      padding: 10px 20px;
+      margin: auto;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 25px;
+      z-index: 1000;
+    }
+    .back-button:hover {
+      background-color: #22b55d;
+    }
+    .container {
+      background-color: white;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      width: 100%;
+    }
+    h2.centered {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #00796b;
+    }
+    .date{
+      display: inline-flex;
+      gap: 100px;
+    }
+    .date .title_input_pair{
+      display: inline;
+    }
+    .title_input_pair {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
+    }
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    input, select, textarea {
+      width: 97%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    .button2 {
+      width: calc(50% - 10px);
+      padding: 12px;
+      margin: 5px;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    .button2:hover {
+      background-color: #45a049;
+    }
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
+      <img src="https://github.com/JoshiRudra-devop/shreeji-instruments/blob/main/logo.png?raw=true" alt="Company Logo" style="width: 40px; border-radius:30%; height: 40px; margin-right: 10px;">
+      <h1 style="color: white; margin: 0;">SHREEJI INSTRUMENTS</h1>
+    </a>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#footer">About</a></li>
+      <li><a href="contactUs.html">Contact Us</a></li>
+    </ul>
+  </nav>
+  <button class="back-button" onclick="window.history.back()"><< Back</button>
+  <div class="container">
+    <h2 class="centered">WEIGHT BALANCE  CALIBRATION CERTIFICATE</h2>
+    <form id="calibrationForm">
+      <div class="title_input_pair">
+        <label for="certificateNumber">Certificate No:</label>
+        <input type="text" id="certificateNumber" required>
+      </div>
+      <div class="date">
+        <div class="title_input_pair">
+          <label for="calibrationDate">Date of Calibration:</label>
+          <input type="date" id="calibrationDate" onchange="calculateNextDate()" required>
+        </div>
+        <div class="title_input_pair">
+          <label for="nextCalibrationDate">Next Suggested Date:</label>
+          <input type="date" id="nextCalibrationDate" required>
+        </div>
+      </div>
+      <div class="title_input_pair">
+        <label for="partyName">Name of Party:</label>
+        <input type="text" id="partyName" required>
+      </div>
+      <div class="title_input_pair">
+        <label for="siteLocation">Site Location:</label>
+        <input type="text" id="siteLocation" required>
+      </div>
+      <div class="title_input_pair">
+        <label for="serialNo">Serial No:</label>
+        <input type="text" id="serialNo" required>
+      </div>
+      <div class="title_input_pair">
+        <label for="capacity">Capacity:</label>
+        <select id="capacity" required>
+           <option value="">Select Size</option>
+           <option value="600 g">600 g</option>
+           <option value="6 KG">6 KG</option>
+           <option value="5 KG">5 KG</option>
+           <option value="10 KG">10 KG</option>
+           <option value="20 KG">20 KG</option>
+           <option value="30 KG">30 KG</option>
+           <option value="50 KG">50 KG</option>
+           <option value="100 KG">100 KG</option>
+           <option value="200 KG">200 KG</option>
+        </select>
+      </div>
+      <div class="title_input_pair">
+        <label for="make">Make:</label>
+        <input type="text" id="make" required>
+      </div> 
+      <div class="button-group">
+        <button type="button" class="button2" onclick="preview()">Preview Calibration Certificate</button>
+        <button type="button" class="button2" onclick="generatePDF()">Download Certificate with Letterhead</button>
+        <button type="button" class="button2" onclick="generatePDFblankpg()">Download Certificate without Letterhead</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+  <script>
+    // Table data for each capacity
+    const capacityTables = {
+      "600 g": [],
+      "5 KG": [
+        ["01", "0.01", "10.0", "±0.12 g"],
+        ["02", "0.05", "50.0", '"'],
+        ["03", "0.1", "100.0", "±6 g"],
+        ["04", "0.5", "500.0", '"'],
+        ["05", "1.0", "1000.0", '"'],
+        ["06", "5.0", "5000.0", '"']
+      ],
+      "30 KG": [
+        ["01", "0.05", "0.050", "±0.6 g"],
+        ["02", "0.1", "0.100", '"'],
+        ["03", "0.5", "0.501", "±6 g"],
+        ["04", "1.0", "0.999", '"'],
+        ["05", "2.0", "1.998", '"'],
+        ["06", "5.0", "4.998", '"'],
+        ["07", "10.0", "9.996", '"'],
+        ["08", "20.0", "19.995", '"'],
+        ["09", "30.0", "29.995", '"']
+      ],
+      "100 KG": [],
+      "200 KG": [],
+      "6 KG": [
+        ["01", "0.01", "10.0", "±0.12 g"],
+        ["02", "0.05", "50.0", '"'],
+        ["03", "0.1", "100.0", "±6 g"],
+        ["04", "0.5", "500.0", '"'],
+        ["05", "1.0", "1000.0", '"'],
+        ["06", "5.0", "5000.0", '"'],
+        ["07", "6.0", "5999.9", '"']
+      ],
+      "10 KG": [
+        ["01", "0.05", "10.0", "0.12 g"],
+        ["02", "0.01", "50.0", '"'],
+        ["03", "0.1", "100.0", '"'],
+        ["04", "0.5", "500.0", "6 g"],
+        ["05", "1.0", "1000.0", '"'],
+        ["06", "5.0", "4999.9", '"'],
+        ["07", "10.0", "9999.9", '"'],
+      ],
+      "20 KG": [
+        ["01", "0.05", "0.050", "±0.6 g"],
+        ["02", "0.1", "0.100", '"'],
+        ["03", "0.5", "0.501", "±6 g"],
+        ["04", "1.0", "0.999", '"'],
+        ["05", "2.0", "1.998", '"'],
+        ["06", "5.0", "4.998", '"'],
+        ["07", "10.0", "9.996", '"'],
+        ["08", "20.0", "19.995", '"']
+      ],
+      "50 KG": [
+        ["01", "0.5", "0.500", "±6 g"],
+        ["02", "1.0", "1.000", '"'],
+        ["03", "2.0", "2.000", '"'],
+        ["04", "5.0", "5.000", '"'],
+        ["05", "10.0", "10.000", '"'],
+        ["06", "20.0", "19.998", '"'],
+        ["07", "40.0", "39.998", '"'],
+        ["08", "50.0", "49.996", '"']
+      ],
+    };
+
+    // Get form details
+    function getFormDetails() {
+      return {
+        certificateNumber: document.getElementById("certificateNumber").value,
+        calibrationDate: document.getElementById("calibrationDate").value.split("-").reverse().join("/"),
+        siteLocation: document.getElementById("siteLocation").value,
+        partyName: document.getElementById("partyName").value,
+        serialNo: document.getElementById("serialNo").value,
+        make: document.getElementById("make").value,
+        capacity: document.getElementById("capacity").value,
+        nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/"),
+      };
+    }
+
+    function calculateNextDate() {
+      const calibrationDateInput = document.getElementById('calibrationDate');
+      const nextDateInput = document.getElementById('nextCalibrationDate');
+      const calibrationDate = new Date(calibrationDateInput.value);
+      if (!isNaN(calibrationDate)) {
+        const nextYearDate = new Date(calibrationDate);
+        nextYearDate.setFullYear(nextYearDate.getFullYear() + 1);
+        nextYearDate.setDate(nextYearDate.getDate() - 1); // Subtract 1 day
+        const formattedDate = nextYearDate.toISOString().split('T')[0];
+        nextDateInput.value = formattedDate;
+      }
+    }
+
+    function addImg(doc) {
+      const img = new Image();
+      img.src = 'footer.jpeg';
+      doc.addImage(img, 'PNG', 0, 255, 210, 27);
+      const img3 = new Image();
+      img3.src = 'sign.jpeg';
+      doc.addImage(img3, 'PNG', 160, 232, 40, 10);
+      const img1 = new Image();
+      img1.src = 'stamp.jpeg';
+      doc.addImage(img1, 'PNG', 100, 217, 35, 35);
+      const img2 = new Image();
+      img2.src = 'header.jpeg';
+      doc.addImage(img2, 'PNG', 3, 3, 210, 30);
+    }
+
+    async function savePDFWithLocation(pdfDocument, defaultFileName) {
+      try {
+        const fileHandle = await window.showSaveFilePicker({
+          suggestedName: defaultFileName,
+          types: [
+            {
+              description: 'PDF Files',
+              accept: { 'application/pdf': ['.pdf'] },
+            },
+          ],
+        });
+        const writableStream = await fileHandle.createWritable();
+        await writableStream.write(pdfDocument);
+        await writableStream.close();
+        console.log('PDF saved successfully!');
+      } catch (error) {
+        console.error('Error saving PDF:', error);
+      }
+    }
+
+    function addCertificateDetails(doc, details) {
+      let Yalign = 50;
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(25);
+      doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, Yalign, { align: 'center' });
+
+      doc.setFontSize(12);
+      doc.text(`DATE:-${details.calibrationDate}`, 155, Yalign += 10);
+      doc.text(`REF NO                        :-     SI-${details.certificateNumber}`, 14, Yalign);
+      doc.text(`NAME OF PARTY        :-     ${details.partyName}`, 14, Yalign += 10);
+      doc.text(`EQUIPMENT NAME     :-     WEIGHT BALANCE`, 14, Yalign += 10);
+      doc.text(`CAPACITY & MAKE    :-     ${details.capacity} & ${details.make}`, 14, Yalign += 10);
+      doc.text(`SR NO                          :-     SI-${details.certificateNumber}`, 14, Yalign += 10);
+      doc.text(`NEXT DUE DATE        :-     ${details.nextCalibrationDate}`, 14, Yalign += 10);
+      doc.text(`SITE LOCATION          :-     ${details.siteLocation}`, 14, Yalign += 10);
+
+      // Get table data for selected capacity
+      const data = capacityTables[details.capacity] || [];
+      let tableStartY = Yalign + 10;
+
+      if (data.length > 0) {
+        doc.autoTable({
+          head: [['SR.NO', 'APPLIED WEIGHT IN (KG)', 'ACTUAL VALUE IN (g/kg)', 'UNCERTANITY AT 95% C.L. (COVARAGE FACTOR k=2)']],
+          body: data,
+          startY: tableStartY,
+          styles: { 
+            fontSize: 12,
+            lineColor:[0,0,0],
+            textColor:[0,0,0],
+            lineWidth: 0.2,
+            halign: 'center',
+            valign: 'middle',
+            cellPadding: 1, // reduce padding inside cells
+            lineHeight: 1   // reduce row height
+          },
+          headStyles: {
+            fontSize: 15,
+            fillColor: [255, 255, 255],
+            textColor: [0,0,0],
+            lineColor: [0, 0, 0],
+            lineWidth: 0.2,
+            halign: 'center',
+            valign: 'middle',
+          },
+          alternateRowStyles: {
+            fillColor: [255, 255, 255]
+          }
+        });
+      }
+
+      let tableStartY2 = doc.autoTable.previous ? doc.autoTable.previous.finalY : Yalign + 20;
+      doc.setFontSize(12);
+      doc.text("CALIBRATED BY: YOGESH B JOSHI", 14, tableStartY2 += 10);
+      doc.setFont("helvetica", "bold"); 
+      doc.setFontSize(12); 
+      doc.text("FOR, SHREEJI INSTRUMENTS", 145, 230);
+      doc.text("PROPRIETOR", 170, 245);
+    }
+
+    // Preview the generated certificate
+    async function preview() {
+      if (!document.getElementById("calibrationForm").reportValidity()) return;
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const details = getFormDetails();
+      addCertificateDetails(doc, details);
+      addImg(doc);
+
+      const pdfBlob = doc.output('blob');
+      const pdfURL = URL.createObjectURL(pdfBlob);
+      const previewFrame = document.createElement('iframe');
+      previewFrame.style.width = "100%";
+      previewFrame.style.height = "600px";
+      previewFrame.src = pdfURL;
+
+      const container = document.querySelector('.container');
+      const existingPreview = document.querySelector('iframe');
+      if (existingPreview) container.removeChild(existingPreview);
+      container.appendChild(previewFrame);
+    }
+
+    // Generate PDF with letterhead
+    async function generatePDF() {
+      if (!document.getElementById("calibrationForm").reportValidity()) return;
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const details = getFormDetails();
+      addCertificateDetails(doc, details);
+      addImg(doc);
+      const pdfBlob = doc.output('blob');
+      savePDFWithLocation(pdfBlob, `${details.capacity} ${details.make} ${details.serialNo} .pdf`);
+    }
+
+    // Generate PDF without letterhead
+    async function generatePDFblankpg() {
+      if (!document.getElementById("calibrationForm").reportValidity()) return;
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const details = getFormDetails();
+      addCertificateDetails(doc, details);
+      const pdfBlob = doc.output('blob');
+      savePDFWithLocation(pdfBlob, `${details.capacity} ${details.make} ${details.serialNo} .pdf`);
+    }
+  </script>
+</body>
+</html>

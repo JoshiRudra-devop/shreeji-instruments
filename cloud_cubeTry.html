@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cube Mould Calibration</title>
+  <link rel="icon" type="img/png" href="logo.png" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+      padding-right: 280px;
+    }
+    nav {
+      background-color: #00796b;
+      width: 100%;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+    }
+    nav h1 {
+      color: white;
+      margin: 0;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+      padding: 0;
+      margin: 0;
+    }
+    nav ul li {
+      display: inline;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+    nav ul li a:hover {
+      color: #ffccbc;
+    }
+    .side-dock {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 260px;
+      height: 100vh;
+      background: linear-gradient(135deg, #00796b, #004d40);
+      box-shadow: -4px 0 15px rgba(0, 0, 0, 0.2);
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      padding: 80px 20px 20px 20px;
+      overflow-y: auto;
+    }
+    .side-dock h3 {
+      color: white;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 18px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+      padding-bottom: 10px;
+    }
+    .dock-button {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 15px;
+      background: linear-gradient(135deg, #26a69a, #00695c);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .dock-button:hover {
+      background: linear-gradient(135deg, #2dd4bf, #0d9488);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+    .dock-button:active {
+      transform: translateY(0);
+    }
+    .dock-button.sticker-btn {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+    }
+    .dock-button.sticker-btn:hover {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    }
+    .back-button {
+      position: fixed;
+      top: 80px;
+      left: 20px;
+      padding: 10px 20px;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      z-index: 1000;
+      transition: background-color 0.3s ease;
+    }
+    .back-button:hover {
+      background-color: #22b55d;
+    }
+    .container {
+      background-color: white;
+      padding: 20px;
+      margin: 100px 0 20px 0;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      width: 100%;
+    }
+    h2.centered {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #00796b;
+    }
+    .date {
+      display: inline-flex;
+      gap: 100px;
+    }
+    .date .title_input_pair {
+      display: inline;
+    }
+    .title_input_pair {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
+    }
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    input, select, textarea {
+      width: 97%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    .button2 {
+      width: calc(50% - 10px);
+      padding: 12px;
+      margin: 5px;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    .button2:hover {
+      background-color: #45a049;
+    }
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+    }
+    #stickerPreviewFrame {
+      width: 100%;
+      max-width: 400px;
+      height: 300px;
+      border: 2px solid #00796b;
+      margin: 16px auto 0 auto;
+      display: none;
+      border-radius: 8px;
+    }
+    #downloadStickerBtn {
+      display: none;
+      margin: 10px auto;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 200px;
+    }
+    #downloadStickerBtn:hover {
+      background-color: #45a049;
+    }
+    .sticker-section {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .sticker-preview-container {
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    .unsaved-reminder {
+      color: #c0392b;
+      text-align: center;
+      font-weight: bold;
+      margin: 10px 0 0 0;
+      font-size: 16px;
+      display: none;
+    }
+    #certificateDetailsBlob {
+      display:none;
+      margin-top:24px;
+      padding:18px;
+      border-radius:8px;
+      background:#e0f7fa;
+      box-shadow: 0 0 10px #b2ebf2;
+    }
+    #certificateDetailsBlob h3 {
+      margin-top:0;
+      color:#00796b;
+    }
+    #openCloudinaryBtn {
+      margin-top:12px;
+      width: 100%;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 12px 0;
+    }
+    #openCloudinaryBtn:hover {
+      background-color: #45a049;
+    }
+
+    /* Loading Animation Styles */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      backdrop-filter: blur(5px);
+    }
+
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .animation-container {
+      position: relative;
+      width: 200px;
+      height: 200px;
+    }
+
+    .mailbox {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 60px;
+      background: linear-gradient(135deg, #00796b, #004d40);
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      z-index: 2;
+    }
+
+    .mailbox::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 20px;
+      background: linear-gradient(135deg, #26a69a, #00695c);
+      border-radius: 20px 20px 8px 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .letter {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 30px;
+      background: linear-gradient(135deg, #ffffff, #f0f0f0);
+      border-radius: 4px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      animation: letterDrop 3s ease-in-out infinite;
+      z-index: 3;
+    }
+
+    .letter::before {
+      content: '📄';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 18px;
+    }
+
+    @keyframes letterDrop {
+      0% {
+        top: 10px;
+        opacity: 0;
+        transform: translateX(-50%) scale(0.8);
+      }
+      20% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+      }
+      60% {
+        top: 60px;
+        transform: translateX(-50%) scale(1);
+      }
+      80% {
+        top: 60px;
+        transform: translateX(-50%) scale(0.9);
+      }
+      100% {
+        top: 10px;
+        opacity: 0;
+        transform: translateX(-50%) scale(0.8);
+      }
+    }
+
+    .success-checkmark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4caf50, #45a049);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(76, 175, 80, 0.4);
+      z-index: 4;
+      animation: checkmarkAppear 0.6s ease-out;
+    }
+
+    .success-checkmark::before {
+      content: '✓';
+      color: white;
+      font-size: 48px;
+      font-weight: bold;
+      animation: checkmarkScale 0.4s ease-out 0.2s both;
+    }
+
+    @keyframes checkmarkAppear {
+      0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes checkmarkScale {
+      0% {
+        transform: scale(0);
+      }
+      50% {
+        transform: scale(1.3);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .loading-text {
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 20px;
+      animation: textPulse 2s ease-in-out infinite;
+    }
+
+    .success-text {
+      color: #4caf50;
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 20px;
+      display: none;
+      animation: fadeInUp 0.5s ease-out;
+    }
+
+    @keyframes textPulse {
+      0%, 100% {
+        opacity: 0.7;
+      }
+      50% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .progress-dots {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      animation: dotPulse 1.5s ease-in-out infinite;
+    }
+
+    .dot:nth-child(1) { animation-delay: 0s; }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes dotPulse {
+      0%, 60%, 100% {
+        opacity: 0.3;
+        transform: scale(1);
+      }
+      30% {
+        opacity: 1;
+        transform: scale(1.3);
+      }
+    }
+
+    @media (max-width: 1200px) {
+      body {
+        padding-right: 0;
+      }
+      .side-dock {
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+      }
+      .side-dock.open {
+        transform: translateX(0);
+      }
+      .dock-toggle {
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        background: #00796b;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        z-index: 1001;
+        display: block;
+      }
+    }
+    @media (min-width: 1201px) {
+      .dock-toggle {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
+      <img src="logo.png" alt="Company Logo" style="width: 40px; border-radius:30%; height: 40px; margin-right: 10px;">
+      <h1 style="color: white; margin: 0;">SHREEJI INSTRUMENTS</h1>
+    </a>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#footer">About</a></li>
+      <li><a href="contactUs.html">Contact Us</a></li>
+    </ul>
+  </nav>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-container">
+      <div class="animation-container">
+        <div class="mailbox"></div>
+        <div class="letter"></div>
+        <div class="success-checkmark" id="successCheckmark"></div>
+      </div>
+      <div class="loading-text" id="loadingText">
+        Uploading PDF to Cloudinary...
+        <div class="progress-dots">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+      <div class="success-text" id="successText">
+        Certificate uploaded successfully! ✨
+      </div>
+    </div>
+  </div>
+
+  <button class="back-button" onclick="goBackOrPromptSave()">← Back</button>
+  <button class="dock-toggle" onclick="toggleDock()">☰ Actions</button>
+  <div class="side-dock" id="sideDock">
+    <h3>Actions</h3>
+    <button class="dock-button" type="button" onclick="preview()">📋 Preview Certificate</button>
+    <button class="dock-button" type="button" onclick="generatePDF()">📄 Upload PDF to Cloudinary & Firebase</button>
+    <button class="dock-button" type="button" onclick="generatePDFblankpg()">📝 Download without Letterhead</button>
+    <button class="dock-button" type="button" onclick="printBlankCertificate()">🖨️ Print without Letterhead</button>
+    <button class="dock-button sticker-btn" type="button" onclick="sharePDF()">🏷️ Share PDF With Letterhead</button>
+  </div>
+  <div class="container">
+    <h2 class="centered">CUBE MOULD CALIBRATION CERTIFICATE</h2>
+    <form id="calibrationForm">
+      <div class="title_input_pair">
+        <label for="certificateNumber">Certificate No:</label>
+        <input type="text" id="certificateNumber" required>
+      </div>
+      <div class="date">
+        <div class="title_input_pair">
+          <label for="calibrationDate">Date of Calibration:</label>
+          <input type="date" id="calibrationDate" onchange="calculateNextDate()" required>
+        </div>
+        <div class="title_input_pair">
+          <label for="nextCalibrationDate">Next Suggested Date:</label>
+          <input type="date" id="nextCalibrationDate" required>
+        </div>
+      </div>
+      <div class="title_input_pair">
+        <label for="partyName">Name of Party:</label>
+        <input type="text" id="partyName" required>
+      </div>
+      <div class="title_input_pair">
+        <label for="quantity">NO. OF CUBE</label>
+        <input type="number" id="quantity" required min="1">
+      </div>
+      <div class="title_input_pair">
+        <label for="siteLocation">Site Location:</label>
+        <input type="text" id="siteLocation" required>
+      </div>
+      <div class="title_input_pair">
+        <label for="size">SIZE:</label>
+        <select id="size" required>
+          <option value="">Select Size</option>
+          <option value="150MM x 150MM x 150MM">150MM x 150MM x 150MM</option>
+          <option value="50MM x 50MM x 50MM">50MM x 50MM x 50MM</option>
+          <option value="100MM x 100MM x 100MM">100MM x 100MM x 100MM</option>
+          <option value="70.6MM x 70.6MM x 70.6MM">70.6MM x 70.6MM x 70.6MM</option>
+          <option value="700MM x 100MM x  100MM ">BIM MOULD</option>
+        </select>
+      </div>
+      <div class="unsaved-reminder" id="unsavedReminder">
+        <span>⚠️ Please save your certificate before leaving this page.</span>
+      </div>
+      <div class="sticker-section">
+        <div class="sticker-preview-container">
+          <h3 style="color: #00796b; margin-top: 0;">Info Sticker Preview</h3>
+          <iframe id="stickerPreviewFrame"></iframe>
+        </div>
+      </div>
+      <div class="button-group">
+        <button type="button" class="button2" onclick="preview()">Preview Calibration Certificate</button>
+        <button type="button" class="button2" onclick="generatePDF()">Upload PDF to Cloudinary & Firebase</button>
+        <button type="button" class="button2" onclick="generatePDFblankpg()">Download Certificate without Letterhead</button>
+      </div>
+    </form>
+    <!-- CERTIFICATE DETAILS BLOB -->
+    <div id="certificateDetailsBlob">
+      <h3>Saved Certificate Details</h3>
+      <div id="certificateDetailsContent"></div>
+      <button id="openCloudinaryBtn" class="button2">Open Certificate PDF in Cloudinary</button>
+    </div>
+  </div>
+
+  <!-- Firebase and PDF libraries -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+  <script>
+let stickerPdfBlob = null;
+let pdfSaved = false;
+
+// Loading animation functions
+function showLoadingAnimation() {
+  const overlay = document.getElementById('loadingOverlay');
+  const loadingText = document.getElementById('loadingText');
+  const successText = document.getElementById('successText');
+  const successCheckmark = document.getElementById('successCheckmark');
+  
+  // Reset animations
+  overlay.style.display = 'flex';
+  loadingText.style.display = 'block';
+  successText.style.display = 'none';
+  successCheckmark.style.display = 'none';
+}
+
+function showSuccessAnimation() {
+  const loadingText = document.getElementById('loadingText');
+  const successText = document.getElementById('successText');
+  const successCheckmark = document.getElementById('successCheckmark');
+  
+  // Hide loading, show success
+  loadingText.style.display = 'none';
+  successCheckmark.style.display = 'flex';
+  successText.style.display = 'block';
+  
+  // Auto-hide after 2 seconds
+  setTimeout(() => {
+    hideLoadingAnimation();
+  }, 2000);
+}
+
+function hideLoadingAnimation() {
+  const overlay = document.getElementById('loadingOverlay');
+  overlay.style.display = 'none';
+}
+
+// --- IMAGE PRELOADING LOGIC ---
+let headerImgB64, footerImgB64, stampImgB64, signImgB64;
+async function prepareImages() {
+  if (!headerImgB64) headerImgB64 = await loadImageToBase64("header.jpeg");
+  if (!footerImgB64) footerImgB64 = await loadImageToBase64("footer.jpeg");
+  if (!stampImgB64)  stampImgB64  = await loadImageToBase64("stamp.jpeg");
+  if (!signImgB64)   signImgB64   = await loadImageToBase64("sign.jpeg");
+}
+function loadImageToBase64(url) {
+  return new Promise((resolve, reject) => {
+    var img = new window.Image();
+    img.crossOrigin = "Anonymous";
+    img.onload = function () {
+      var canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      var ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+      resolve(canvas.toDataURL("image/png"));
+    };
+    img.onerror = reject;
+    img.src = url;
+  });
+}
+
+// ---- FIREBASE INIT (REPLACE with your values) ----
+const firebaseConfig = {
+  apiKey: "AIzaSyB5LBbG8EZtE0iVecwpk7QYpmPhAY5Y5R4",
+  authDomain: "shreeji-instruments.firebaseapp.com",
+  projectId: "shreeji-instruments",
+  storageBucket: "shreeji-instruments.firebasestorage.app",
+  messagingSenderId: "714355376623",
+  appId: "1:714355376623:web:ff4d29899b4012568c761a"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// ---- CLOUDINARY UPLOAD (REPLACE with your values) ----
+async function uploadPDFtoCloudinary(pdfBlob, fileName) {
+  const url = `https://api.cloudinary.com/v1_1/deread6ss/auto/upload`;
+  const formData = new FormData();
+  formData.append("file", pdfBlob, fileName);
+  formData.append("upload_preset", "shreeji_instruments");
+  const response = await fetch(url, {
+    method: "POST",
+    body: formData
+  });
+  if (!response.ok) throw new Error("Cloudinary upload failed");
+  return await response.json(); // .secure_url
+}
+
+function updateUnsavedReminder() {
+  const reminder = document.getElementById('unsavedReminder');
+  if (!pdfSaved) {
+    reminder.style.display = 'block';
+  } else {
+    reminder.style.display = 'none';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll("#calibrationForm input, #calibrationForm select").forEach(input => {
+    input.addEventListener('input', () => {
+      pdfSaved = false;
+      updateUnsavedReminder();
+    });
+  });
+  updateUnsavedReminder();
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('calibrationDate').value = today;
+  calculateNextDate();
+});
+
+window.onbeforeunload = function(e) {
+  if (!pdfSaved) {
+    e.preventDefault();
+    e.returnValue = 'You have unsaved changes. Please save your calibration certificate before leaving!';
+    return e.returnValue;
+  }
+};
+
+function goBackOrPromptSave() {
+  if (!pdfSaved) {
+    updateUnsavedReminder();
+    if (confirm("⚠️ You have unsaved changes! Please save your calibration certificate before leaving.\n\nDo you want to save now?")) {
+      generatePDF();
+    }
+  } else {
+    window.history.back();
+  }
+}
+
+function toggleDock() {
+  const dock = document.getElementById('sideDock');
+  dock.classList.toggle('open');
+}
+
+function isMobile() {
+  return /Mobi|Android/i.test(navigator.userAgent);
+}
+
+async function savePDFWithLocation(pdfDocument, defaultFileName) {
+  try {
+    if (window.showSaveFilePicker && !isMobile()) {
+      const fileHandle = await window.showSaveFilePicker({
+        suggestedName: defaultFileName,
+        types: [
+          {
+            description: 'PDF Files',
+            accept: { 'application/pdf': ['.pdf'] },
+          },
+        ],
+      });
+      const writableStream = await fileHandle.createWritable();
+      await writableStream.write(pdfDocument);
+      await writableStream.close();
+    } else {
+      const url = URL.createObjectURL(pdfDocument);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = defaultFileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(url), 100);
+    }
+    pdfSaved = true;
+    updateUnsavedReminder();
+    alert('PDF saved successfully!');
+  } catch (error) {
+    console.error('Error saving PDF:', error);
+  }
+}
+
+function getFormDetails() {
+  return {
+    certificateNumber: document.getElementById("certificateNumber").value,
+    calibrationDate: document.getElementById("calibrationDate").value.split("-").reverse().join("/"),
+    siteLocation: document.getElementById("siteLocation").value,
+    partyName: document.getElementById("partyName").value,
+    quantity: document.getElementById("quantity").value,
+    size: document.getElementById("size").value,
+    nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/")
+  };
+}
+
+function calculateNextDate() {
+  const calibrationDateInput = document.getElementById('calibrationDate');
+  const nextDateInput = document.getElementById('nextCalibrationDate');
+  const calibrationDate = new Date(calibrationDateInput.value);
+  if (!isNaN(calibrationDate)) {
+    const nextYearDate = new Date(calibrationDate);
+    nextYearDate.setFullYear(nextYearDate.getFullYear() + 1);
+    nextYearDate.setDate(nextYearDate.getDate() - 1);
+    const formattedDate = nextYearDate.toISOString().split('T')[0];
+    nextDateInput.value = formattedDate;
+  }
+}
+
+function incrementCertificateNumber(baseCertNo, increment) {
+  if (!isNaN(Number(baseCertNo))) {
+    return String(Number(baseCertNo) + increment);
+  } else {
+    const match = baseCertNo.match(/^(\d+)(.*)$/);
+    if (match) {
+      return (Number(match[1]) + increment) + match[2];
+    } else {
+      return baseCertNo;
+    }
+  }
+}
+
+function drawHeader(doc, details, Yalign, withImages) {
+  if (withImages && headerImgB64) doc.addImage(headerImgB64, 'PNG', 3, 3, 210, 30);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(23);
+  doc.text("TEST REPORT FOR CUBE MOULD", doc.internal.pageSize.getWidth() / 2, Yalign, { align: 'center' });
+  doc.text(`${details.size}`, doc.internal.pageSize.getWidth() / 2, Yalign+=7, { align: 'center' });
+
+  doc.setFontSize(12);
+  doc.text(`DATE:-${details.calibrationDate}`, 155, Yalign += 10);
+  doc.text(`REF NO                        :-     SI-${details.certificateNumber}`, 14, Yalign);
+  doc.text(`NAME OF PARTY        :-     ${details.partyName}`, 14, Yalign += 10);
+  doc.text(`EQUIPMENT NAME     :-     CUBE MOULD (${details.size})`, 14, Yalign += 10);
+  doc.text(`NEXT DUE DATE        :-     ${details.nextCalibrationDate}`, 14, Yalign += 10);
+
+  // --- Site Location with wrapping (only value, not prefix) ---
+  const siteLocPrefix = "SITE LOCATION          :-     ";
+  const prefixWidth = doc.getTextWidth(siteLocPrefix);
+  const maxWidth = 180 - prefixWidth;
+  const siteLocLines = doc.splitTextToSize(details.siteLocation, maxWidth);
+  doc.text(siteLocPrefix + (siteLocLines[0] || ""), 14, Yalign += 10);
+  for (let i = 1; i < siteLocLines.length; i++) {
+    doc.text(siteLocLines[i], 14 + prefixWidth , Yalign +=4);
+  }
+  Yalign += ((siteLocLines.length - 1)+5);
+  return Yalign;
+}
+
+// Add footer, stamp, sign images (every page)
+function addFooterImages(doc) {
+  if (footerImgB64) doc.addImage(footerImgB64, 'PNG', 0, 255, 210, 27);
+  if (stampImgB64)  doc.addImage(stampImgB64,  'PNG', 100, 217, 35, 35);
+  if (signImgB64)   doc.addImage(signImgB64,   'PNG', 160, 232, 40, 10);
+}
+
+function addCertificateDetails(doc, details) {
+  let qty = parseInt(details.quantity);
+  if (isNaN(qty) || qty <= 0) {
+    alert("Please enter a valid number of cubes.");
+    return;
+  }
+  let [length, height, width] = details.size.split("x").map(s => s.trim());
+  if (!length) length = "";
+  if (!height) height = "";
+  if (!width) width = "";
+  const headers = [["SR.NO", "LENGTH", "HEIGHT", "WIDTH"]];
+  const allRows = [];
+  for (let i = 1; i <= qty; i++) {
+    allRows.push([i, length, height, width]);
+  }
+  const pageCount = Math.ceil(allRows.length / 10);
+  for (let page = 0; page < pageCount; page++) {
+    if (page > 0) doc.addPage();
+    let pageRows = allRows.slice(page * 10, page * 10 + 10);
+    let refNo = incrementCertificateNumber(details.certificateNumber, page);
+    let pageDetails = { ...details, certificateNumber: refNo };
+    let tableY = drawHeader(doc, pageDetails, 50, true);
+    doc.autoTable({
+      head: headers,
+      body: pageRows,
+      startY: tableY + 1,
+      styles: {
+        fontSize: 12,
+        lineColor: [0, 0, 0],
+        textColor: [0, 0, 0],
+        lineWidth: 0.2,
+        halign: 'center',
+        valign: 'middle'
+      },
+      headStyles: {
+        fontSize: 15,
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        lineColor: [0, 0, 0],
+        lineWidth: 0.2,
+        halign: 'center',
+        valign: 'middle'
+      },
+      alternateRowStyles: {
+        fillColor: [255, 255, 255]
+      }
+    });
+    let tableEndY = doc.autoTable.previous.finalY;
+    doc.setFontSize(12);
+    doc.text("CALIBRATED BY: YOGESH B JOSHI", 14, tableEndY + 10);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.text("FOR, SHREEJI INSTRUMENTS", 145, 230);
+    doc.text("PROPRIETOR", 170, 245);
+    addFooterImages(doc);
+  }
+}
+
+async function preview() {
+  if (!document.getElementById("calibrationForm").reportValidity()) return;
+  await prepareImages();
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const details = getFormDetails();
+  addCertificateDetails(doc, details);
+
+  const pdfBlob = doc.output('blob');
+  const pdfURL = URL.createObjectURL(pdfBlob);
+  const previewFrame = document.createElement('iframe');
+  previewFrame.style.width = "100%";
+  previewFrame.style.height = "600px";
+  previewFrame.src = pdfURL;
+  const container = document.querySelector('.container');
+  const existingPreview = document.querySelector('iframe[style*="600px"]');
+  if (existingPreview) container.removeChild(existingPreview);
+  container.appendChild(previewFrame);
+}
+
+// --- SHOW CERTIFICATE DETAILS BLOB ---
+function showCertificateBlob(details, pdfUrl) {
+  // Fill certificate details as HTML
+  const detailsHtml = `
+    <b>Certificate No:</b> ${details.certificateNumber}<br>
+    <b>Calibration Date:</b> ${details.calibrationDate}<br>
+    <b>Next Due Date:</b> ${details.nextCalibrationDate}<br>
+    <b>Name of Party:</b> ${details.partyName}<br>
+    <b>Quantity:</b> ${details.quantity}<br>
+    <b>Size:</b> ${details.size}<br>
+    <b>Site Location:</b> ${details.siteLocation}<br>
+    <b>Cloudinary PDF Link:</b> <a href="${pdfUrl}" target="_blank">${pdfUrl}</a>
+  `;
+  document.getElementById('certificateDetailsContent').innerHTML = detailsHtml;
+  // Store URL for button
+  const openBtn = document.getElementById('openCloudinaryBtn');
+  openBtn.onclick = function() {
+    window.open(pdfUrl, '_blank');
+  };
+  document.getElementById('certificateDetailsBlob').style.display = 'block';
+}
+
+// --- THE KEY FUNCTION: GENERATE, UPLOAD PDF TO CLOUDINARY, SAVE LINK TO FIREBASE ---
+async function generatePDF() {
+  if (!document.getElementById("calibrationForm").reportValidity()) return;
+  await prepareImages();
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const details = getFormDetails();
+  addCertificateDetails(doc, details);
+  const pdfBlob = doc.output('blob');
+  const fileName = `CubeMould_${details.certificateNumber}.pdf`;
+
+  // 1. Upload to Cloudinary
+  let cloudinaryResp;
+  try {
+    cloudinaryResp = await uploadPDFtoCloudinary(pdfBlob, fileName);
+  } catch (err) {
+    alert("Cloudinary upload failed: " + err);
+    return;
+  }
+  const pdfUrl = cloudinaryResp.secure_url;
+
+  // 2. Save PDF URL & details to Firestore
+  try {
+    await db.collection("certificates").add({
+      certificateNumber: details.certificateNumber,
+      downloadUrl: pdfUrl,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      ...details
+    });
+    // Show certificate details blob
+    showCertificateBlob(details, pdfUrl);
+    alert("PDF uploaded and link saved to Firebase!\n" + pdfUrl);
+  } catch (err) {
+    alert("Failed to save to Firebase: " + err);
+  }
+}
+
+async function generatePDFblankpg() {
+  if (!document.getElementById("calibrationForm").reportValidity()) return;
+  await prepareImages();
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const details = getFormDetails();
+  // draw header without header image
+  function drawHeaderNoImg(doc, details, Yalign) {
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(23);
+    doc.text("TEST REPORT FOR CUBE MOULD", doc.internal.pageSize.getWidth() / 2, Yalign, { align: 'center' });
+    doc.text(`${details.size}`, doc.internal.pageSize.getWidth() / 2, Yalign+=7, { align: 'center' });
+    doc.setFontSize(12);
+    doc.text(`DATE:-${details.calibrationDate}`, 155, Yalign += 10);
+    doc.text(`REF NO                        :-     SI-${details.certificateNumber}`, 14, Yalign);
+    doc.text(`NAME OF PARTY        :-     ${details.partyName}`, 14, Yalign += 10);
+    doc.text(`EQUIPMENT NAME     :-     CUBE MOULD (${details.size})`, 14, Yalign += 10);
+    doc.text(`NEXT DUE DATE        :-     ${details.nextCalibrationDate}`, 14, Yalign += 10);
+    const siteLocPrefix = "SITE LOCATION          :-     ";
+    const prefixWidth = doc.getTextWidth(siteLocPrefix);
+    const maxWidth = 180 - prefixWidth;
+    const siteLocLines = doc.splitTextToSize(details.siteLocation, maxWidth);
+    doc.text(siteLocPrefix + (siteLocLines[0] || ""), 14, Yalign += 10);
+    for (let i = 1; i < siteLocLines.length; i++) {
+      doc.text(siteLocLines[i], 14 + prefixWidth , Yalign +=4);
+    }
+    Yalign += ((siteLocLines.length - 1)+5);
+    return Yalign;
+  }
+  let qty = parseInt(details.quantity);
+  if (isNaN(qty) || qty <= 0) {
+    alert("Please enter a valid number of cubes.");
+    return;
+  }
+  let [length, height, width] = details.size.split("x").map(s => s.trim());
+  if (!length) length = "";
+  if (!height) height = "";
+  if (!width) width = "";
+  const headers = [["SR.NO", "LENGTH", "HEIGHT", "WIDTH"]];
+  const allRows = [];
+  for (let i = 1; i <= qty; i++) {
+    allRows.push([i, length, height, width]);
+  }
+  const pageCount = Math.ceil(allRows.length / 10);
+  for (let page = 0; page < pageCount; page++) {
+    if (page > 0) doc.addPage();
+    let pageRows = allRows.slice(page * 10, page * 10 + 10);
+    let refNo = incrementCertificateNumber(details.certificateNumber, page);
+    let pageDetails = { ...details, certificateNumber: refNo };
+    let tableY = drawHeaderNoImg(doc, pageDetails, 50);
+    doc.autoTable({
+      head: headers,
+      body: pageRows,
+      startY: tableY + 1,
+      styles: {
+        fontSize: 12,
+        lineColor: [0, 0, 0],
+        textColor: [0, 0, 0],
+        lineWidth: 0.2,
+        halign: 'center',
+        valign: 'middle'
+      },
+      headStyles: {
+        fontSize: 15,
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        lineColor: [0, 0, 0],
+        lineWidth: 0.2,
+        halign: 'center',
+        valign: 'middle'
+      },
+      alternateRowStyles: {
+        fillColor: [255, 255, 255]
+      }
+    });
+    let tableEndY = doc.autoTable.previous.finalY;
+    doc.setFontSize(12);
+    doc.text("CALIBRATED BY: YOGESH B JOSHI", 14, tableEndY + 10);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.text("FOR, SHREEJI INSTRUMENTS", 145, 230);
+    doc.text("PROPRIETOR", 170, 245);
+  }
+  const pdfBlob = doc.output('blob');
+  await savePDFWithLocation(pdfBlob, `CubeMould_${details.certificateNumber}_blank.pdf`);
+}
+
+async function printBlankCertificate() {
+  if (!document.getElementById("calibrationForm").reportValidity()) return;
+  await prepareImages();
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const details = getFormDetails();
+  let qty = parseInt(details.quantity);
+  if (isNaN(qty) || qty <= 0) {
+    alert("Please enter a valid number of cubes.");
+    return;
+  }
+  let [length, height, width] = details.size.split("x").map(s => s.trim());
+  if (!length) length = "";
+  if (!height) height = "";
+  if (!width) width = "";
+  const headers = [["SR.NO", "LENGTH", "HEIGHT", "WIDTH"]];
+  const allRows = [];
+  for (let i = 1; i <= qty; i++) {
+    allRows.push([i, length, height, width]);
+  }
+  const pageCount = Math.ceil(allRows.length / 10);
+  for (let page = 0; page < pageCount; page++) {
+    if (page > 0) doc.addPage();
+    let pageRows = allRows.slice(page * 10, page * 10 + 10);
+    let refNo = incrementCertificateNumber(details.certificateNumber, page);
+    let pageDetails = { ...details, certificateNumber: refNo };
+    let tableY = drawHeader(doc, pageDetails, 50, false);
+    doc.autoTable({
+      head: headers,
+      body: pageRows,
+      startY: tableY + 1,
+      styles: {
+        fontSize: 12,
+        lineColor: [0, 0, 0],
+        textColor: [0, 0, 0],
+        lineWidth: 0.2,
+        halign: 'center',
+        valign: 'middle'
+      },
+      headStyles: {
+        fontSize: 15,
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        lineColor: [0, 0, 0],
+        lineWidth: 0.2,
+        halign: 'center',
+        valign: 'middle'
+      },
+      alternateRowStyles: {
+        fillColor: [255, 255, 255]
+      }
+    });
+    let tableEndY = doc.autoTable.previous.finalY;
+    doc.setFontSize(12);
+    doc.text("CALIBRATED BY: YOGESH B JOSHI", 14, tableEndY + 10);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.text("FOR, SHREEJI INSTRUMENTS", 145, 230);
+    doc.text("PROPRIETOR", 170, 245);
+  }
+  const pdfBlob = doc.output('blob');
+  const pdfURL = URL.createObjectURL(pdfBlob);
+  const printWindow = window.open(pdfURL, '_blank');
+  if (printWindow) {
+    printWindow.onload = function () { printWindow.print(); };
+  }
+}
+async function sharePDF() {
+  if (!document.getElementById("calibrationForm").reportValidity()) return;
+  await prepareImages();
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const details = getFormDetails();
+  addCertificateDetails(doc, details);
+  const pdfBlob = doc.output('blob');
+  const pdfFile = new File([pdfBlob], "CubeMould_Certificate.pdf", { type: "application/pdf" });
+  if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+    try {
+      await navigator.share({
+        files: [pdfFile],
+        title: 'Cube Mould Calibration Certificate',
+        text: 'Here is your Cube Mould calibration certificate PDF.'
+      });
+    } catch (err) {
+      alert('Sharing cancelled or not supported.');
+    }
+  } else {
+    alert('Web Share API not supported or file sharing not available in your browser.');
+  }
+}
+  </script>
+</body>
+</html>

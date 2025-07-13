@@ -4,126 +4,47 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="img/png" href="logo.png" />
+  <link rel="stylesheet"  href="general.css" />
   <title>CTM Calibration</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin: 0;
-    }
-    nav {
-      background-color: #00796b;
-      width: 95%;
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    nav h1 {
-      color: white;
-      margin: 0;
-    }
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 15px;
-      padding: 0;
-      margin: 0;
-    }
-    nav ul li {
-      display: inline;
-    }
-    nav ul li a {
-      text-decoration: none;
-      color: white;
-      font-weight: bold;
-      transition: color 0.3s ease;
-    }
-    nav ul li a:hover {
-      color: #ffccbc;
-    }
-    .container {
-      background-color: white;
-      padding: 20px;
-      margin: 20px 0;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      max-width: 800px;
-      width: 100%;
-    }
-    h2.centered {
-      text-align: center;
-      font-size: 24px;
-      margin-bottom: 20px;
-      color: #00796b;
-    }
-    .date{
-            display: inline-flex;
-            gap: 100px;
-    }
-    .date .title_input_pair{
-            display: inline;
-            
-    }
-    .title_input_pair {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 15px;
-    }
-    label {
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-    input, select, textarea {
-      width: 97%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 16px;
-      margin-bottom: 10px;
-    }
-    .READING-container {
-      /* display: flex; */
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-    .READING-container .title_input_pair {
-      flex: 1  calc(50% - 15px);
-    }
-    button {
-      width: calc(50% - 10px);
-      padding: 12px;
-      margin: 5px;
-      background-color: #00796b;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-      border-radius: 4px;
-      transition: background-color 0.3s ease;
-    }
-    button:hover {
-      background-color: #45a049;
-    }
-    .button-group {
-      display: flex;
-      justify-content: space-between;
-    }
-  </style>
 </head>
 <body>
-  <nav>
-    <h1 style="color: white;">SHREEJI INSTRUMENTS</h1>
+    <nav>
+    <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
+      <img src="https://github.com/JoshiRudra-devop/shreeji-instruments/blob/main/logo.png?raw=true" alt="Company Logo" style="width: 40px; border-radius:30%; height: 40px; margin-right: 10px;">
+      <h1 style="color: white; margin: 0;">SHREEJI INSTRUMENTS</h1>
+    </a>
     <ul>
       <li><a href="index.html">Home</a></li>
-      <li><a href="#">About</a></li>
-      <li><a href="#">Contact</a></li>
+      <li><a href="#footer">About</a></li>
+      <li><a href="contactUs.html">Contact Us</a></li>
     </ul>
   </nav>
+  <button class="back-button" onclick="goBackOrPromptSave()">← Back</button>
+  <button class="dock-toggle" onclick="toggleDock()">☰ Actions</button>
+  <div class="side-dock" id="sideDock">
+    <h3>Actions</h3>
+    <button class="dock-button" type="button" onclick="preview()">
+      📋 Preview Certificate
+    </button>
+    <button class="dock-button" type="button" onclick="generatePDF()">
+      📄 Download with Letterhead
+    </button>
+    <button class="dock-button" type="button" onclick="generatePDFWithoutLetterpad()">
+      📝 Download without Letterhead
+    </button>
+    <button class="dock-button" type="button" onclick="printBlankCertificate()">
+      🖨️ Print without Letterhead
+    </button>
+    <button class="dock-button sticker-btn" type="button" onclick="generateInfoSticker()">
+      🏷️ Generate Info Sticker
+    </button>
+    <button class="dock-button" id="downloadStickerBtn" type="button" onclick="downloadSticker()" style="display: none;">
+      ⬇️ Download Sticker
+    </button>
+    <button class="dock-button" type="button" onclick="sharePDF()">
+      📤 Share PDF (With Letterhead)
+    </button>
+  </div>
   <div class="container">
     <h2 class="centered">CUBE TESTING MACHINE CALIBRATION CERTIFICATE</h2>
     <form id="calibrationForm">
@@ -134,7 +55,7 @@
       <div class="date">
         <div class="title_input_pair">
             <label for="calibrationDate">Date of Calibration:</label>
-            <input type="date" id="calibrationDate" required>
+            <input type="date" id="calibrationDate" onchange="calculateNextDate()" required>
         </div>
         <div class="title_input_pair">
             <label for="nextCalibrationDate">Next Suggested Date:</label>
@@ -148,8 +69,8 @@
       <div class="title_input_pair">
         <label for="operated">Type of Machine:</label>
         <select  id="operated">
-          <option value="Electrical Operated">Electrical Operated</option>
-          <option value="HAND Operated">HAND Operated</option>
+          <option value="ELECTRICAL OPERATED">Electrical Operated</option>
+          <option value="HAND OPERATED">HAND Operated</option>
         </select>
       </div>
       <div class="title_input_pair">
@@ -179,7 +100,6 @@
           <option value="">SELECT PROVIRING</option>
           <option value='1000KN'>1000 KN </option>
           <option value='2000KN'>2000 KN</option>
-          <!-- <option value='3000KN'>3000 KN</option> -->
         </select>
       </div>  
       <div class="READING-container">
@@ -268,584 +188,450 @@
                 </div>
             </div>
       </div>      
-      <div class="form-actions button-group">
-        <button type="button" onclick="showpreview()">Show preview</button>
-        <button type="button" onclick="generatePDF()">Generate Certificate</button>
-        <button type="button" onclick="generatePDFWithoutLetterpad()">Generate Certificate without Letterhead</button>
+      <div class="unsaved-reminder" id="unsavedReminder">
+        <span>⚠️ Please save your certificate before leaving this page.</span>
       </div>
+      <div class="sticker-section">
+        <div class="sticker-preview-container">
+          <h3 style="color: #00796b; margin-top: 0;">Info Sticker Preview</h3>
+          <iframe id="stickerPreviewFrame"></iframe>
+        </div>
+      </div>
+      
     </form>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script>
-  function showInputBoxes() {
-            var option = document.getElementById("ring").value;
-            var option1Inputs = document.getElementById("reading1000");
-            var option2Inputs = document.getElementById("reading2000");
 
-            option1Inputs.style.display = "none";
-            option2Inputs.style.display = "none";
+<script>
+ let stickerPdfBlob = null;
+let pdfSaved = false;
 
-            if (option === "1000KN") {
-                option1Inputs.style.display = "flex";
-            } else if (option === "2000KN") {
-                option2Inputs.style.display = "flex";
-            }
-        }
-    
-  async function showpreview() {
-      if (!document.getElementById("calibrationForm").reportValidity()) {
-        return;
-      }
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-
-      const certificateNumber = document.getElementById("certificateNumber").value;
-      const calibrationDateRaw = document.getElementById("calibrationDate").value;
-      const calibrationDate = calibrationDateRaw.split("-").reverse().join("/");
-      const siteLocation = document.getElementById("siteLocation").value;
-      const partyName = document.getElementById("partyName").value;
-      const operated = document.getElementById("operated").value;
-      const make = document.getElementById("make").value;
-      const ring = document.getElementById("ring").value;
-      const serialNo = document.getElementById("serialNo").value;
-      const capacity = document.getElementById("capacity").value;
-      const nextCalibrationDateRaw = document.getElementById("nextCalibrationDate").value;
-      const nextCalibrationDate = nextCalibrationDateRaw.split("-").reverse().join("/");
-
-      const inputs1000 = [];
-      for (let i = 1; i <= 10; i++) {
-        inputs1000.push(document.getElementById(`i${i}`).value);
-      }
-      const inputs2000 = [];
-      for (let i = 1; i <= 10; i++) {
-        inputs2000.push(document.getElementById(`i2${i}`).value);
-      }
-
-      doc.setFont("Cloister Black Font", "bold");
-      doc.setFontSize(25);
-      doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, 50, { align: "center" });
-      doc.setFontSize(10);
-
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(12);
-      doc.text(`Date:-    ${calibrationDate}`, 140, 60);
-      doc.text(`REF No      :-    ${certificateNumber}`, 14, 60);
-      doc.text(`Name of Party       :-    ${partyName}`, 14, 70);
-      doc.text(`Instrument name  :-    CUBE TESTING MACHINE(${operated})`, 14, 80);
-      doc.text(`Capacity  / MAKE  :-    ${capacity}  /  ${make}`, 14, 90);
-      doc.text(`Serial No                :-    ${serialNo}`, 14, 100);
-      doc.text(`Next Due Date:-    ${nextCalibrationDate}`, 140, 100);
-      doc.text(`Site Location         :-    ${siteLocation}`, 14, 110); 
-
-      doc.setFontSize(10);
-      doc.setFont("helvetica", "bold");
-      let RING=String(ring);
-      console.log(typeof(ring));
-      // if(RING<="1000KN"){
-      //   const container = document.getElementById("1000reading");
-      //           container.style.display = container.style.display === 'block' ? 'none' : 'block';
-      // }
-      if(RING==="1000KN"){
-        doc.text(`CALIBRATION INSTRUMENT 1000KN`, 14, 120);  
-      doc.text(`PROVING RING NO:1000KN 065 IS 4169:2014`, 14, 125);  
-      doc.text(`CALIBRATED BY : NATIONAL COUNCIL FOR CEMENT AND BUILDING MATERIALS`, 14, 130);  
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(11);
-      const startX = 13;
-      const startY = 142;
-      const cellWidth = 30;
-      const cellHeight = 7;
-
-      doc.text(`Divisions`, 18, 141);
-      doc.text(`KN`, 174, 141);
-
-      const fixedTexts = ["Deflection In", "LOAD IN KN", "1st set in KN", "2nd set in KN", "3rd set in KN", "AVERAGE in"];
-
-      for (let k = 0; k < 6; k++) {
-        const x = startX + k * cellWidth;
-        doc.rect(x, 132, cellWidth, 10);
-        doc.text(fixedTexts[k], x + 2, 137);
-      }
-
-      const fixedValuesColumn1 = ["79.1", "155.2", "232.3", "308.1", "384.4", "460.1","536.7", "613.4", "689.7", "766.1"];
-      const fixedValuesColumn2 = ["100", "200", "300", "400", "5000", "600", "700", "800", "900", "1000"];
-
-      for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < 6; j++) {
-          const x = startX + j * cellWidth;
-          const y = startY + i * cellHeight;
-          doc.rect(x, y, cellWidth, cellHeight);
-
-          let textValue = "";
-          if (j === 0) textValue = fixedValuesColumn1[i];
-          else if (j === 1) textValue = fixedValuesColumn2[i];
-          else textValue = inputs1000[i];
-
-          // Centering the text horizontally within the cell
-          const textWidth = doc.getTextWidth(textValue); // Get the width of the text
-          const centeredX = x + (cellWidth - textWidth) / 2; // Calculate centered X position
-          doc.text(textValue, centeredX, y + 6); // Draw the text centered
-        }
-      }
-      }
-      else if(RING==="2000KN"){
-      doc.text(`CALIBRATION INSTRUMENT 2000KN`, 14, 120);  
-      doc.text(`PROVING RING NO:2000KN 094 IS 4169:2014`, 14, 125);  
-      doc.text(`CALIBRATED BY : NATIONAL COUNCIL FOR CEMENT AND BUILDING MATERIALS`, 14, 130);  
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(11);
-      const startX = 13;
-      const startY = 142;
-      const cellWidth = 30;
-      const cellHeight = 7;
-
-      doc.text(`Divisions`, 18, 141);
-      doc.text(`KN`, 174, 141);
-
-      const fixedTexts = ["Deflection In", "LOAD IN KN", "1st set in KN", "2nd set in KN", "3rd set in KN", "AVERAGE in"];
-
-      for (let k = 0; k < 6; k++) {
-        const x = startX + k * cellWidth;
-        doc.rect(x, 132, cellWidth, 10);
-        doc.text(fixedTexts[k], x + 2, 137);
-      }
-
-      const fixedValuesColumn1 = ["84.1", "168.6", "254.7", "342.1", "429.1", "513.9", "600.9", "689.2", "776.7", "865.8"];
-      const fixedValuesColumn2 = ["200", "400", "600", "800", "1000", "1200", "1400", "1600", "1800", "2000"];
-
-      for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < 6; j++) {
-          const x = startX + j * cellWidth;
-          const y = startY + i * cellHeight;
-          doc.rect(x, y, cellWidth, cellHeight);
-
-          let textValue = "";
-          if (j === 0) textValue = fixedValuesColumn1[i];
-          else if (j === 1) textValue = fixedValuesColumn2[i];
-          else textValue = inputs2000[i];
-
-          // Centering the text horizontally within the cell
-          const textWidth = doc.getTextWidth(textValue); // Get the width of the text
-          const centeredX = x + (cellWidth - textWidth) / 2; // Calculate centered X position
-          doc.text(textValue, centeredX, y + 6); // Draw the text centered
-        }
-      }
-      }
-      else if(ring.value=="3000KN"){
-        alert("THIS OPTION IS NOT AVAILABLE");
-        return;
-      }
-      else{
-        console.log(ring);
-        alert("Select a appropreat proviring");
-        return;
-      }
-      doc.text(`Calibration By      :-   YOGESH BHAI`, 14, 225); 
-      doc.text("FOR, Shreeji Instruments", 145, 230);
-      doc.text("Proprietor", 170, 245);
-
-      const img = new Image();
-      img.src = 'footer.jpeg';
-      doc.addImage(img, 'PNG', 0, 255, 210, 27);
-     
-      const img3 = new Image();
-      img.src = 'sign.jpeg';
-      doc.addImage(img, 'PNG', 160, 232, 40, 10);
-
-      const img1 = new Image();
-      img.src = 'stamp.jpeg';
-      doc.addImage(img, 'PNG', 100, 215, 40, 35);
-
-      const img2 = new Image();
-      img.src = 'header.jpeg';
-      doc.addImage(img, 'PNG', 3, 3, 210, 30);
-
-
-
-            // Generate preview
-      const pdfBlob = doc.output('blob');
-      const pdfURL = URL.createObjectURL(pdfBlob);
-      const previewFrame = document.createElement('iframe');
-      previewFrame.style.width = "100%";
-      previewFrame.style.height = "600px";
-      previewFrame.src = pdfURL;
-
-      // Clear previous preview and add new one
-      const container = document.querySelector('.container');
-      const existingPreview = document.querySelector('iframe');
-      if (existingPreview) container.removeChild(existingPreview);
-      container.appendChild(previewFrame);
-
+function updateUnsavedReminder() {
+  const reminder = document.getElementById('unsavedReminder');
+  if (!pdfSaved) {
+    reminder.style.display = 'block';
+  } else {
+    reminder.style.display = 'none';
+  }
 }
 
-  async function generatePDF() {
-        {
-      if (!document.getElementById("calibrationForm").reportValidity()) {
-        return;
-      }
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll("#calibrationForm input, #calibrationForm select").forEach(input => {
+    input.addEventListener('input', () => {
+      pdfSaved = false;
+      updateUnsavedReminder();
+    });
+  });
+  updateUnsavedReminder();
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('calibrationDate').value = today;
+  calculateNextDate();
+});
 
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
+window.onbeforeunload = function(e) {
+  if (!pdfSaved) {
+    e.preventDefault();
+    e.returnValue = 'You have unsaved changes. Please save your calibration certificate before leaving!';
+    return e.returnValue;
+  }
+};
 
-      
+function goBackOrPromptSave() {
+  if (!pdfSaved) {
+    updateUnsavedReminder();
+    if (confirm("⚠️ You have unsaved changes! Please save your calibration certificate before leaving.\n\nDo you want to save now?")) {
+      generatePDF();
+    }
+  } else {
+    window.history.back();
+  }
+}
 
-      const certificateNumber = document.getElementById("certificateNumber").value;
-      const calibrationDateRaw = document.getElementById("calibrationDate").value;
-      const calibrationDate = calibrationDateRaw.split("-").reverse().join("/");
-      const siteLocation = document.getElementById("siteLocation").value;
-      const partyName = document.getElementById("partyName").value;
-      const operated = document.getElementById("operated").value;
-      const ring = document.getElementById("ring").value;
-      const make = document.getElementById("make").value;
-      const serialNo = document.getElementById("serialNo").value;
-      const capacity = document.getElementById("capacity").value;
-      const nextCalibrationDateRaw = document.getElementById("nextCalibrationDate").value;
-      const nextCalibrationDate = nextCalibrationDateRaw.split("-").reverse().join("/");
-      // const personResponsible = document.getElementById("personResponsible").value;
+function toggleDock() {
+  const dock = document.getElementById('sideDock');
+  dock.classList.toggle('open');
+}
 
-      const inputs1000 = [];
-      for (let i = 1; i <= 10; i++) {
-        inputs1000.push(document.getElementById(`i${i}`).value);
-      }
-      const inputs2000 = [];
-      for (let i = 1; i <= 10; i++) {
-        inputs2000.push(document.getElementById(`i2${i}`).value);
-      }
+function isMobile() {
+  return /Mobi|Android/i.test(navigator.userAgent);
+}
 
+async function savePDFWithLocation(pdfDocument, defaultFileName) {
+  try {
+    if (window.showSaveFilePicker && !isMobile()) {
+      const fileHandle = await window.showSaveFilePicker({
+        suggestedName: defaultFileName,
+        types: [
+          {
+            description: 'PDF Files',
+            accept: { 'application/pdf': ['.pdf'] },
+          },
+        ],
+      });
+      const writableStream = await fileHandle.createWritable();
+      await writableStream.write(pdfDocument);
+      await writableStream.close();
+    } else {
+      const url = URL.createObjectURL(pdfDocument);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = defaultFileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(url), 100);
+    }
+    pdfSaved = true;
+    updateUnsavedReminder();
+    alert('PDF saved successfully!');
+  } catch (error) {
+    console.error('Error saving PDF:', error);
+  }
+}
 
-      doc.setFont("Cloister Black Font", "bold");
-      doc.setFontSize(25);
-      doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, 50, { align: "center" });
-      doc.setFontSize(10);
+function calculateNextDate() {
+  const calibrationDateInput = document.getElementById('calibrationDate');
+  const nextDateInput = document.getElementById('nextCalibrationDate');
+  const calibrationDate = new Date(calibrationDateInput.value);
+  if (!isNaN(calibrationDate)) {
+    const nextYearDate = new Date(calibrationDate);
+    nextYearDate.setFullYear(nextYearDate.getFullYear() + 1);
+    nextYearDate.setDate(nextYearDate.getDate() - 1);
+    const formattedDate = nextYearDate.toISOString().split('T')[0];
+    nextDateInput.value = formattedDate;
+  }
+}
 
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(12);
-      doc.text(`Date:-    ${calibrationDate}`, 140, 60);
-      doc.text(`REF No      :-    ${certificateNumber}`, 14, 60);
-      doc.text(`Name of Party      :-    ${partyName}`, 14, 70);
-      doc.text(`Instrument name :-    CUBE TESTING MACHINE(${operated})`, 14, 80);
-      doc.text(`Capacity  / MAKE  :-    ${capacity}  /  ${make}`, 14, 90);
-      doc.text(`Serial No                :-    ${serialNo}`, 14, 100);
-      doc.text(`Next Due Date:-    ${nextCalibrationDate}`, 140, 100);
-      doc.text(`Site Location         :-    ${siteLocation}`, 14, 110); 
-
-      doc.setFontSize(10);
-      doc.setFont("helvetica", "bold");
-
-      let RING=String(ring);
-      console.log(typeof(ring));
-      if(RING==="1000KN"){
-        doc.text(`CALIBRATION INSTRUMENT 1000KN`, 14, 120);  
-      doc.text(`PROVING RING NO:1000KN 065 IS 4169:2014`, 14, 125);  
-      doc.text(`CALIBRATED BY : NATIONAL COUNCIL FOR CEMENT AND BUILDING MATERIALS`, 14, 130);  
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(11);
-      const startX = 13;
-      const startY = 142;
-      const cellWidth = 30;
-      const cellHeight = 7;
-
-      doc.text(`Divisions`, 18, 141);
-      doc.text(`KN`, 174, 141);
-
-      const fixedTexts = ["Deflection In", "LOAD IN KN", "1st set in KN", "2nd set in KN", "3rd set in KN", "AVERAGE in"];
-
-      for (let k = 0; k < 6; k++) {
-        const x = startX + k * cellWidth;
-        doc.rect(x, 132, cellWidth, 10);
-        doc.text(fixedTexts[k], x + 2, 137);
-      }
-
-      const fixedValuesColumn1 = ["79.1", "155.2", "232.3", "308.1", "384.4", "460.1","536.7", "613.4", "689.7", "766.1"];
-      const fixedValuesColumn2 = ["100", "200", "300", "400", "5000", "600", "700", "800", "900", "1000"];
-
-      for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < 6; j++) {
-          const x = startX + j * cellWidth;
-          const y = startY + i * cellHeight;
-          doc.rect(x, y, cellWidth, cellHeight);
-
-          let textValue = "";
-          if (j === 0) textValue = fixedValuesColumn1[i];
-          else if (j === 1) textValue = fixedValuesColumn2[i];
-          else textValue = inputs1000[i];
-
-          // Centering the text horizontally within the cell
-          const textWidth = doc.getTextWidth(textValue); // Get the width of the text
-          const centeredX = x + (cellWidth - textWidth) / 2; // Calculate centered X position
-          doc.text(textValue, centeredX, y + 6); // Draw the text centered
-        }
-      }
-      }
-      else if(RING==="2000KN"){
-      doc.text(`CALIBRATION INSTRUMENT 2000KN`, 14, 120);  
-      doc.text(`PROVING RING NO:2000KN 094 IS 4169:2014`, 14, 125);  
-      doc.text(`CALIBRATED BY : NATIONAL COUNCIL FOR CEMENT AND BUILDING MATERIALS`, 14, 130);  
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(11);
-      const startX = 13;
-      const startY = 142;
-      const cellWidth = 30;
-      const cellHeight = 7;
-
-      doc.text(`Divisions`, 18, 141);
-      doc.text(`KN`, 174, 141);
-
-      const fixedTexts = ["Deflection In", "LOAD IN KN", "1st set in KN", "2nd set in KN", "3rd set in KN", "AVERAGE in"];
-
-      for (let k = 0; k < 6; k++) {
-        const x = startX + k * cellWidth;
-        doc.rect(x, 132, cellWidth, 10);
-        doc.text(fixedTexts[k], x + 2, 137);
-      }
-
-      const fixedValuesColumn1 = ["84.1", "168.6", "254.7", "342.1", "429.1", "513.9", "600.9", "689.2", "776.7", "865.8"];
-      const fixedValuesColumn2 = ["200", "400", "600", "800", "1000", "1200", "1400", "1600", "1800", "2000"];
-
-      for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < 6; j++) {
-          const x = startX + j * cellWidth;
-          const y = startY + i * cellHeight;
-          doc.rect(x, y, cellWidth, cellHeight);
-
-          let textValue = "";
-          if (j === 0) textValue = fixedValuesColumn1[i];
-          else if (j === 1) textValue = fixedValuesColumn2[i];
-          else textValue = inputs2000[i];
-
-          // Centering the text horizontally within the cell
-          const textWidth = doc.getTextWidth(textValue); // Get the width of the text
-          const centeredX = x + (cellWidth - textWidth) / 2; // Calculate centered X position
-          doc.text(textValue, centeredX, y + 6); // Draw the text centered
-        }
-      }
-      }
-      else if(ring.value=="3000KN"){
-        alert("THIS OPTION IS NOT AVAILABLE");
-        return;
-      }
-      else{
-        console.log(ring);
-        alert("Select a appropreat proviring");
-        return;
-      }
-
-      doc.text(`Calibration By      :-   YOGESHI BHAI`, 14, 225); 
-      doc.text("FOR, Shreeji Instruments", 150, 225);
-
+function showInputBoxes() {
+  var option = document.getElementById("ring").value;
+  var option1Inputs = document.getElementById("reading1000");
+  var option2Inputs = document.getElementById("reading2000");
+  option1Inputs.style.display = "none";
+  option2Inputs.style.display = "none";
+  if (option === "1000KN") {
+      option1Inputs.style.display = "flex";
+  } else if (option === "2000KN") {
+      option2Inputs.style.display = "flex";
+  }
+} 
+  function addImg(doc, details) {
       const img = new Image();
       img.src = 'footer.jpeg';
       doc.addImage(img, 'PNG', 0, 255, 210, 27);
-     
+
       const img3 = new Image();
-      img.src = 'sign.jpeg';
-      doc.addImage(img, 'PNG', 160, 225, 40, 10);
+      img3.src = 'sign.jpeg';
+      doc.addImage(img3, 'PNG', 160, 232, 40, 10);
 
       const img1 = new Image();
-      img.src = 'stamp.jpeg';
-      doc.addImage(img, 'PNG', 110, 215, 40, 35);
+      img1.src = 'stamp.jpeg';
+      doc.addImage(img1, 'PNG', 100, 217, 35, 35);
 
       const img2 = new Image();
-      img.src = 'header.jpeg';
-      doc.addImage(img, 'PNG', 3, 3, 210, 30);
-
-      doc.text("Proprietor", 174, 235);
-
-            // Generate preview
-            const pdfBlob = doc.output('blob');
-      const pdfURL = URL.createObjectURL(pdfBlob);
-      const previewFrame = document.createElement('iframe');
-      previewFrame.style.width = "100%";
-      previewFrame.style.height = "600px";
-      previewFrame.src = pdfURL;
-
-      // Clear previous preview and add new one
-      const container = document.querySelector('.container');
-      const existingPreview = document.querySelector('iframe');
-      if (existingPreview) container.removeChild(existingPreview);
-      container.appendChild(previewFrame);
-
-      
-      doc.save(`${certificateNumber}_Calibration_Certificate.pdf`);
+      img2.src = 'header.jpeg';
+      doc.addImage(img2, 'PNG', 3, 3, 210, 30);
     }
+async function addcertificateDetails(doc, details){
+  const certificateNumber = document.getElementById("certificateNumber").value;
+  const calibrationDateRaw = document.getElementById("calibrationDate").value;
+  const calibrationDate = calibrationDateRaw.split("-").reverse().join("/");
+  const siteLocation = document.getElementById("siteLocation").value;
+  const partyName = document.getElementById("partyName").value;
+  const operated = document.getElementById("operated").value;
+  const make = document.getElementById("make").value;
+  const ring = document.getElementById("ring").value;
+  const serialNo = document.getElementById("serialNo").value;
+  const capacity = document.getElementById("capacity").value;
+  const nextCalibrationDateRaw = document.getElementById("nextCalibrationDate").value;
+  const nextCalibrationDate = nextCalibrationDateRaw.split("-").reverse().join("/");
+
+  const inputs1000 = [];
+  for (let i = 1; i <= 10; i++) {
+    inputs1000.push(document.getElementById(`i${i}`).value);
+  }
+  const inputs2000 = [];
+  for (let i = 1; i <= 10; i++) {
+    inputs2000.push(document.getElementById(`i2${i}`).value);
   }
 
-  async function generatePDFWithoutLetterpad() {
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(25);
+  doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, 50, { align: "center" });
+  doc.setFontSize(10);
 
-        {
-      if (!document.getElementById("calibrationForm").reportValidity()) {
-        return;
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(12);
+  doc.text(`DATE:-${calibrationDate}`, 160, 60);
+  doc.text(`REF NO                       :-    ${certificateNumber}`, 14, 60);
+  doc.text(`NAME OF PARTY       :-    ${partyName}`, 14, 70);
+  doc.text(`EQUIPMENT NAME    :-    CUBE TESTING MACHINE ( ${operated} )`, 14, 80);
+  doc.text(`CAPACITY  / MAKE    :-    ${capacity}  /  ${make}`, 14, 90);
+  doc.text(`SERIAL NO                  :-    ${serialNo}`, 14, 100);
+  doc.text(`NEXT DUE DATE:-${nextCalibrationDate}`, 140, 100);
+  doc.text(`SITE LOCATION         :-    ${siteLocation}`, 14, 110); 
+
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "bold");
+  let RING=String(ring);
+
+  if(RING==="1000KN"){
+    doc.text(`CALIBRATION INSTRUMENT 1000KN`, 14, 120);  
+    doc.text(`PROVING RING NO:1000KN 065 IS 4169:2014`, 14, 125);  
+    doc.text(`CALIBRATED BY : NATIONAL COUNCIL FOR CEMENT AND BUILDING MATERIALS`, 14, 130);  
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+    const startX = 13;
+    const startY = 142;
+    const cellWidth = 30;
+    const cellHeight = 7;
+
+    doc.text(`IN DIVISIONS`, 16, 141);
+    doc.text(`KN`, 174, 141);
+
+    const fixedTexts = ["DEFLECTION", "LOAD IN KN", "1st SET IN KN", "2nd SET IN KN", "3rd SET IN KN", "AVERAGE IN"];
+
+    for (let k = 0; k < 6; k++) {
+      const x = startX + k * cellWidth;
+      doc.rect(x, 132, cellWidth, 10);
+      doc.text(fixedTexts[k], x + 2, 137);
+    }
+
+    const fixedValuesColumn1 = ["79.1", "155.2", "232.3", "308.1", "384.4", "460.1","536.7", "613.4", "689.7", "766.1"];
+    const fixedValuesColumn2 = ["100", "200", "300", "400", "500", "600", "700", "800", "900", "1000"];
+
+    for (let i = 0; i < 10; i++) {
+      for (let j = 0; j < 6; j++) {
+        const x = startX + j * cellWidth;
+        const y = startY + i * cellHeight;
+        doc.rect(x, y, cellWidth, cellHeight);
+
+        let textValue = "";
+        if (j === 0) textValue = fixedValuesColumn1[i];
+        else if (j === 1) textValue = fixedValuesColumn2[i];
+        else textValue = inputs1000[i];
+
+        const textWidth = doc.getTextWidth(textValue);
+        const centeredX = x + (cellWidth - textWidth) / 2;
+        doc.text(textValue, centeredX, y + 6);
       }
-
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-
-      
-
-      const certificateNumber = document.getElementById("certificateNumber").value;
-      const calibrationDateRaw = document.getElementById("calibrationDate").value;
-      const calibrationDate = calibrationDateRaw.split("-").reverse().join("/");
-      const siteLocation = document.getElementById("siteLocation").value;
-      const partyName = document.getElementById("partyName").value;
-      const operated = document.getElementById("operated").value;
-      const ring = document.getElementById("ring").value;
-      const make = document.getElementById("make").value;
-      const serialNo = document.getElementById("serialNo").value;
-      const capacity = document.getElementById("capacity").value;
-      const nextCalibrationDateRaw = document.getElementById("nextCalibrationDate").value;
-      const nextCalibrationDate = nextCalibrationDateRaw.split("-").reverse().join("/");
-      // const personResponsible = document.getElementById("personResponsible").value;
-
-      const inputs1000 = [];
-      for (let i = 1; i <= 10; i++) {
-        inputs1000.push(document.getElementById(`i${i}`).value);
-      }
-      const inputs2000 = [];
-      for (let i = 1; i <= 10; i++) {
-        inputs2000.push(document.getElementById(`i2${i}`).value);
-      }
-
-
-      doc.setFont("Cloister Black Font", "bold");
-      doc.setFontSize(25);
-      doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, 50, { align: "center" });
-      doc.setFontSize(10);
-
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(12);
-      doc.text(`Date:-    ${calibrationDate}`, 140, 60);
-      doc.text(`REF No      :-    SI-${certificateNumber}`, 14, 60);
-      doc.text(`Name of Party      :-    ${partyName}`, 14, 70);
-      doc.text(`Instrument name :-    CUBE TESTING MACHINE(${operated})`, 14, 80);
-      doc.text(`Capacity  / MAKE  :-    ${capacity}  /  ${make}`, 14, 90);
-      doc.text(`Serial No                :-    ${serialNo}`, 14, 100);
-      doc.text(`Next Due Date:-    ${nextCalibrationDate}`, 140, 100);
-      doc.text(`Site Location         :-    ${siteLocation}`, 14, 110); 
-
-      doc.setFontSize(10);
-      doc.setFont("helvetica", "bold");
-
-      let RING=String(ring);
-      console.log(typeof(ring));
-      if(RING==="1000KN"){
-        doc.text(`CALIBRATION INSTRUMENT 1000KN`, 14, 120);  
-      doc.text(`PROVING RING NO:1000KN 065 IS 4169:2014`, 14, 125);  
-      doc.text(`CALIBRATED BY : NATIONAL COUNCIL FOR CEMENT AND BUILDING MATERIALS`, 14, 130);  
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(11);
-      const startX = 13;
-      const startY = 142;
-      const cellWidth = 30;
-      const cellHeight = 7;
-
-      doc.text(`Divisions`, 18, 141);
-      doc.text(`KN`, 174, 141);
-
-      const fixedTexts = ["Deflection In", "LOAD IN KN", "1st set in KN", "2nd set in KN", "3rd set in KN", "AVERAGE in"];
-
-      for (let k = 0; k < 6; k++) {
-        const x = startX + k * cellWidth;
-        doc.rect(x, 132, cellWidth, 10);
-        doc.text(fixedTexts[k], x + 2, 137);
-      }
-
-      const fixedValuesColumn1 = ["79.1", "155.2", "232.3", "308.1", "384.4", "460.1","536.7", "613.4", "689.7", "766.1"];
-      const fixedValuesColumn2 = ["100", "200", "300", "400", "5000", "600", "700", "800", "900", "1000"];
-
-      for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < 6; j++) {
-          const x = startX + j * cellWidth;
-          const y = startY + i * cellHeight;
-          doc.rect(x, y, cellWidth, cellHeight);
-
-          let textValue = "";
-          if (j === 0) textValue = fixedValuesColumn1[i];
-          else if (j === 1) textValue = fixedValuesColumn2[i];
-          else textValue = inputs1000[i];
-
-          // Centering the text horizontally within the cell
-          const textWidth = doc.getTextWidth(textValue); // Get the width of the text
-          const centeredX = x + (cellWidth - textWidth) / 2; // Calculate centered X position
-          doc.text(textValue, centeredX, y + 6); // Draw the text centered
-        }
-      }
-      }
-      else if(RING==="2000KN"){
-      doc.text(`CALIBRATION INSTRUMENT 2000KN`, 14, 120);  
-      doc.text(`PROVING RING NO:2000KN 094 IS 4169:2014`, 14, 125);  
-      doc.text(`CALIBRATED BY : NATIONAL COUNCIL FOR CEMENT AND BUILDING MATERIALS`, 14, 130);  
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(11);
-      const startX = 13;
-      const startY = 142;
-      const cellWidth = 30;
-      const cellHeight = 7;
-
-      doc.text(`Divisions`, 18, 141);
-      doc.text(`KN`, 174, 141);
-
-      const fixedTexts = ["Deflection In", "LOAD IN KN", "1st set in KN", "2nd set in KN", "3rd set in KN", "AVERAGE in"];
-
-      for (let k = 0; k < 6; k++) {
-        const x = startX + k * cellWidth;
-        doc.rect(x, 132, cellWidth, 10);
-        doc.text(fixedTexts[k], x + 2, 137);
-      }
-
-      const fixedValuesColumn1 = ["84.1", "168.6", "254.7", "342.1", "429.1", "513.9", "600.9", "689.2", "776.7", "865.8"];
-      const fixedValuesColumn2 = ["200", "400", "600", "800", "1000", "1200", "1400", "1600", "1800", "2000"];
-
-      for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < 6; j++) {
-          const x = startX + j * cellWidth;
-          const y = startY + i * cellHeight;
-          doc.rect(x, y, cellWidth, cellHeight);
-
-          let textValue = "";
-          if (j === 0) textValue = fixedValuesColumn1[i];
-          else if (j === 1) textValue = fixedValuesColumn2[i];
-          else textValue = inputs2000[i];
-
-          // Centering the text horizontally within the cell
-          const textWidth = doc.getTextWidth(textValue); // Get the width of the text
-          const centeredX = x + (cellWidth - textWidth) / 2; // Calculate centered X position
-          doc.text(textValue, centeredX, y + 6); // Draw the text centered
-        }
-      }
-      }
-      else if(ring.value=="3000KN"){
-        alert("THIS OPTION IS NOT AVAILABLE");
-        return;
-      }
-      else{
-        console.log(ring);
-        alert("Select a appropreat proviring");
-        return;
-      }
-
-      doc.text(`Calibration By      :-   YOGESH BHAI`, 14, 225); 
-      doc.text("FOR, Shreeji Instruments", 150, 225);
-
-      doc.text("Proprietor", 174, 235);
-
-            // Generate preview
-            const pdfBlob = doc.output('blob');
-      const pdfURL = URL.createObjectURL(pdfBlob);
-      const previewFrame = document.createElement('iframe');
-      previewFrame.style.width = "100%";
-      previewFrame.style.height = "600px";
-      previewFrame.src = pdfURL;
-
-      // Clear previous preview and add new one
-      const container = document.querySelector('.container');
-      const existingPreview = document.querySelector('iframe');
-      if (existingPreview) container.removeChild(existingPreview);
-      container.appendChild(previewFrame);
-
-      
-      doc.save(`${certificateNumber}_Calibration_Certificate_Without_Letterhead.pdf`);
     }
   }
-  </script>
+  else if(RING==="2000KN"){
+    doc.text(`CALIBRATION INSTRUMENT 2000KN`, 14, 120);  
+    doc.text(`PROVING RING NO:2000KN 094 IS 4169:2014`, 14, 125);  
+    doc.text(`CALIBRATED BY : NATIONAL COUNCIL FOR CEMENT AND BUILDING MATERIALS`, 14, 130);  
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+    const startX = 13;
+    const startY = 142;
+    const cellWidth = 30;
+    const cellHeight = 7;
+
+    doc.text(`IN DIVISIONS`, 16, 141);
+    doc.text(`KN`, 174, 141);
+
+    const fixedTexts = ["DEFLECTION", "LOAD IN KN", "1st SET IN KN", "2nd SET IN KN", "3rd SET IN KN", "AVERAGE IN"];
+
+    for (let k = 0; k < 6; k++) {
+      const x = startX + k * cellWidth;
+      doc.rect(x, 132, cellWidth, 10);
+      doc.text(fixedTexts[k], x + 2, 137);
+    }
+
+    const fixedValuesColumn1 = ["84.1", "168.6", "254.7", "342.1", "429.1", "513.9", "600.9", "689.2", "776.7", "865.8"];
+    const fixedValuesColumn2 = ["200", "400", "600", "800", "1000", "1200", "1400", "1600", "1800", "2000"];
+
+    for (let i = 0; i < 10; i++) {
+      for (let j = 0; j < 6; j++) {
+        const x = startX + j * cellWidth;
+        const y = startY + i * cellHeight;
+        doc.rect(x, y, cellWidth, cellHeight);
+
+        let textValue = "";
+        if (j === 0) textValue = fixedValuesColumn1[i];
+        else if (j === 1) textValue = fixedValuesColumn2[i];
+        else textValue = inputs2000[i];
+
+        const textWidth = doc.getTextWidth(textValue);
+        const centeredX = x + (cellWidth - textWidth) / 2;
+        doc.text(textValue, centeredX, y + 6);
+      }
+    }
+  }
+  else {
+    alert("Select a appropriate proviring");
+    return;
+  }
+  doc.text(`CALIBRATION BY      :-   YOGESH BHAI`, 14, 225); 
+  doc.setFontSize(12);
+  doc.text("FOR,SHREEJI INSTRUMENTS", 145, 230);
+  doc.text("PROPRIETOR", 170, 245);
+
+}
+async function preview() {
+  if (!document.getElementById("calibrationForm").reportValidity()) return;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  addcertificateDetails(doc);
+   addImg(doc);
+  const pdfBlob = doc.output('blob');
+  const pdfURL = URL.createObjectURL(pdfBlob);
+  const previewFrame = document.createElement('iframe');
+  previewFrame.style.width = "100%";
+  previewFrame.style.height = "600px";
+  previewFrame.src = pdfURL;
+
+  const container = document.querySelector('.container');
+  const existingPreview = document.querySelector('iframe[style*="600px"]');
+  if (existingPreview) container.removeChild(existingPreview);
+  container.appendChild(previewFrame);
+}
+
+async function generatePDF() {
+  if (!document.getElementById("calibrationForm").reportValidity()) return;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  addcertificateDetails(doc);
+   addImg(doc);
+  const pdfBlob = doc.output('blob');
+  await savePDFWithLocation(pdfBlob, `CTM_${document.getElementById("certificateNumber").value}.pdf`);
+}
+
+async function generatePDFWithoutLetterpad() {
+  if (!document.getElementById("calibrationForm").reportValidity()) return;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  addcertificateDetails(doc);
+  const pdfBlob = doc.output('blob');
+  await savePDFWithLocation(pdfBlob, `CTM_${document.getElementById("certificateNumber").value}_no_letterhead.pdf`);
+}
+
+async function printBlankCertificate() {
+  if (!document.getElementById("calibrationForm").reportValidity()) return;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+   addcertificateDetails(doc);
+  const pdfBlob = doc.output('blob');
+  const pdfURL = URL.createObjectURL(pdfBlob);
+  const printWindow = window.open(pdfURL, '_blank');
+  if (printWindow) {
+    printWindow.onload = function () { printWindow.print(); };
+  }
+}
+
+async function generateInfoSticker() {
+  const { jsPDF } = window.jspdf;
+  const width = 40 * 2.83465;
+  const height = 30 * 2.83465;
+  const doc = new jsPDF({
+    orientation: "landscape",
+    unit: "pt",
+    format: [width, height]
+  });
+  const certificateNumber = document.getElementById("certificateNumber").value;
+  const make = document.getElementById("make").value;
+  const calibrationDateRaw = document.getElementById("calibrationDate").value;
+  const calibrationDate = calibrationDateRaw.split("-").reverse().join("/");
+  const nextCalibrationDateRaw = document.getElementById("nextCalibrationDate").value;
+  const nextCalibrationDate = nextCalibrationDateRaw.split("-").reverse().join("/");
+  const serialNo = document.getElementById("serialNo").value;
+  const modelNo = document.getElementById("operated").value;
+  const siteLocation = document.getElementById("siteLocation").value;
+  const primaryBlue = [19, 52, 165];
+  const accentRed = [228, 34, 21];
+  doc.setDrawColor(...primaryBlue);
+  doc.setLineWidth(3);
+  doc.rect(5, 5, width - 10, height - 10);
+  const logoImg = new Image();
+  logoImg.src = "logo.jpeg";
+  await new Promise(resolve => { logoImg.onload = resolve; logoImg.onerror = resolve; });
+  if (logoImg.width) {
+    doc.addImage(logoImg, "JPEG", 20, 7, 5, 7);
+  }
+  doc.setFont("times", "bold");
+  doc.setFontSize(8);
+  doc.setTextColor(...accentRed);
+  doc.text("Shreeji Instruments", 32, 13);
+  doc.setFont("times", "normal");
+  doc.setFontSize(4);
+  doc.setTextColor(...primaryBlue);
+  doc.text("SALES • SERVICE • REPAIRING • CALIBRATIONS", width / 2, 18, { align: "center" });
+  const tableLeft = 15;
+  const tableTop = 20;
+  const tableWidth = width - 30;
+  const rowHeight = 13;
+  const labelWidth = tableWidth * 0.4;
+  const tableData = [
+    { label: "CERT. NO.", value: certificateNumber || "N/A" },
+    { label: "MAKE", value: make || "N/A" },
+    { label: "CALIB. DATE", value: calibrationDate || "N/A" },
+    { label: "NEXT DATE", value: nextCalibrationDate || "N/A" },
+    { label: "SERIAL NO.", value: serialNo || "N/A" },
+    { label: "TYPE", value: modelNo || "N/A" },
+    { label: "SITE", value: siteLocation || "N/A" }
+  ];
+  doc.setDrawColor(0, 0, 0);
+  doc.setLineWidth(1);
+  doc.rect(tableLeft, tableTop, tableWidth, rowHeight * tableData.length);
+  tableData.forEach((row, index) => {
+    const rowY = tableTop + (index * rowHeight);
+    if (index > 0) doc.line(tableLeft, rowY, tableLeft + tableWidth, rowY);
+    doc.line(tableLeft + labelWidth, rowY, tableLeft + labelWidth, rowY + rowHeight);
+    doc.setFillColor(255, 255, 255);
+    doc.rect(tableLeft, rowY, labelWidth, rowHeight, 'F');
+    const labelY = rowY + rowHeight / 2 + 1;
+    const valueY = rowY + rowHeight / 2 + 1;
+    doc.setFont("times", "bold");
+    doc.setFontSize(4.5);
+    doc.setTextColor(...primaryBlue);
+    doc.text(row.label, tableLeft + 4, labelY, { baseline: 'middle' });
+    doc.setFont("times", "normal");
+    doc.setFontSize(4.5);
+    doc.setTextColor(0, 0, 0);
+    doc.text(row.value, tableLeft + labelWidth + 5, valueY, { baseline: 'middle' });
+  });
+  stickerPdfBlob = doc.output('blob');
+  const pdfURL = URL.createObjectURL(stickerPdfBlob);
+  const frame = document.getElementById("stickerPreviewFrame");
+  frame.src = pdfURL;
+  frame.style.display = "block";
+  const dockDownloadBtn = document.querySelector('.side-dock #downloadStickerBtn');
+  dockDownloadBtn.style.display = "block";
+  frame.scrollIntoView({ behavior: 'smooth' });
+}
+
+async function downloadSticker() {
+  if (!stickerPdfBlob) {
+    alert('Please generate the sticker first!');
+    return;
+  }
+  const certificateNumber = document.getElementById("certificateNumber").value;
+  await savePDFWithLocation(stickerPdfBlob, `CTM_Sticker_${certificateNumber}.pdf`);
+}
+
+async function sharePDF() {
+  if (!document.getElementById("calibrationForm").reportValidity()) return;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+   addcertificateDetails(doc);
+   addImg(doc);
+  const pdfBlob = doc.output('blob');
+  const pdfFile = new File([pdfBlob], "certificate.pdf", { type: "application/pdf" });
+  if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+    try {
+      await navigator.share({
+        files: [pdfFile],
+        title: 'Calibration Certificate',
+        text: 'Here is your calibration certificate PDF.'
+      });
+    } catch (err) {
+      alert('Sharing cancelled or not supported.');
+    }
+  } else {
+    alert('Web Share API not supported or file sharing not available in your browser.');
+  }
+}
+      </script>
 </body>
 </html>

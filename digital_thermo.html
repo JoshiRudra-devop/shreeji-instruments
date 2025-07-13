@@ -4,120 +4,47 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="img/png" href="logo.png" />
-  <title>DIGITAL THERMOMETER Calibration</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin: 0;
-    }
-    nav {
-      background-color: #00796b;
-      width: 100%;
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    nav h1 {
-      color: white;
-      margin: 0;
-    }
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 15px;
-      padding: 0;
-      margin: 0;
-    }
-    nav ul li {
-      display: inline;
-    }
-    nav ul li a {
-      text-decoration: none;
-      color: white;
-      font-weight: bold;
-      transition: color 0.3s ease;
-    }
-    nav ul li a:hover {
-      color: #ffccbc;
-    }
-    .container {
-      background-color: white;
-      padding: 20px;
-      margin: 20px 0;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      max-width: 800px;
-      width: 100%;
-    }
-    h2.centered {
-      text-align: center;
-      font-size: 24px;
-      margin-bottom: 20px;
-      color: #00796b;
-    }
-    .date{
-            display: inline-flex;
-            gap: 100px;
-        }
-        .date .title_input_pair{
-            display: inline;
-            
-        }
-
-    .title_input_pair {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 15px;
-    }
-    label {
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-    input, select, textarea {
-      width: 97%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 16px;
-      margin-bottom: 10px;
-    }
-    button {
-      width: calc(50% - 10px);
-      padding: 12px;
-      margin: 5px;
-      background-color: #00796b;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-      border-radius: 4px;
-      transition: background-color 0.3s ease;
-    }
-    button:hover {
-      background-color: #45a049;
-    }
-    .button-group {
-      display: flex;
-      /* flex-wrap: wrap; */
-      justify-content: space-between;
-    }
-  </style>
-</head>
+<link rel="stylesheet"  href="general.css" />
+  <title>DIGITAL THERMOMETER CALIBRATION</title>
+ </head>
 <body>
   <nav>
-    <h1 style="color: white;">Shreeji Instruments</h1>
+    <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
+      <img src="https://github.com/JoshiRudra-devop/shreeji-instruments/blob/main/logo.png?raw=true" alt="Company Logo" style="width: 40px; border-radius:30%; height: 40px; margin-right: 10px;">
+      <h1 style="color: white; margin: 0;">SHREEJI INSTRUMENTS</h1>
+    </a>
     <ul>
       <li><a href="index.html">Home</a></li>
-      <li><a href="#">About</a></li>
-      <li><a href="#">Contact</a></li>
+      <li><a href="#footer">About</a></li>
+      <li><a href="contactUs.html">Contact Us</a></li>
     </ul>
   </nav>
+  <button class="back-button" onclick="goBackOrPromptSave()">← Back</button>
+  <button class="dock-toggle" onclick="toggleDock()">☰ Actions</button>
+  <div class="side-dock" id="sideDock">
+    <h3>Actions</h3>
+    <button class="dock-button" type="button" onclick="preview()">
+      📋 Preview Certificate
+    </button>
+    <button class="dock-button" type="button" onclick="generatePDF()">
+      📄 Download with Letterhead
+    </button>
+    <button class="dock-button" type="button" onclick="generatePDFblankpg()">
+      📝 Download without Letterhead
+    </button>
+    <button class="dock-button" type="button" onclick="printBlankCertificate()">
+      🖨️ Print without Letterhead
+    </button>
+    <button class="dock-button sticker-btn" type="button" onclick="generateInfoSticker()">
+      🏷️ Generate Info Sticker
+    </button>
+    <button class="dock-button" id="downloadStickerBtn" type="button" onclick="downloadSticker()" style="display: none;">
+      ⬇️ Download Sticker
+    </button>
+    <button class="dock-button" type="button" onclick="sharePDF()">
+      📤 Share PDF (With Letterhead)
+    </button>
+  </div>
   <div class="container">
     <h2 class="centered">DIGITAL THERMOMETER CALIBRATION CERTIFICATE</h2>
     <form id="calibrationForm">
@@ -126,14 +53,14 @@
         <input type="text" id="certificateNumber" required>
       </div>
       <div class="date">
-          <div class="title_input_pair">
-              <label for="calibrationDate">Date of Calibration:</label>
-              <input type="date" id="calibrationDate" required>
-          </div>
-          <div class="title_input_pair">
-              <label for="nextCalibrationDate">Next Suggested Date:</label>
-              <input type="date" id="nextCalibrationDate" required>
-          </div>
+        <div class="title_input_pair">
+          <label for="calibrationDate">Date of Calibration:</label>
+          <input type="date" id="calibrationDate" onchange="calculateNextDate()" required>
+        </div>
+        <div class="title_input_pair">
+          <label for="nextCalibrationDate">Next Suggested Date:</label>
+          <input type="date" id="nextCalibrationDate" required>
+        </div>
       </div>
       <div class="title_input_pair">
         <label for="partyName">Name of Party:</label>
@@ -150,89 +77,71 @@
       <div class="title_input_pair">
         <label for="make">Make:</label>
         <input type="text" id="make" required>
-      </div> 
-      <div class="button-group">
-        <button type="button" onclick="preview()">Preview Calibration Certificate</button>
-        <button type="button" onclick="generatePDF()">Download Certificate with Letterhead</button>
-        <button type="button" onclick="generatePDFblankpg()">Download Certificate without Letterhead</button>
+      </div>
+      <div class="unsaved-reminder" id="unsavedReminder">
+        <span>⚠️ Please save your certificate before leaving this page.</span>
+      </div>
+      <div class="sticker-section">
+        <div class="sticker-preview-container">
+          <h3 style="color: #00796b; margin-top: 0;">Info Sticker Preview</h3>
+          <iframe id="stickerPreviewFrame"></iframe>
         </div>
+      </div>
     </form>
   </div>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="general.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
   <script>
-    // Function to fetch form details
+    let stickerPdfBlob = null;
+    
     function getFormDetails() {
       return {
         certificateNumber: document.getElementById("certificateNumber").value,
         calibrationDate: document.getElementById("calibrationDate").value.split("-").reverse().join("/"),
         siteLocation: document.getElementById("siteLocation").value,
         partyName: document.getElementById("partyName").value,
-        // equipmentType: document.getElementById("equipmentType").value,
         make: document.getElementById("make").value,
-        // serialNo: document.getElementById("serialNo").value,
         capacity: document.getElementById("capacity").value,
         nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/"),
       };
     }
-
-    // Function to add common certificate details
-    function addImg(doc, details)
-     {
-      const img = new Image();
-      img.src = 'footer.jpeg';
-      doc.addImage(img, 'PNG', 0, 255, 210, 27);
-     
-      const img3 = new Image();
-      img3.src = 'sign.jpeg';
-      doc.addImage(img3, 'PNG', 160, 232, 40, 10);
-      
-      const img1 = new Image();
-      img1.src = 'stamp.jpeg';
-      doc.addImage(img1, 'PNG', 90, 207, 40, 40);
-
-      const img2 = new Image();
-      img2.src = 'header.jpeg';
-      doc.addImage(img2, 'PNG', 3, 3, 210, 30);
-     }
-
-    function addCertificateDetails(doc, details)
-     {
+    
+    function addCertificateDetails(doc, details) {
+      let Yalign = 50;
       doc.setFont("helvetica", "bold");
       doc.setFontSize(25);
-      doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, 50, { align: 'center' });
+      doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, Yalign, { align: 'center' });
 
-    // Spacing
-    doc.setFontSize(12);
-    doc.text(`Date:-${details.calibrationDate}`, 140, 60);
-    doc.text(`REF NO:- SI-${details.certificateNumber}`, 14, 60);
-    doc.text(`Name of Party               :-   ${details.partyName}`, 14, 70);
-    doc.text(`Name OF Instrument    :-   DIGITAL THERMOMETER`, 14, 80);
-    doc.text(`Capacity & Make          :-   ${details.capacity} & ${details.make}`, 14, 90);
-    doc.text(`Identification No           :-   SI-${details.certificateNumber}`, 14, 100);
-    doc.text(`Next Due Date               :-   ${details.nextCalibrationDate}`, 14, 110);
-    doc.text(`Site Location                 :-   ${details.siteLocation}`, 14, 120);
-    const tableStartY =120;
-const data = [
-    [ "1", " 50"," 50"],
-    [ "2", " 100"," 100" ],
-    [ "3", " 150"," 150" ],
-    [ "4", " 200"," 200" ],
-    [ "5", " 250"," 250" ],
-    [ "6", " 300"," 300" ]
-];
-
-doc.autoTable({
-        head: [['SR.NO', 'STANDARD TEMPERATURE', 'STANDARD TEMPERATURE BY 1 St Bucket “A”']],
+      doc.setFontSize(12);
+      doc.text(`DATE:-${details.calibrationDate}`, 155, Yalign += 10);
+      doc.text(`REF NO                         :-      SI-${details.certificateNumber}`, 14, Yalign);
+      doc.text(`NAME OF PARTY         :-     ${details.partyName}`, 14, Yalign += 10);
+      doc.text(`EQUIPEMENT NAME    :-     DIGITAL THERMOMETER`, 14, Yalign += 10);
+      doc.text(`CAPACITY & MAKE      :-     ${details.capacity} & ${details.make}`, 14, Yalign += 10);
+      doc.text(`SERIAL NO                    :-     SI-${details.certificateNumber}`, 14, Yalign += 10);
+      doc.text(`NEXT DUE DATE           :-     ${details.nextCalibrationDate}`, 14, Yalign += 10);
+      doc.text(`SITE LOCATION            :-     ${details.siteLocation}`, 14, Yalign += 10);
+      const tableStartY = Yalign;
+      const data = [
+        [ "1", " 50"," 50"],
+        [ "2", " 100"," 100" ],
+        [ "3", " 150"," 150" ],
+        [ "4", " 200"," 200" ],
+        [ "5", " 250"," 250" ],
+        [ "6", " 300"," 300" ]
+      ];
+      doc.autoTable({
+        head: [['SR.NO', 'STANDARD TEMPERATURE', 'STANDARD TEMPERATURE BY 1 St BUCKET “A”']],
         body: data,
         startY: tableStartY + 10,
         styles: { 
           fontSize: 12 ,
-          lineColor:[87, 86, 85],
+          textColor:[0,0,0],
+          lineColor:[0,0,0],
           lineWidth: 0.2,
-          halign: 'center',  // horizontal align to center
-          valign: 'middle',  // vertical align to middle
+          halign: 'center',
+          valign: 'middle',
         },
         headStyles: {
           fontSize: 15,
@@ -240,89 +149,146 @@ doc.autoTable({
           textColor: [0,0,0],
           lineColor: [0, 0, 0],
           lineWidth: 0.2,
-          halign: 'center',  // horizontal align to center
-          valign: 'middle',  // vertical align to middle
+          halign: 'center',
+          valign: 'middle',
         },
         alternateRowStyles: {
           fillColor: [255, 255, 255]
         }
-    });
-    let tableStartY2=doc.autoTable.previous.finalY;
-// Add calibrated by
-doc.setFontSize(12);
-doc.text("CALIBRATED BY: YOGESH B JOSHI", 14, tableStartY2+=5);
-
-// Add footer
-doc.setFont("helvetica", "BOLD"); 
+      });
+      let tableStartY2 = doc.autoTable.previous.finalY;
       doc.setFontSize(12); 
-      doc.text("FOR, Shreeji Instruments", 145, 230);
-      doc.text("Proprietor", 170, 245);
-
+      doc.setFont("helvetica", "bold"); 
+      doc.text("CALIBRATED BY       :-     YOGESH B JOSHI", 14, tableStartY2 += 5);
+      doc.text("FOR, SHREEJI INSTRUMENTS", 137, tableStartY2 += 15);
+      doc.text("PROPRIETOR", 170, tableStartY2 += 20);
     }
+    
+    // --- Sticker logic ---
+async function generateInfoSticker() {
+    if (!document.getElementById("calibrationForm").reportValidity()) return;
+    const stickerPreviewFrame = document.getElementById("stickerPreviewFrame");
+    stickerPreviewFrame.style.display = "block";
+    const downloadButton = document.getElementById("downloadStickerBtn");
+    downloadButton.style.display = "block";
+    stickerPdfBlob = null; // Reset previous blob
+    const details = getFormDetails();
+  const { jsPDF } = window.jspdf;
+  // A4 size in points
+  const a4Width = 210 * 2.83465;
+  const a4Height = 297 * 2.83465;
+  // Sticker size
+  const stickerWidth = 60 * 2.83465;
+  const stickerHeight = 30 * 2.83465;
+  // Desired position on A4 (e.g., 5cm left, 10cm top)
+  const posX = 5 * 2.83465;
+  const posY = 10 * 2.83465;
 
-    // Preview the generated certificate
-    async function preview() {
+  const doc = new jsPDF({
+    orientation: "portrait",
+    unit: "pt",
+    format: [a4Width, a4Height]
+  });
+
+  // Draw sticker (same code as in generateInfoSticker, but use posX/posY as offsets)
+  const primaryBlue = [19, 52, 165];
+  const accentRed = [228, 34, 21];
+
+  // Blue border at specific spot
+  doc.setDrawColor(...primaryBlue);
+  doc.setLineWidth(3);
+  doc.rect(posX, posY, stickerWidth, stickerHeight);
+
+  // Logo
+  const logoImg = new Image();
+  logoImg.src = "logo.jpeg";
+  await new Promise(resolve => { logoImg.onload = resolve; logoImg.onerror = resolve; });
+  if (logoImg.width) {
+    doc.addImage(logoImg, "JPEG", posX + 8, posY + 4, 12, 16);
+  }
+
+  // Header text
+  doc.setFont("times", "bold");
+  doc.setFontSize(13);
+  doc.setTextColor(...accentRed);
+  doc.text("Shreeji Instruments", posX + 30, posY + 13);
+
+  doc.setFont("times", "normal");
+  doc.setFontSize(6);
+  doc.setTextColor(...primaryBlue);
+  doc.text("SALES • SERVICE • REPAIRING • CALIBRATIONS", posX + 30, posY + 20, { align: "left" });
+
+  // Table
+  const tableLeft = posX + 5;
+  const tableTop = posY + 22;
+  const tableWidth = stickerWidth - 10;
+  const rowHeight = 14;
+  const labelWidth = tableWidth * 0.4;
+  const tableData = [
+    { label: "INST ID NO.", value: details.certificateNumber || "N/A" },
+    { label: "CAPACITY", value: details.capacity || "N/A" },
+    { label: "CALIB. DATE", value: details.calibrationDate || "N/A" },
+    { label: "NEXT DATE", value: details.nextCalibrationDate || "N/A" },
+  ];
+  doc.setDrawColor(0, 0, 0);
+  doc.setLineWidth(1);
+  doc.rect(tableLeft, tableTop, tableWidth, rowHeight * tableData.length);
+  tableData.forEach((row, index) => {
+    const rowY = tableTop + (index * rowHeight);
+    if (index > 0) doc.line(tableLeft, rowY, tableLeft + tableWidth, rowY);
+    doc.line(tableLeft + labelWidth, rowY, tableLeft + labelWidth, rowY + rowHeight);
+    doc.setFillColor(255, 255, 255);
+    doc.rect(tableLeft, rowY, labelWidth, rowHeight, 'F');
+    const labelY = rowY + rowHeight / 2;
+    const valueY = rowY + rowHeight / 2;
+    doc.setFont("times", "bold");
+    doc.setFontSize(9.4);
+    doc.setTextColor(...primaryBlue);
+    doc.text(row.label, tableLeft + 4, labelY, { baseline: 'middle' });
+    doc.setFont("times", "normal");
+    doc.setFontSize(9);
+    doc.setTextColor(0, 0, 0);
+    doc.text(row.value, tableLeft + labelWidth + 5, valueY, { baseline: 'middle' });
+  });
+
+  // Print window
+  const pdfBlob = doc.output('blob');
+  const pdfURL = URL.createObjectURL(pdfBlob);
+  const printWindow = window.open(pdfURL, '_blank');
+  if (printWindow) {
+    printWindow.onload = function () { printWindow.print(); };
+  }
+}
+async function downloadSticker() {
+      if (!stickerPdfBlob) {
+        alert('Please generate the sticker first!');
+        return;
+      }
+      const details = getFormDetails();
+      const fileName = `InfoSticker_${details.certificateNumber || 'Unknown'}.pdf`;
+      await savePDFWithLocation(stickerPdfBlob, fileName);
+    }
+    async function sharePDF() {
       if (!document.getElementById("calibrationForm").reportValidity()) return;
-
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
-
-      // Fetch form details
-      const details = getFormDetails();
-
-      // Add certificate details using the reusable function
-      addCertificateDetails(doc, details);
-
-      addImg(doc, details);
-
-      // Generate preview
+      addCertificateDetails(doc, getFormDetails());
+      addImg(doc, getFormDetails());
       const pdfBlob = doc.output('blob');
-      const pdfURL = URL.createObjectURL(pdfBlob);
-      const previewFrame = document.createElement('iframe');
-      previewFrame.style.width = "100%";
-      previewFrame.style.height = "600px";
-      previewFrame.src = pdfURL;
-
-      // Clear previous preview and add new one
-      const container = document.querySelector('.container');
-      const existingPreview = document.querySelector('iframe');
-      if (existingPreview) container.removeChild(existingPreview);
-      container.appendChild(previewFrame);
-    }
-
-    // Generate PDF with letterhead
-    async function generatePDF() {
-      if (!document.getElementById("calibrationForm").reportValidity()) return;
-
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-
-      // Fetch form details
-      const details = getFormDetails();
-
-      // Add certificate details using the reusable function
-      addCertificateDetails(doc, details);
-
-      addImg(doc, details);
-      // Save PDF
-      setTimeout(() => doc.save(`${details.certificateNumber}_Calibration_Certificate.pdf`), 500);
-    }
-
-    // Generate PDF without letterhead
-    async function generatePDFblankpg() {
-      if (!document.getElementById("calibrationForm").reportValidity()) return;
-
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-
-      // Fetch form details
-      const details = getFormDetails();
-
-      // Add certificate details using the reusable function
-      addCertificateDetails(doc, details);
-
-      // Save PDF without letterhead/footer
-      setTimeout(() => doc.save(`${details.certificateNumber}_Calibration_Certificate_Without_Letterhead.pdf`), 500);
+      const pdfFile = new File([pdfBlob], "certificate.pdf", { type: "application/pdf" });
+      if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+        try {
+          await navigator.share({
+            files: [pdfFile],
+            title: 'Calibration Certificate',
+            text: 'Here is your calibration certificate PDF.'
+          });
+        } catch (err) {
+          alert('Sharing cancelled or not supported.');
+        }
+      } else {
+        alert('Web Share API not supported or file sharing not available in your browser.');
+      }
     }
   </script>
 </body>
