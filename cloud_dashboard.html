@@ -15,49 +15,147 @@
       margin: 0;
       padding-right: 280px;
     }
-    nav {
-      background-color: #00796b;
+    /* Header and Navigation styling (copied and modified from previous request) */
+    .header-container {
+      background: linear-gradient(45deg, #00796b, #22b55d);
       width: 100%;
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      padding: 20px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       position: fixed;
       top: 0;
       left: 0;
-      z-index: 1000;
+      z-index: 1100;
     }
-    nav h1 {
-      color: white;
-      margin: 0;
-    }
-    nav ul {
-      list-style: none;
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
       display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .logo-section {
+      display: flex;
+      align-items: center;
       gap: 15px;
-      padding: 0;
-      margin: 0;
     }
-    nav ul li {
-      display: inline;
+    .logo-section img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 3px solid white;
     }
-    nav ul li a {
-      text-decoration: none;
+    .company-info h1 {
       color: white;
+      font-size: 2.2em;
+      margin: 0;
       font-weight: bold;
-      transition: color 0.3s ease;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
-    nav ul li a:hover {
-      color: #ffccbc;
+    .company-info p {
+      color: #e0f2f1;
+      font-size: 1.1em;
+      margin: 5px 0 0 0;
+      font-weight: 500;
     }
+    .nav-container {
+      background-color: #00796b;
+      width: 100%;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      top: 100px;
+      left: 0;
+      z-index: 1099;
+    }
+    .nav-content {
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-evenly;
+      border-radius: 0;
+      overflow: hidden;
+    }
+    .nav-tab {
+      width: 350px;
+      flex: 1;
+      padding: 20px;
+      background: none;
+      background-color: linear-gradient(45deg, #22b55d, #00796b);
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      color: WHITE;
+      transition: all 0.3s ease;
+      position: relative;
+      text-align: center;
+    }
+    .nav-tab:hover {
+      background: linear-gradient(45deg, #00796b, #22b55d);
+      color: #495057;
+    }
+    .nav-tab.active {
+      width: 350px;
+      color:#00796b;
+      background: whitesmoke;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+    }
+    .nav-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background:whitesmoke;
+    }
+    .back-button {
+      position: fixed;
+      display: block;
+      top: 170px;
+      right: 20px;
+      padding: 12px 24px;
+      background: linear-gradient(45deg, #00796b, #26a69a);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      z-index: 1000;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .back-button:hover {
+      background: linear-gradient(45deg, #26a69a, #00796b);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+    }
+    .main-header {
+      background:whitesmoke no-repeat center center/cover;
+      height: 100px;
+      margin-top: 170px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #00796b;
+      text-shadow: 2px 2px 8px rgba(143, 141, 141, 0.7);
+      font-size: 32px;
+      font-weight: bold;
+      text-align: center;
+    }
+    @media (max-width: 600px) {
+      .main-header { font-size: 20px; }
+      .header-container, .nav-container { position: static; }
+      .back-button { position: static; margin: 15px 0; }
+    }
+    /* --- Original styles below this line --- */
     .container {
+      align-items: start;
       background-color: white;
       padding: 20px;
-      margin: 100px 0 20px 0;
+      margin: 300px 0 20px 150px ;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      max-width: 1000px;
+      max-width: 1400px;
       width: 100%;
     }
     h2.centered {
@@ -374,7 +472,7 @@
       cursor: pointer;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       transition: all 0.3s;
-      z-index: 1000;
+      z-index: 1002;
     }
     .toggle-btn:hover {
       background: #26a69a;
@@ -414,23 +512,35 @@
     @media (max-width: 768px) {
       .sidebar { width: 100%; right: -100%; }
       .toggle-btn.sidebar-open { right: 20px; }
+      .container { margin: 200px 10px 20px; }
+      .main-header { margin-top: 120px; }
     }
   </style>
 </head>
 <body>
-  <nav>
-    <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
-      <img src="logo.png" alt="Company Logo" style="width: 40px; border-radius:30%; height: 40px; margin-right: 10px;">
-      <h1 style="color: white; margin: 0;">SHREEJI INSTRUMENTS</h1>
-    </a>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="cube_mould_cloud.html">New Certificate</a></li>
-      <li><a href="all_certificates.html">All Certificates</a></li>
-      <li><a href="#footer">About</a></li>
-      <li><a href="contactUs.html">Contact Us</a></li>
-    </ul>
-  </nav>
+  <!-- Header Section -->
+  <div class="header-container">
+    <div class="header-content">
+      <div class="logo-section">
+        <img src="logo.png" alt="Company Logo">
+        <div class="company-info">
+          <h1>SHREEJI INSTRUMENTS</h1>
+          <p>Welcome to Shreeji Instruments - Create Calibration Certificates Easily.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+   <!-- Navigation Section -->
+  <div class="nav-container">
+    <div class="nav-content">
+      <a href="index.html"><button class="nav-tab ">Home</button></a>
+      <a href="#footer"><button class="nav-tab">About</button></a>
+      <a href="cloud_dashboard.html"><button class="nav-tab active">Dashboard</button></a>
+      <a href="contactUs.html"><button class="nav-tab">Contact Us</button></a>
+    </div>
+  </div>
+  <button class="back-button" onclick="window.history.back()">← Back</button>
+  
   <!-- Toggle Button -->
   <button class="toggle-btn" id="toggleSidebar">📊</button>
   <!-- Overlay -->
@@ -486,12 +596,16 @@
         <div class="stat-label">Total Certificates</div>
       </div>
       <div class="stat-item">
-        <div class="stat-number" id="thisMonth">0</div>
-        <div class="stat-label">This Month</div>
+        <div class="stat-number" id="validCerts">0</div>
+        <div class="stat-label">Valid Certificates</div>
       </div>
       <div class="stat-item">
-        <div class="stat-number" id="thisWeek">0</div>
-        <div class="stat-label">This Week</div>
+        <div class="stat-number" id="dueCerts">0</div>
+        <div class="stat-label">Due Soon</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" id="overdueCerts">0</div>
+        <div class="stat-label">Overdue Certificates</div>
       </div>
     </div>
     <!-- Search and Controls -->
@@ -532,6 +646,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+  <!-- The rest of your script remains unchanged -->
   <script>
     // Firebase Configuration
     const firebaseConfig = {
@@ -878,24 +993,51 @@
     }
 
     // Stats
-    function updateStats() {
-      const total = allCertificates.length;
-      const now = new Date();
-      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-      const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay());
-      const thisMonth = allCertificates.filter(cert => {
-        const certDate = cert.createdAt && cert.createdAt.toDate ? cert.createdAt.toDate() : new Date(cert.createdAt);
-        return certDate >= startOfMonth;
-      }).length;
-      const thisWeek = allCertificates.filter(cert => {
-        const certDate = cert.createdAt && cert.createdAt.toDate ? cert.createdAt.toDate() : new Date(cert.createdAt);
-        return certDate >= startOfWeek;
-      }).length;
-      document.getElementById('totalCerts').textContent = total;
-      document.getElementById('thisMonth').textContent = thisMonth;
-      document.getElementById('thisWeek').textContent = thisWeek;
-    }
-    // Search main table
+   async function updateStats()
+ {
+  try {
+    // Fetch all certificates from Firestore
+    const querySnapshot = await db.collection("certificates").get();
+    const total = querySnapshot.size;
+    let valid = 0, dueSoon = 0, overdue = 0;
+    const now = new Date();
+
+    querySnapshot.forEach(doc => {
+      const cert = doc.data();
+      let dueDate;
+      if (cert.nextDueDate) {
+        dueDate = cert.nextDueDate instanceof Date
+          ? cert.nextDueDate
+          : (typeof cert.nextDueDate === 'object' && cert.nextDueDate.toDate)
+              ? cert.nextDueDate.toDate()
+              : new Date(cert.nextDueDate);
+      } else if (cert.validTill) {
+        dueDate = cert.validTill instanceof Date
+          ? cert.validTill
+          : (typeof cert.validTill === 'object' && cert.validTill.toDate)
+              ? cert.validTill.toDate()
+              : new Date(cert.validTill);
+      } else {
+        return;
+      }
+      const daysDiff = (dueDate - now) / (1000 * 60 * 60 * 24);
+      if (dueDate > now && daysDiff > 30) valid++;
+      else if (dueDate > now && daysDiff <= 30) dueSoon++;
+      else if (dueDate < now) overdue++;
+    });
+
+    document.getElementById('totalCerts').textContent = total;
+    document.getElementById('validCerts').textContent = valid;
+    document.getElementById('dueCerts').textContent = dueSoon;
+    document.getElementById('overdueCerts').textContent = overdue;
+  } catch (error) {
+    console.error("Error updating certificate stats:", error);
+    document.getElementById('totalCerts').textContent = 0;
+    document.getElementById('validCerts').textContent = 0;
+    document.getElementById('dueCerts').textContent = 0;
+    document.getElementById('overdueCerts').textContent = 0;
+  }
+ }
     function handleSearch(event) {
       const searchTerm = event.target.value.toLowerCase().trim();
       currentInstrumentFilter = null;
@@ -910,7 +1052,6 @@
       }
       renderCertificates();
     }
-    // PDF, Edit, Delete
     function openPDF(url) {
       if (url) window.open(url, '_blank');
       else alert('PDF not available');
@@ -928,9 +1069,7 @@
       document.getElementById('deleteModal').style.display = 'none';
       deleteDocId = null;
     }
-    // Delete PDF from Cloudinary
     async function deletePDFFromCloudinary(publicId) {
-      // This is a placeholder. In production, do this server-side for security!
       return true;
     }
     async function confirmDelete() {
@@ -965,7 +1104,6 @@
         return null;
       }
     }
-    // Auto-refresh every 1 minutes
     setInterval(fetchCertificates, 1 * 60 * 1000);
   </script>
 </body>
