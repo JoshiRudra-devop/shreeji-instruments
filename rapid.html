@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="img/png" href="logo.png" />
   <link rel="stylesheet" href="general.css" />
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <title>Rapid Moisture Meter Calibration</title>
 </head>
 <body>
@@ -25,6 +27,9 @@
     <h3>Actions</h3>
     <button class="dock-button" type="button" onclick="preview()">
       📋 Preview Certificate
+    </button>
+    <button class="dock-button" type="button" id="uploadBtn">
+      📄 Upload PDF to Cloudinary & Firebase
     </button>
     <button class="dock-button" type="button" onclick="generatePDF()">
       📄 Download with Letterhead
@@ -50,8 +55,9 @@
     <form id="calibrationForm">
       <div class="title_input_pair">
         <label for="certificateNumber">Certificate No:</label>
-        <input type="text" id="certificateNumber" required>
+        <input type="text" class=".error-input" id="certificateNumber" required>
       </div>
+      <div id="certificateNumberError" class="error-message">This certificate number already exists!</div>
       <div class="date">
         <div class="title_input_pair">
           <label for="calibrationDate">Date of Calibration:</label>
@@ -65,6 +71,10 @@
       <div class="title_input_pair">
         <label for="partyName">Name of Party:</label>
         <input type="text" id="partyName" required>
+      </div>
+      <div class="title_input_pair">
+        <label for="instrumentType">Name of Instrument:</label>
+        <input type="text" id="instrumentType" value="RAPID MOISTURE" readonly required>
       </div>
       <div class="title_input_pair">
         <label for="make">Make:</label>
@@ -87,6 +97,19 @@
           <iframe id="stickerPreviewFrame"></iframe>
         </div>
       </div>
+      <div id="customLoaderOverlay" class="custom-loader-overlay">
+        <div class="custom-loader-content" id="customLoaderContent">
+        <div id="loaderSpinner" class="custom-spinner"></div>
+        <div id="loaderTick" class="custom-tick-container" style="display:none;">
+            <svg width="70" height="70" viewBox="0 0 70 70">
+            <circle class="tick-circle" cx="35" cy="35" r="32" fill="none" stroke="#4caf50" stroke-width="5"/>
+            <polyline class="tick-check" points="22,38 32,48 50,28" fill="none" stroke="#4caf50" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <button id="loaderOkkBtn" class="custom-okk-btn">OK</button>
+        </div>
+        <div id="loaderText" class="custom-loader-text"> Uploading PDF to Cloudinary...</div>
+        </div>
+     </div>
     </form>
   </div>
   <script src="general.js"></script>
@@ -102,7 +125,7 @@
         partyName: document.getElementById("partyName").value,
         make: document.getElementById("make").value,
         serialNo: document.getElementById("serialNo").value,
-        // siteLocation: document.getElementById("siteLocation").value,
+        instrumentType:document.getElementById("instrumentType").value ,
         nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/"),
       };
     }
