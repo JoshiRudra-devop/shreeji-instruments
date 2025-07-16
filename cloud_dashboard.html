@@ -618,6 +618,7 @@
         <tr>
           <th>Certificate No.</th>
           <th>Name of Party</th>
+          <th>Instrument Type</th>
           <th>Date Created</th>
           <th>Last Updated</th>
           <th>Actions</th>
@@ -875,40 +876,43 @@
       });
     }
 
-    // Main Table Rendering
-    function renderCertificates() {
-      const tbody = document.getElementById('certTableBody');
-      let backHtml = '';
-      if (currentInstrumentFilter) {
-        backHtml = `<tr><td colspan="5"><button class="refresh-btn" onclick="showInstrumentFilter()">⬅️ Back to Instruments</button></td></tr>`;
-      }
-      if (filteredCertificates.length === 0) {
-        tbody.innerHTML = backHtml + `<tr><td colspan="5" class="no-data-msg">No certificates found.</td></tr>`;
-        return;
-      }
-      let rowsHTML = '';
-      filteredCertificates.forEach(cert => {
-        const createdDate = formatDate(cert.createdAt);
-        const updatedDate = cert.updatedAt ? formatDate(cert.updatedAt) : 'Never';
-        rowsHTML += `
-          <tr>
-            <td><strong>${cert.certificateNumber || 'N/A'}</strong></td>
-            <td>${cert.partyName || 'N/A'}</td>
-            <td class="date-column">${createdDate}</td>
-            <td class="date-column">${updatedDate}</td>
-            <td>
-              <div class="action-buttons">
-                <button class="cert-link-btn" onclick="openPDF('${cert.downloadUrl}')">📄 Open PDF</button>
-                <button class="cert-link-btn edit-btn" onclick="editCertificate('${cert.id}')">✏️ Edit</button>
-                <button class="cert-link-btn delete-btn" onclick="showDeleteModal('${cert.id}', '${cert.certificateNumber}', '${cert.partyName}')">🗑️ Delete</button>
-              </div>
-            </td>
-          </tr>
-        `;
-      });
-      tbody.innerHTML = backHtml + rowsHTML;
-    }
-
+   // Fixed renderCertificates function
+function renderCertificates() {
+  const tbody = document.getElementById('certTableBody');
+  let backHtml = '';
+  if (currentInstrumentFilter) {
+    backHtml = `<tr><td colspan="6"><button class="refresh-btn" onclick="showInstrumentFilter()">⬅️ Back to Instruments</button></td></tr>`;
+  }
+  if (filteredCertificates.length === 0) {
+    tbody.innerHTML = backHtml + `<tr><td colspan="6" class="no-data-msg">No certificates found.</td></tr>`;
+    return;
+  }
+  let rowsHTML = '';
+  filteredCertificates.forEach(cert => {
+    const createdDate = formatDate(cert.createdAt);
+    const updatedDate = cert.updatedAt ? formatDate(cert.updatedAt) : 'Never';
+    // Get instrument type from the certificate data
+    const instrumentType = cert.instrumentType || cert.equipment || 'N/A';
+    
+    rowsHTML += `
+      <tr>
+        <td><strong>${cert.certificateNumber || 'N/A'}</strong></td>
+        <td>${cert.partyName || 'N/A'}</td>
+        <td>${instrumentType}</td>
+        <td class="date-column">${createdDate}</td>
+        <td class="date-column">${updatedDate}</td>
+        <td>
+          <div class="action-buttons">
+            <button class="cert-link-btn" onclick="openPDF('${cert.downloadUrl}')">📄 Open PDF</button>
+            <button class="cert-link-btn edit-btn" onclick="editCertificate('${cert.id}')">✏️ Edit</button>
+            <button class="cert-link-btn delete-btn" onclick="showDeleteModal('${cert.id}', '${cert.certificateNumber}', '${cert.partyName}')">🗑️ Delete</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  });
+  tbody.innerHTML = backHtml + rowsHTML;
+}
     // Sidebar search
     function handleSidebarSearch() {
       const searchTerm = document.getElementById('sidebarSearch').value.toLowerCase();
@@ -993,8 +997,7 @@
     }
 
     // Stats
-   async function updateStats()
- {
+   async function updateStats() {
   try {
     // Fetch all certificates from Firestore
     const querySnapshot = await db.collection("certificates").get();
@@ -1004,41 +1007,59 @@
 
     querySnapshot.forEach(doc => {
       const cert = doc.data();
-      let dueDate;
-      if (cert.nextDueDate) {
-        dueDate = cert.nextDueDate instanceof Date
-          ? cert.nextDueDate
-          : (typeof cert.nextDueDate === 'object' && cert.nextDueDate.toDate)
-              ? cert.nextDueDate.toDate()
-              : new Date(cert.nextDueDate);
-      } else if (cert.validTill) {
-        dueDate = cert.validTill instanceof Date
-          ? cert.validTill
-          : (typeof cert.validTill === 'object' && cert.validTill.toDate)
-              ? cert.validTill.toDate()
-              : new Date(cert.validTill);
+      let generatedDate;
+      
+      // Get the certificate generation date
+      if (cert.createdAt) {
+        generatedDate = cert.createdAt instanceof Date
+          ? cert.createdAt
+          : (typeof cert.createdAt === 'object' && cert.createdAt.toDate)
+              ? cert.createdAt.toDate()
+              : new Date(cert.createdAt);
+      } else if (cert.dateCreated) {
+        generatedDate = cert.dateCreated instanceof Date
+          ? cert.dateCreated
+          : (typeof cert.dateCreated === 'object' && cert.dateCreated.toDate)
+              ? cert.dateCreated.toDate()
+              : new Date(cert.dateCreated);
       } else {
+        // If no generation date is found, skip this certificate
         return;
       }
+
+      // Calculate due date (1 year from generation date)
+      const dueDate = new Date(generatedDate);
+      dueDate.setFullYear(dueDate.getFullYear() + 1);
+
+      // Calculate days difference
       const daysDiff = (dueDate - now) / (1000 * 60 * 60 * 24);
-      if (dueDate > now && daysDiff > 30) valid++;
-      else if (dueDate > now && daysDiff <= 30) dueSoon++;
-      else if (dueDate < now) overdue++;
+
+      // Categorize certificates
+      if (dueDate > now && daysDiff > 30) {
+        valid++; // Valid certificates (more than 30 days until due)
+      } else if (dueDate > now && daysDiff <= 30) {
+        dueSoon++; // Due soon certificates (30 days or less until due)
+      } else if (dueDate <= now) {
+        overdue++; // Overdue certificates (past due date)
+      }
     });
 
+    // Update the display
     document.getElementById('totalCerts').textContent = total;
     document.getElementById('validCerts').textContent = valid;
     document.getElementById('dueCerts').textContent = dueSoon;
     document.getElementById('overdueCerts').textContent = overdue;
+    
   } catch (error) {
     console.error("Error updating certificate stats:", error);
+    // Set all stats to 0 in case of error
     document.getElementById('totalCerts').textContent = 0;
     document.getElementById('validCerts').textContent = 0;
     document.getElementById('dueCerts').textContent = 0;
     document.getElementById('overdueCerts').textContent = 0;
   }
- }
-    function handleSearch(event) {
+}
+function handleSearch(event) {
       const searchTerm = event.target.value.toLowerCase().trim();
       currentInstrumentFilter = null;
       if (searchTerm === '') {
