@@ -60,12 +60,8 @@
     <form id="calibrationForm">
       <div class="title_input_pair">
         <label for="certificateNumber">Certificate No:</label>
-        <div class="certificate-input-container">
-          <input type="text" class="error-input" id="certificateNumber" readonly required>
-          <button type="button" class="auto-generate-btn" id="autoGenerateBtn">
-            🔄 Auto Generate
-          </button>
-        </div>
+        <input type="text" id="certificateNumber" required>
+      </div>
         <div class="certificate-status" id="certificateStatus"></div>
       </div>
       <div id="certificateNumberError" class="error-message">This certificate number already exists!</div>
