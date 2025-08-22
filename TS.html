@@ -112,7 +112,8 @@
     function addCertificateDetails(doc, details) {
       doc.setFont("helvetica", "bold");
       let Yalign=48;
-      
+      const saveentry =`${details.make} ${details.modelNo || "Unknown"} ${details.serialNo || "Unknown"}`;
+
       doc.setTextColor(0, 0, 0);
       doc.setFontSize(15);
       doc.text(`TEST CERTIFICATE FOR`,  doc.internal.pageSize.getWidth() / 2, Yalign,{ align: 'center' });
