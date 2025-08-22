@@ -104,12 +104,15 @@
         serialNo: document.getElementById("serialNo").value,
         modelNo: document.getElementById("modelNo").value,
         nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/"),
+        saveentry: `${document.getElementById("make").value} ${document.getElementById("modelNo").value}  ${document.getElementById("serialNo").value || "Unknown"} `
+
       };
     }
    
     function addCertificateDetails(doc, details) {
       doc.setFont("helvetica", "bold");
       let Yalign=48;
+      
       doc.setTextColor(0, 0, 0);
       doc.setFontSize(15);
       doc.text(`TEST CERTIFICATE FOR`,  doc.internal.pageSize.getWidth() / 2, Yalign,{ align: 'center' });
