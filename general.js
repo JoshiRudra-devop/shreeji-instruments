@@ -82,7 +82,7 @@ async function generatePDF() {
   const pdfBlob = doc.output("blob");
   await savePDFWithLocation(
     pdfBlob,
-    `ElongationGauge_${details.certificateNumber || "Unknown"}.pdf`
+        `${details.saveentry || "Unknown"}.pdf`
   );
 }
 
@@ -95,7 +95,7 @@ async function generatePDFblankpg() {
   const pdfBlob = doc.output("blob");
   await savePDFWithLocation(
     pdfBlob,
-    `ElongationGauge_${details.certificateNumber || "Unknown"}.pdf`
+    `${details.saveentry || "Unknown"}.pdf`
   );
 }
 
@@ -106,7 +106,7 @@ async function sharePDF() {
   addCertificateDetails(doc, getFormDetails());
   addImg(doc, getFormDetails());
   const pdfBlob = doc.output("blob");
-  const pdfFile = new File([pdfBlob], "certificate.pdf", {
+  const pdfFile = new File([pdfBlob], "`${details.saveentry || "Unknown"}.pdf`", {
     type: "application/pdf",
   });
   if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
