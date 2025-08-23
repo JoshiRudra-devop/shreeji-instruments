@@ -106,7 +106,7 @@ async function sharePDF() {
   addCertificateDetails(doc, getFormDetails());
   addImg(doc, getFormDetails());
   const pdfBlob = doc.output("blob");
-  const pdfFile = new File([pdfBlob], "`${details.saveentry || "Unknown"}.pdf`", {
+  const pdfFile = new File([pdfBlob], "`${details.saveentry || "Unknown"}.pdf`"), {
     type: "application/pdf",
   });
   if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
