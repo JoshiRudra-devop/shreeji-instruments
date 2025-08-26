@@ -103,12 +103,13 @@ async function sharePDF() {
   if (!document.getElementById("calibrationForm").reportValidity()) return;
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
+  const details = getFormDetails(); // Add this line
   addCertificateDetails(doc, getFormDetails());
   addImg(doc, getFormDetails());
   const pdfBlob = doc.output("blob");
-  const pdfFile = new File([pdfBlob], "`${details.saveentry || "Unknown"}.pdf`"), {
-    type: "application/pdf",
-  });
+ const pdfFile = new File([pdfBlob], `${details.saveentry || "Unknown"}.pdf`, {
+  type: "application/pdf",
+});
   if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
     try {
       await navigator.share({
