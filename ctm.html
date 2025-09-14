@@ -4,8 +4,262 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="img/png" href="logo.png" />
-  <link rel="stylesheet"  href="general.css" />
   <title>CTM Calibration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+      padding-right: 280px;
+    }
+    nav {
+      background-color: #00796b;
+      width: 100%;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+    }
+    nav h1 {
+      color: white;
+      margin: 0;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+      padding: 0;
+      margin: 0;
+    }
+    nav ul li {
+      display: inline;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+    nav ul li a:hover {
+      color: #ffccbc;
+    }
+    .side-dock {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 260px;
+      height: 100vh;
+      background: linear-gradient(135deg, #00796b, #004d40);
+      box-shadow: -4px 0 15px rgba(0, 0, 0, 0.2);
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      padding: 80px 20px 20px 20px;
+      overflow-y: auto;
+    }
+    .side-dock h3 {
+      color: white;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 18px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+      padding-bottom: 10px;
+    }
+    .dock-button {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 15px;
+      background: linear-gradient(135deg, #26a69a, #00695c);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .dock-button:hover {
+      background: linear-gradient(135deg, #2dd4bf, #0d9488);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+    .dock-button:active {
+      transform: translateY(0);
+    }
+    .dock-button.sticker-btn {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+    }
+    .dock-button.sticker-btn:hover {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    }
+    .back-button {
+      position: fixed;
+      top: 80px;
+      left: 20px;
+      padding: 10px 20px;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      z-index: 1000;
+      transition: background-color 0.3s ease;
+    }
+    .back-button:hover {
+      background-color: #22b55d;
+    }
+    .container {
+      background-color: white;
+      padding: 20px;
+      margin: 100px 0 20px 0;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      width: 100%;
+    }
+    h2.centered {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #00796b;
+    }
+    .date{
+      display: inline-flex;
+      gap: 100px;
+    }
+    .date .title_input_pair{
+      display: inline;
+    }
+    .title_input_pair {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
+    }
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    input, select, textarea {
+      width: 97%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    .READING-container {
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .READING-container .title_input_pair {
+      flex: 1  calc(50% - 15px);
+    }
+    #stickerPreviewFrame {
+      width: 100%;
+      max-width: 400px;
+      height: 300px;
+      border: 2px solid #00796b;
+      margin: 16px auto 0 auto;
+      display: none;
+      border-radius: 8px;
+    }
+    #downloadStickerBtn {
+      display: none;
+      margin: 10px auto;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 200px;
+    }
+    #downloadStickerBtn:hover {
+      background-color: #45a049;
+    }
+    .sticker-section {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .sticker-preview-container {
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    .unsaved-reminder {
+      color: #c0392b;
+      text-align: center;
+      font-weight: bold;
+      margin: 10px 0 0 0;
+      font-size: 16px;
+      display: none;
+    }
+    .button2 {
+      width: calc(50% - 10px);
+      padding: 12px;
+      margin: 5px;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    .button2:hover {
+      background-color: #45a049;
+    }
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+    }
+    @media (max-width: 1200px) {
+      body {
+        padding-right: 0;
+      }
+      .side-dock {
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+      }
+      .side-dock.open {
+        transform: translateX(0);
+      }
+      .dock-toggle {
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        background: #00796b;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        z-index: 1001;
+        display: block;
+      }
+    }
+    @media (min-width: 1201px) {
+      .dock-toggle {
+        display: none;
+      }
+    }
+  </style>
 </head>
 <body>
     <nav>
@@ -23,7 +277,7 @@
   <button class="dock-toggle" onclick="toggleDock()">☰ Actions</button>
   <div class="side-dock" id="sideDock">
     <h3>Actions</h3>
-    <button class="dock-button" type="button" onclick="preview()">
+    <button class="dock-button" type="button" onclick="showpreview()">
       📋 Preview Certificate
     </button>
     <button class="dock-button" type="button" onclick="generatePDF()">
@@ -100,6 +354,7 @@
           <option value="">SELECT PROVIRING</option>
           <option value='1000KN'>1000 KN </option>
           <option value='2000KN'>2000 KN</option>
+          <option value='2000KN new'>2000 KN NEW</option>
         </select>
       </div>  
       <div class="READING-container">
@@ -201,9 +456,10 @@
     </form>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<script>
- let stickerPdfBlob = null;
+  <!-- Ensure libraries are loaded before your script -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    let stickerPdfBlob = null;
 let pdfSaved = false;
 
 function updateUnsavedReminder() {
@@ -310,28 +566,104 @@ function showInputBoxes() {
   option2Inputs.style.display = "none";
   if (option === "1000KN") {
       option1Inputs.style.display = "flex";
-  } else if (option === "2000KN") {
+  } else if (option === "2000KN" ||"2000KN new") {
       option2Inputs.style.display = "flex";
   }
-} 
-  function addImg(doc, details) {
-      const img = new Image();
-      img.src = 'footer.jpeg';
-      doc.addImage(img, 'PNG', 0, 255, 210, 27);
+}
 
-      const img3 = new Image();
-      img3.src = 'sign.jpeg';
-      doc.addImage(img3, 'PNG', 160, 232, 40, 10);
+async function generateInfoSticker() {
+  const { jsPDF } = window.jspdf;
+  const width = 40 * 2.83465;
+  const height = 30 * 2.83465;
+  const doc = new jsPDF({
+    orientation: "landscape",
+    unit: "pt",
+    format: [width, height]
+  });
+  const certificateNumber = document.getElementById("certificateNumber").value;
+  const capacity = document.getElementById("capacity").value;
+  const calibrationDateRaw = document.getElementById("calibrationDate").value;
+  const calibrationDate = calibrationDateRaw.split("-").reverse().join("/");
+  const nextCalibrationDateRaw = document.getElementById("nextCalibrationDate").value;
+  const nextCalibrationDate = nextCalibrationDateRaw.split("-").reverse().join("/");
+  const serialNo = document.getElementById("serialNo").value;
+  const modelNo = document.getElementById("operated").value;
+  const siteLocation = document.getElementById("siteLocation").value;
+  const primaryBlue = [19, 52, 165];
+  const accentRed = [228, 34, 21];
+  doc.setDrawColor(...primaryBlue);
+  doc.setLineWidth(3);
+  doc.rect(5, 5, width - 10, height - 10);
+  const logoImg = new Image();
+  logoImg.src = "logo.jpeg";
+  await new Promise(resolve => { logoImg.onload = resolve; logoImg.onerror = resolve; });
+  if (logoImg.width) {
+    doc.addImage(logoImg, "JPEG", 20, 7, 5, 7);
+  }
+  doc.setFont("times", "bold");
+  doc.setFontSize(8);
+  doc.setTextColor(...accentRed);
+  doc.text("Shreeji Instruments", 32, 13);
+  doc.setFont("times", "normal");
+  doc.setFontSize(4);
+  doc.setTextColor(...primaryBlue);
+  doc.text("SALES • SERVICE • REPAIRING • CALIBRATIONS", width / 2, 18, { align: "center" });
+  const tableLeft = 15;
+  const tableTop = 20;
+  const tableWidth = width - 30;
+  const rowHeight = 13;
+  const labelWidth = tableWidth * 0.4;
+  const tableData = [
+    { label: "SERIAL NO.", value: serialNo || "N/A" },
+    { label: "MODEL", value: capacity || "N/A" },
+    { label: "CALIB. DATE", value: calibrationDate || "N/A" },
+    { label: "NEXT DATE", value: nextCalibrationDate || "N/A" },
+   
+  ];
+  doc.setDrawColor(0, 0, 0);
+  doc.setLineWidth(1);
+  doc.rect(tableLeft, tableTop, tableWidth, rowHeight * tableData.length);
+  tableData.forEach((row, index) => {
+    const rowY = tableTop + (index * rowHeight);
+    if (index > 0) doc.line(tableLeft, rowY, tableLeft + tableWidth, rowY);
+    doc.line(tableLeft + labelWidth, rowY, tableLeft + labelWidth, rowY + rowHeight);
+    doc.setFillColor(255, 255, 255);
+    doc.rect(tableLeft, rowY, labelWidth, rowHeight, 'F');
+    const labelY = rowY + rowHeight / 2 + 1;
+    const valueY = rowY + rowHeight / 2 + 1;
+    doc.setFont("times", "bold");
+    doc.setFontSize(4.5);
+    doc.setTextColor(...primaryBlue);
+    doc.text(row.label, tableLeft + 4, labelY, { baseline: 'middle' });
+    doc.setFont("times", "normal");
+    doc.setFontSize(4.5);
+    doc.setTextColor(0, 0, 0);
+    doc.text(row.value, tableLeft + labelWidth + 5, valueY, { baseline: 'middle' });
+  });
+  stickerPdfBlob = doc.output('blob');
+  const pdfURL = URL.createObjectURL(stickerPdfBlob);
+  const frame = document.getElementById("stickerPreviewFrame");
+  frame.src = pdfURL;
+  frame.style.display = "block";
+  const dockDownloadBtn = document.querySelector('.side-dock #downloadStickerBtn');
+  dockDownloadBtn.style.display = "block";
+  frame.scrollIntoView({ behavior: 'smooth' });
+}
 
-      const img1 = new Image();
-      img1.src = 'stamp.jpeg';
-      doc.addImage(img1, 'PNG', 100, 217, 35, 35);
+async function downloadSticker() {
+  if (!stickerPdfBlob) {
+    alert('Please generate the sticker first!');
+    return;
+  }
+  const certificateNumber = document.getElementById("certificateNumber").value;
+  await savePDFWithLocation(stickerPdfBlob, `CTM_Sticker_${certificateNumber}.pdf`);
+}
 
-      const img2 = new Image();
-      img2.src = 'header.jpeg';
-      doc.addImage(img2, 'PNG', 3, 3, 210, 30);
-    }
-async function addcertificateDetails(doc, details){
+async function main(){
+  if (!document.getElementById("calibrationForm").reportValidity()) return null;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
   const certificateNumber = document.getElementById("certificateNumber").value;
   const calibrationDateRaw = document.getElementById("calibrationDate").value;
   const calibrationDate = calibrationDateRaw.split("-").reverse().join("/");
@@ -416,6 +748,7 @@ async function addcertificateDetails(doc, details){
       }
     }
   }
+  
   else if(RING==="2000KN"){
     doc.text(`CALIBRATION INSTRUMENT 2000KN`, 14, 120);  
     doc.text(`PROVING RING NO:2000KN 094 IS 4169:2014`, 14, 125);  
@@ -458,22 +791,92 @@ async function addcertificateDetails(doc, details){
       }
     }
   }
+  
+  else if(RING==="2000KN new"){
+    doc.text(`CALIBRATION INSTRUMENT 2000KN`, 14, 120);  
+    doc.text(`PROVING RING NO:2000KN 381 IS 4169:2014`, 14, 125);  
+    doc.text(`CALIBRATED BY : NATIONAL COUNCIL FOR CEMENT AND BUILDING MATERIALS`, 14, 130);  
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+    const startX = 13;
+    const startY = 142;
+    const cellWidth = 30;
+    const cellHeight = 7;
+
+    doc.text(`IN DIVISIONS`, 16, 141);
+    doc.text(`KN`, 174, 141);
+
+    const fixedTexts = ["DEFLECTION", "LOAD IN KN", "1st SET IN KN", "2nd SET IN KN", "3rd SET IN KN", "AVERAGE IN"];
+
+    for (let k = 0; k < 6; k++) {
+      const x = startX + k * cellWidth;
+      doc.rect(x, 132, cellWidth, 10);
+      doc.text(fixedTexts[k], x + 2, 137);
+    }
+
+    const fixedValuesColumn1 = ["73.1","145.1","215.2","284.7","356.1","427.4","498.1","569.4","641.3","714.1"];
+    const fixedValuesColumn2 = ["200", "400", "600", "800", "1000", "1200", "1400", "1600", "1800", "2000"];
+
+    for (let i = 0; i < 10; i++) {
+      for (let j = 0; j < 6; j++) {
+        const x = startX + j * cellWidth;
+        const y = startY + i * cellHeight;
+        doc.rect(x, y, cellWidth, cellHeight);
+
+        let textValue = "";
+        if (j === 0) textValue = fixedValuesColumn1[i];
+        else if (j === 1) textValue = fixedValuesColumn2[i];
+        else textValue = inputs2000[i];
+
+        const textWidth = doc.getTextWidth(textValue);
+        const centeredX = x + (cellWidth - textWidth) / 2;
+        doc.text(textValue, centeredX, y + 6);
+      }
+    }
+  }
   else {
     alert("Select a appropriate proviring");
-    return;
+    return null;
   }
   doc.text(`CALIBRATION BY      :-   YOGESH BHAI`, 14, 225); 
   doc.setFontSize(12);
   doc.text("FOR,SHREEJI INSTRUMENTS", 145, 230);
   doc.text("PROPRIETOR", 170, 245);
 
+  return doc; // Return the doc object
 }
-async function preview() {
-  if (!document.getElementById("calibrationForm").reportValidity()) return;
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  addcertificateDetails(doc);
-   addImg(doc);
+
+// Fixed addImg function
+function addImg(doc, details) {
+  if (!doc) {
+    console.error('Document object is required for addImg function');
+    return;
+  }
+  
+  const img = new Image();
+  img.src = 'footer.jpeg';
+  doc.addImage(img, 'PNG', 0, 255, 210, 27);
+
+  const img3 = new Image();
+  img3.src = 'sign.jpeg';
+  doc.addImage(img3, 'PNG', 160, 232, 40, 10);
+
+  const img1 = new Image();
+  img1.src = 'stamp.jpeg';
+  doc.addImage(img1, 'PNG', 100, 217, 35, 35);
+
+  const img2 = new Image();
+  img2.src = 'header.jpeg';
+  doc.addImage(img2, 'PNG', 3, 3, 210, 30);
+}
+
+// Fixed showpreview function
+async function showpreview() {
+  const doc = await main(); // Get the doc object from main()
+  if (!doc) return; // Exit if main() failed
+  
+  addImg(doc); // Pass the doc object to addImg
+
   const pdfBlob = doc.output('blob');
   const pdfURL = URL.createObjectURL(pdfBlob);
   const previewFrame = document.createElement('iframe');
@@ -487,31 +890,41 @@ async function preview() {
   container.appendChild(previewFrame);
 }
 
+// Fixed generatePDF function
 async function generatePDF() {
   if (!document.getElementById("calibrationForm").reportValidity()) return;
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-
-  addcertificateDetails(doc);
-   addImg(doc);
+  
+  const doc = await main(); // Get the doc object from main()
+  if (!doc) return; // Exit if main() failed
+  
+  addImg(doc); // Pass the doc object to addImg
+  
   const pdfBlob = doc.output('blob');
   await savePDFWithLocation(pdfBlob, `CTM_${document.getElementById("certificateNumber").value}.pdf`);
 }
 
+// Fixed generatePDFWithoutLetterpad function
 async function generatePDFWithoutLetterpad() {
   if (!document.getElementById("calibrationForm").reportValidity()) return;
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  addcertificateDetails(doc);
+  
+  const doc = await main(); // Get the doc object from main()
+  if (!doc) return; // Exit if main() failed
+  
+  // Don't call addImg() for letterhead-free version
+  
   const pdfBlob = doc.output('blob');
   await savePDFWithLocation(pdfBlob, `CTM_${document.getElementById("certificateNumber").value}_no_letterhead.pdf`);
 }
 
+// Fixed printBlankCertificate function
 async function printBlankCertificate() {
   if (!document.getElementById("calibrationForm").reportValidity()) return;
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-   addcertificateDetails(doc);
+  
+  const doc = await main(); // Get the doc object from main()
+  if (!doc) return; // Exit if main() failed
+  
+  // Don't call addImg() for letterhead-free version
+  
   const pdfBlob = doc.output('blob');
   const pdfURL = URL.createObjectURL(pdfBlob);
   const printWindow = window.open(pdfURL, '_blank');
@@ -520,118 +933,32 @@ async function printBlankCertificate() {
   }
 }
 
-async function generateInfoSticker() {
-  const { jsPDF } = window.jspdf;
-  const width = 40 * 2.83465;
-  const height = 30 * 2.83465;
-  const doc = new jsPDF({
-    orientation: "landscape",
-    unit: "pt",
-    format: [width, height]
-  });
-  const certificateNumber = document.getElementById("certificateNumber").value;
-  const make = document.getElementById("make").value;
-  const calibrationDateRaw = document.getElementById("calibrationDate").value;
-  const calibrationDate = calibrationDateRaw.split("-").reverse().join("/");
-  const nextCalibrationDateRaw = document.getElementById("nextCalibrationDate").value;
-  const nextCalibrationDate = nextCalibrationDateRaw.split("-").reverse().join("/");
-  const serialNo = document.getElementById("serialNo").value;
-  const modelNo = document.getElementById("operated").value;
-  const siteLocation = document.getElementById("siteLocation").value;
-  const primaryBlue = [19, 52, 165];
-  const accentRed = [228, 34, 21];
-  doc.setDrawColor(...primaryBlue);
-  doc.setLineWidth(3);
-  doc.rect(5, 5, width - 10, height - 10);
-  const logoImg = new Image();
-  logoImg.src = "logo.jpeg";
-  await new Promise(resolve => { logoImg.onload = resolve; logoImg.onerror = resolve; });
-  if (logoImg.width) {
-    doc.addImage(logoImg, "JPEG", 20, 7, 5, 7);
-  }
-  doc.setFont("times", "bold");
-  doc.setFontSize(8);
-  doc.setTextColor(...accentRed);
-  doc.text("Shreeji Instruments", 32, 13);
-  doc.setFont("times", "normal");
-  doc.setFontSize(4);
-  doc.setTextColor(...primaryBlue);
-  doc.text("SALES • SERVICE • REPAIRING • CALIBRATIONS", width / 2, 18, { align: "center" });
-  const tableLeft = 15;
-  const tableTop = 20;
-  const tableWidth = width - 30;
-  const rowHeight = 13;
-  const labelWidth = tableWidth * 0.4;
-  const tableData = [
-    { label: "CERT. NO.", value: certificateNumber || "N/A" },
-    { label: "MAKE", value: make || "N/A" },
-    { label: "CALIB. DATE", value: calibrationDate || "N/A" },
-    { label: "NEXT DATE", value: nextCalibrationDate || "N/A" },
-    { label: "SERIAL NO.", value: serialNo || "N/A" },
-    { label: "TYPE", value: modelNo || "N/A" },
-    { label: "SITE", value: siteLocation || "N/A" }
-  ];
-  doc.setDrawColor(0, 0, 0);
-  doc.setLineWidth(1);
-  doc.rect(tableLeft, tableTop, tableWidth, rowHeight * tableData.length);
-  tableData.forEach((row, index) => {
-    const rowY = tableTop + (index * rowHeight);
-    if (index > 0) doc.line(tableLeft, rowY, tableLeft + tableWidth, rowY);
-    doc.line(tableLeft + labelWidth, rowY, tableLeft + labelWidth, rowY + rowHeight);
-    doc.setFillColor(255, 255, 255);
-    doc.rect(tableLeft, rowY, labelWidth, rowHeight, 'F');
-    const labelY = rowY + rowHeight / 2 + 1;
-    const valueY = rowY + rowHeight / 2 + 1;
-    doc.setFont("times", "bold");
-    doc.setFontSize(4.5);
-    doc.setTextColor(...primaryBlue);
-    doc.text(row.label, tableLeft + 4, labelY, { baseline: 'middle' });
-    doc.setFont("times", "normal");
-    doc.setFontSize(4.5);
-    doc.setTextColor(0, 0, 0);
-    doc.text(row.value, tableLeft + labelWidth + 5, valueY, { baseline: 'middle' });
-  });
-  stickerPdfBlob = doc.output('blob');
-  const pdfURL = URL.createObjectURL(stickerPdfBlob);
-  const frame = document.getElementById("stickerPreviewFrame");
-  frame.src = pdfURL;
-  frame.style.display = "block";
-  const dockDownloadBtn = document.querySelector('.side-dock #downloadStickerBtn');
-  dockDownloadBtn.style.display = "block";
-  frame.scrollIntoView({ behavior: 'smooth' });
-}
-
-async function downloadSticker() {
-  if (!stickerPdfBlob) {
-    alert('Please generate the sticker first!');
-    return;
-  }
-  const certificateNumber = document.getElementById("certificateNumber").value;
-  await savePDFWithLocation(stickerPdfBlob, `CTM_Sticker_${certificateNumber}.pdf`);
-}
-
+// Fixed sharePDF function
 async function sharePDF() {
-  if (!document.getElementById("calibrationForm").reportValidity()) return;
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-   addcertificateDetails(doc);
-   addImg(doc);
-  const pdfBlob = doc.output('blob');
-  const pdfFile = new File([pdfBlob], "certificate.pdf", { type: "application/pdf" });
-  if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
-    try {
-      await navigator.share({
-        files: [pdfFile],
-        title: 'Calibration Certificate',
-        text: 'Here is your calibration certificate PDF.'
-      });
-    } catch (err) {
-      alert('Sharing cancelled or not supported.');
-    }
-  } else {
-    alert('Web Share API not supported or file sharing not available in your browser.');
-  }
-}
-      </script>
+      if (!document.getElementById("calibrationForm").reportValidity()) return;
+      
+      const doc = await main(); // Get the doc object from main()
+      if (!doc) return; // Exit if main() failed
+      
+      addImg(doc); // Pass the doc object to addImg
+      
+      const pdfBlob = doc.output('blob');
+      const pdfFile = new File([pdfBlob], "certificate.pdf", { type: "application/pdf" });
+      if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+        try {
+          await navigator.share({
+            files: [pdfFile],
+            title: 'Calibration Certificate',
+            text: 'Here is your calibration certificate PDF.'
+          });
+        } catch (err) {
+          alert('Sharing cancelled or not supported.');
+        }
+      } else {
+        alert('Web Share API not supported or file sharing not available in your browser.');
+      }
+    }  
+ 
+</script>
 </body>
 </html>
