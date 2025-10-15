@@ -701,7 +701,7 @@ async function main(){
   doc.text(`SERIAL NO                  :-    ${serialNo}`, 14, 100);
   doc.text(`NEXT DUE DATE:-${nextCalibrationDate}`, 140, 100);
   // Wrap long site address to next line(s)
-  const siteLine = `SITE LOCATION         :-    ${siteLocation}`;A
+  const siteLine = `SITE LOCATION         :-    ${siteLocation}`;
   const wrappedSite = doc.splitTextToSize(siteLine, 180);
   let currentY = 110;
   wrappedSite.forEach((line) => {
