@@ -700,16 +700,29 @@ async function main(){
   doc.text(`CAPACITY  / MAKE    :-    ${capacity}  /  ${make}`, 14, 90);
   doc.text(`SERIAL NO                  :-    ${serialNo}`, 14, 100);
   doc.text(`NEXT DUE DATE:-${nextCalibrationDate}`, 140, 100);
-  doc.text(`SITE LOCATION         :-    ${siteLocation}`, 14, 110); 
+  // Wrap long site address to next line(s)
+  const siteLine = `SITE LOCATION         :-    ${siteLocation}`;A
+  const wrappedSite = doc.splitTextToSize(siteLine, 180);
+  let currentY = 110;
+  wrappedSite.forEach((line) => {
+    doc.text(line, 14, currentY);
+    currentY += 6;
+  });
+  const extraOffset = (wrappedSite.length - 1) * 6; // push following content down
 
   doc.setFontSize(10);
   doc.setFont("helvetica", "bold");
   let RING=String(ring);
 
   if(RING==="1000KN"){
-    doc.text(`CALIBRATION INSTRUMENT 1000KN`, 14, 120);  
-    doc.text(`PROVING RING NO:1000KN 065 IS 4169:2014`, 14, 125);  
-    doc.text(`CALIBRATED BY : NATIONAL COUNCIL FOR CEMENT AND BUILDING MATERIALS`, 14, 130);  
+    const ringTitleY = 120 + extraOffset;
+    const calibByY = 130 + extraOffset;
+    const rectTopY = 132 + extraOffset;
+    const headerTextY = 141 + extraOffset;
+    const tableStartY = 142 + extraOffset;
+    doc.text(`CALIBRATION INSTRUMENT 1000KN`, 14, ringTitleY);  
+    doc.text(`PROVING RING NO:1000KN 065 IS 4169:2014`, 14, ringTitleY + 5);  
+    doc.text(`CALIBRATED BY : NATIONAL COUNCIL FOR CEMENT AND BUILDING MATERIALS`, 14, calibByY);  
     doc.setFont("helvetica", "bold");
     doc.setFontSize(11);
     const startX = 13;
@@ -717,14 +730,14 @@ async function main(){
     const cellWidth = 30;
     const cellHeight = 7;
 
-    doc.text(`IN DIVISIONS`, 16, 141);
-    doc.text(`KN`, 174, 141);
+    doc.text(`IN DIVISIONS`, 16, headerTextY);
+    doc.text(`KN`, 174, headerTextY);
 
     const fixedTexts = ["DEFLECTION", "LOAD IN KN", "1st SET IN KN", "2nd SET IN KN", "3rd SET IN KN", "AVERAGE IN"];
 
     for (let k = 0; k < 6; k++) {
       const x = startX + k * cellWidth;
-      doc.rect(x, 132, cellWidth, 10);
+      doc.rect(x, rectTopY, cellWidth, 10);
       doc.text(fixedTexts[k], x + 2, 137);
     }
 
@@ -734,7 +747,7 @@ async function main(){
     for (let i = 0; i < 10; i++) {
       for (let j = 0; j < 6; j++) {
         const x = startX + j * cellWidth;
-        const y = startY + i * cellHeight;
+        const y = tableStartY + i * cellHeight;
         doc.rect(x, y, cellWidth, cellHeight);
 
         let textValue = "";
@@ -750,9 +763,14 @@ async function main(){
   }
   
   else if(RING==="2000KN"){
-    doc.text(`CALIBRATION INSTRUMENT 2000KN`, 14, 120);  
-    doc.text(`PROVING RING NO:2000KN 094 IS 4169:2014`, 14, 125);  
-    doc.text(`CALIBRATED BY : NATIONAL COUNCIL FOR CEMENT AND BUILDING MATERIALS`, 14, 130);  
+    const ringTitleY = 120 + extraOffset;
+    const calibByY = 130 + extraOffset;
+    const rectTopY = 132 + extraOffset;
+    const headerTextY = 141 + extraOffset;
+    const tableStartY = 142 + extraOffset;
+    doc.text(`CALIBRATION INSTRUMENT 2000KN`, 14, ringTitleY);  
+    doc.text(`PROVING RING NO:2000KN 094 IS 4169:2014`, 14, ringTitleY + 5);  
+    doc.text(`CALIBRATED BY : NATIONAL COUNCIL FOR CEMENT AND BUILDING MATERIALS`, 14, calibByY);  
     doc.setFont("helvetica", "bold");
     doc.setFontSize(11);
     const startX = 13;
@@ -760,14 +778,14 @@ async function main(){
     const cellWidth = 30;
     const cellHeight = 7;
 
-    doc.text(`IN DIVISIONS`, 16, 141);
-    doc.text(`KN`, 174, 141);
+    doc.text(`IN DIVISIONS`, 16, headerTextY);
+    doc.text(`KN`, 174, headerTextY);
 
     const fixedTexts = ["DEFLECTION", "LOAD IN KN", "1st SET IN KN", "2nd SET IN KN", "3rd SET IN KN", "AVERAGE IN"];
 
     for (let k = 0; k < 6; k++) {
       const x = startX + k * cellWidth;
-      doc.rect(x, 132, cellWidth, 10);
+      doc.rect(x, rectTopY, cellWidth, 10);
       doc.text(fixedTexts[k], x + 2, 137);
     }
 
@@ -777,7 +795,7 @@ async function main(){
     for (let i = 0; i < 10; i++) {
       for (let j = 0; j < 6; j++) {
         const x = startX + j * cellWidth;
-        const y = startY + i * cellHeight;
+        const y = tableStartY + i * cellHeight;
         doc.rect(x, y, cellWidth, cellHeight);
 
         let textValue = "";
@@ -793,9 +811,14 @@ async function main(){
   }
   
   else if(RING==="2000KN new"){
-    doc.text(`CALIBRATION INSTRUMENT 2000KN`, 14, 120);  
-    doc.text(`PROVING RING NO:2000KN 381 IS 4169:2014`, 14, 125);  
-    doc.text(`CALIBRATED BY : NATIONAL COUNCIL FOR CEMENT AND BUILDING MATERIALS`, 14, 130);  
+    const ringTitleY = 120 + extraOffset;
+    const calibByY = 130 + extraOffset;
+    const rectTopY = 132 + extraOffset;
+    const headerTextY = 141 + extraOffset;
+    const tableStartY = 142 + extraOffset;
+    doc.text(`CALIBRATION INSTRUMENT 2000KN`, 14, ringTitleY);  
+    doc.text(`PROVING RING NO:2000KN 381 IS 4169:2014`, 14, ringTitleY + 5);  
+    doc.text(`CALIBRATED BY : NATIONAL COUNCIL FOR CEMENT AND BUILDING MATERIALS`, 14, calibByY);  
     doc.setFont("helvetica", "bold");
     doc.setFontSize(11);
     const startX = 13;
@@ -803,14 +826,14 @@ async function main(){
     const cellWidth = 30;
     const cellHeight = 7;
 
-    doc.text(`IN DIVISIONS`, 16, 141);
-    doc.text(`KN`, 174, 141);
+    doc.text(`IN DIVISIONS`, 16, headerTextY);
+    doc.text(`KN`, 174, headerTextY);
 
     const fixedTexts = ["DEFLECTION", "LOAD IN KN", "1st SET IN KN", "2nd SET IN KN", "3rd SET IN KN", "AVERAGE IN"];
 
     for (let k = 0; k < 6; k++) {
       const x = startX + k * cellWidth;
-      doc.rect(x, 132, cellWidth, 10);
+      doc.rect(x, rectTopY, cellWidth, 10);
       doc.text(fixedTexts[k], x + 2, 137);
     }
 
@@ -820,7 +843,7 @@ async function main(){
     for (let i = 0; i < 10; i++) {
       for (let j = 0; j < 6; j++) {
         const x = startX + j * cellWidth;
-        const y = startY + i * cellHeight;
+        const y = tableStartY + i * cellHeight;
         doc.rect(x, y, cellWidth, cellHeight);
 
         let textValue = "";
