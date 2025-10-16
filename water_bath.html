@@ -133,69 +133,92 @@
       };
     }
        
-    function addCertificateDetails(doc, details) {
-      let Yalign=50;
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(25);
-      doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, Yalign, { align: 'center' });
+   function addCertificateDetails(doc, details) {
+  let Yalign = 50;
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(25);
+  doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, Yalign, { align: 'center' });
+  
+  // Spacing
+  doc.setFontSize(15);
+  doc.text(`DATE:-${details.calibrationDate}`, 155, Yalign += 10);
+  doc.text(`REF NO                        :-     SI ${details.certificateNumber}`, 14, Yalign);
+  
+  // --- Party Name with wrapping ---
+  const partyNamePrefix = "NAME OF PARTY        :-     ";
+  const prefixWidth = doc.getTextWidth(partyNamePrefix);
+  const maxWidth = 180 - prefixWidth;
+  const partyNameLines = doc.splitTextToSize(details.partyName, maxWidth);
+  
+  doc.text(partyNamePrefix + (partyNameLines[0] || ""), 14, Yalign += 10);
+  for (let i = 1; i < partyNameLines.length; i++) {
+    doc.text(partyNameLines[i], 14 + prefixWidth, Yalign += 6);
+  }
 
-      // Spacing
-      doc.setFontSize(15);
-      doc.text(`DATE:-${details.calibrationDate}`, 155, Yalign+=10);
-      doc.text(`REF NO                        :-     SI ${details.certificateNumber}`, 14, Yalign);
-      doc.text(`NAME OF PARTY        :-     ${details.partyName}`, 14, Yalign+=10);
-      doc.text(`EQUIPMENT NAME     :-     ELECTRICAL WATER BATH`, 14, Yalign+=10);
-      doc.text(`CAPICITY & MAKE      :-     ${details.capacity} & ${details.make}`, 14, Yalign+=10);
-      doc.text(`SERIAL NO                  :-     ${details.certificateNumber}`, 14, Yalign+=10);
-      doc.text(`NEXT DUE DATE         :-     ${details.nextCalibrationDate}`, 14, Yalign+=10);
-      doc.text(`SITE LOCATION          :-     ${details.siteLocation}`, 14, Yalign+=10);
-      const tableStartY =Yalign;
-      const data = [
-          [ "1", " 20'C"," 20'C"],
-          [ "2", " 40'C"," 40'C" ],
-          [ "3", " 60'C"," 60'C" ],
-          [ "4", " 80'C"," 80'C" ],
-          [ "5", " 100'C"," 100'C" ],
-          [ "6", " 110'C"," 110'C" ]
-      ];
-
-      doc.autoTable({
-              head: [['SR.NO', 'STANDARD TEMPERATURE', 'STANDARD TEMPERATURE BY 1 St Bucket "A"']],
-              body: data,
-              startY: tableStartY + 10,
-              styles: { 
-                fontSize: 12 ,
-                textColor:[0,0,0],
-                lineColor:[87, 86, 85],
-                lineWidth: 0.2,
-                halign: 'center',  // horizontal align to center
-                valign: 'middle',  // vertical align to middle
-              },
-              headStyles: {
-                fontSize: 15,
-                fillColor: [255, 255, 255],
-                textColor: [0,0,0],
-                lineColor: [0, 0, 0],
-                lineWidth: 0.2,
-                halign: 'center',  // horizontal align to center
-                valign: 'middle',  // vertical align to middle
-              },
-              alternateRowStyles: {
-                fillColor: [255, 255, 255]
-              }
-          });
-      let tableStartY2=doc.autoTable.previous.finalY;
-      // Add calibrated by
-      doc.setFontSize(12);
-      doc.text("CALIBRATED BY: YOGESH B JOSHI", 14, tableStartY2+=10);
-
-      // Add footer
-      doc.setFont("helvetica", "bold"); 
-      doc.setFontSize(12); 
-      doc.text("FOR, SHREEJI INSTRUMENTS", 145, 230);
-      doc.text("PROPRIETOR", 170, 245);
+  
+  doc.text(`EQUIPMENT NAME     :-     ELECTRICAL WATER BATH`, 14, Yalign += 10);
+  doc.text(`CAPICITY & MAKE      :-     ${details.capacity} & ${details.make}`, 14, Yalign += 10);
+  doc.text(`SERIAL NO                  :-     ${details.certificateNumber}`, 14, Yalign += 10);
+  doc.text(`NEXT DUE DATE         :-     ${details.nextCalibrationDate}`, 14, Yalign += 10);
+  
+  // --- Site Location with wrapping ---
+  const siteLocPrefix = "SITE LOCATION          :-     ";
+  const siteLocPrefixWidth = doc.getTextWidth(siteLocPrefix);
+  const siteLocMaxWidth = 180 - siteLocPrefixWidth;
+  const siteLocLines = doc.splitTextToSize(details.siteLocation, siteLocMaxWidth);
+  
+  doc.text(siteLocPrefix + (siteLocLines[0] || ""), 14, Yalign += 10);
+  for (let i = 1; i < siteLocLines.length; i++) {
+    doc.text(siteLocLines[i], 14 + siteLocPrefixWidth, Yalign += 6);
+  }
+ 
+  
+  const tableStartY = Yalign;
+  const data = [
+    ["1", " 20'C", " 20'C"],
+    ["2", " 40'C", " 40'C"],
+    ["3", " 60'C", " 60'C"],
+    ["4", " 80'C", " 80'C"],
+    ["5", " 100'C", " 100'C"],
+    ["6", " 110'C", " 110'C"]
+  ];
+  
+  doc.autoTable({
+    head: [['SR.NO', 'STANDARD TEMPERATURE', 'STANDARD TEMPERATURE BY 1 St Bucket "A"']],
+    body: data,
+    startY: tableStartY + 10,
+    styles: {
+      fontSize: 12,
+      textColor: [0, 0, 0],
+      lineColor: [87, 86, 85],
+      lineWidth: 0.2,
+      halign: 'center',
+      valign: 'middle',
+    },
+    headStyles: {
+      fontSize: 15,
+      fillColor: [255, 255, 255],
+      textColor: [0, 0, 0],
+      lineColor: [0, 0, 0],
+      lineWidth: 0.2,
+      halign: 'center',
+      valign: 'middle',
+    },
+    alternateRowStyles: {
+      fillColor: [255, 255, 255]
     }
-    
+  });
+  
+  let tableStartY2 = doc.autoTable.previous.finalY;
+  // Add calibrated by
+  doc.setFontSize(12);
+  doc.text("CALIBRATED BY: YOGESH B JOSHI", 14, tableStartY2 += 10);
+  // Add footer
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(12);
+  doc.text("FOR, SHREEJI INSTRUMENTS", 145, 230);
+  doc.text("PROPRIETOR", 170, 245);
+}
     async function generateInfoSticker() {
       const { jsPDF } = window.jspdf;
       const width = 40 * 2.83465;
