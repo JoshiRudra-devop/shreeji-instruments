@@ -134,11 +134,6 @@ function addCertificateDetails(doc, details)
   for (let i = 1; i < partyNameLines.length; i++) {
     doc.text(partyNameLines[i], 14 + prefixWidth, Yalign += 7);
   }
-  // Add spacing after party name if wrapped
-  if (partyNameLines.length > 1) {
-    Yalign += 8;
-  }
-  
   doc.text(`EQUIPMENT NAME      :     MEASURING CYLINDER  (${details.size})`, 14, Yalign+=15);
   doc.text(`SERIAL NO                  :     ${details.certificateNumber}`, 14, Yalign+=15);
   
@@ -152,11 +147,7 @@ function addCertificateDetails(doc, details)
   for (let i = 1; i < siteLocLines.length; i++) {
     doc.text(siteLocLines[i], 14 + siteLocPrefixWidth, Yalign += 7);
   }
-  // Add spacing after site location if wrapped
-  if (siteLocLines.length > 1) {
-    Yalign += 8;
-  }
-  
+
   doc.text(`NEXT DUE DATE          :     ${details.nextCalibrationDate}`, 14, Yalign+=15);
   doc.text(`CALIBRATION BY        :     YOGESH BHAI`, 14, Yalign+=15);
   doc.setFontSize(12);
