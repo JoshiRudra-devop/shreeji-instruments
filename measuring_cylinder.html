@@ -108,42 +108,61 @@
       };
     }
 
-    function addCertificateDetails(doc, details)
-     {
-      let Yalign=50;
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(25);
-      doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, Yalign, { align: 'center' });
-
-      doc.setFontSize(12);
-      doc.text("SHREEJI INSTRUMENTS: Calibration laboratory certifies that the instrument has been inspected,", 12, Yalign+=10);
-      doc.text("tested,and calibrated in accordance with documented procedures using measuring and test", 12, Yalign+=7);
-      doc.text("equipment traceable to international standards.", 12, Yalign+=7);
-
-      doc.setFontSize(15);
-      // Certificate Details
-      doc.text(`DATE: ${details.calibrationDate}`, 140, Yalign+=15);
-      doc.text(`REF NO                         :     SI-${details.certificateNumber}`, 14, Yalign);
-      doc.text(`NAME OF PARTY         :     ${details.partyname}`, 14, Yalign+=15);
-      doc.text(`EQUIPMENT NAME      :     MEASURING CYLINDER  (${details.size})`, 14, Yalign+=15);
-      doc.text(`SERIAL NO                  :     ${details.certificateNumber} `, 14, Yalign+=15);
-     // --- Site Location with wrapping (only value, not prefix) ---
-      const siteLocPrefix = "SITE LOCATION          :-     ";
-      const prefixWidth = doc.getTextWidth(siteLocPrefix);
-      const maxWidth = 180 - prefixWidth; // adjust as needed according to your layout
-      const siteLocLines = doc.splitTextToSize(details.siteLocation, maxWidth);
-      doc.text(siteLocPrefix + (siteLocLines[0] || ""), 14, Yalign += 10);
-      for (let i = 1; i < siteLocLines.length; i++) {
-        doc.text(siteLocLines[i], 14 + prefixWidth , Yalign +=4);
-      }
-      Yalign += ((siteLocLines.length - 1)+5) ;
-      doc.text(`NEXT DUE DATE          :     ${details.nextCalibrationDate}`, 14, Yalign+=15);
-      doc.text(`CALIBRATION BY        :     YOGESH BHAI`, 14, Yalign+=15);
-
-      doc.setFontSize(12);
-      doc.text("FOR,SHREEJI INSTRUMENTS", 145, 230);
-      doc.text("PROPRIETOR", 170, 245);
-    }
+function addCertificateDetails(doc, details)
+{
+  let Yalign = 50;
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(25);
+  doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, Yalign, { align: 'center' });
+  doc.setFontSize(12);
+  doc.text("SHREEJI INSTRUMENTS: Calibration laboratory certifies that the instrument has been inspected,", 12, Yalign+=10);
+  doc.text("tested,and calibrated in accordance with documented procedures using measuring and test", 12, Yalign+=7);
+  doc.text("equipment traceable to international standards.", 12, Yalign+=7);
+  doc.setFontSize(15);
+  
+  // Certificate Details
+  doc.text(`DATE: ${details.calibrationDate}`, 140, Yalign+=15);
+  doc.text(`REF NO                         :     SI-${details.certificateNumber}`, 14, Yalign);
+  
+  // --- Party Name with wrapping (only value, not prefix) ---
+  const partyNamePrefix = "NAME OF PARTY         :     ";
+  const prefixWidth = doc.getTextWidth(partyNamePrefix);
+  const maxWidth = 180 - prefixWidth;
+  const partyNameLines = doc.splitTextToSize(details.partyname, maxWidth);
+  
+  doc.text(partyNamePrefix + (partyNameLines[0] || ""), 14, Yalign += 15);
+  for (let i = 1; i < partyNameLines.length; i++) {
+    doc.text(partyNameLines[i], 14 + prefixWidth, Yalign += 7);
+  }
+  // Add spacing after party name if wrapped
+  if (partyNameLines.length > 1) {
+    Yalign += 8;
+  }
+  
+  doc.text(`EQUIPMENT NAME      :     MEASURING CYLINDER  (${details.size})`, 14, Yalign+=15);
+  doc.text(`SERIAL NO                  :     ${details.certificateNumber}`, 14, Yalign+=15);
+  
+  // --- Site Location with wrapping (only value, not prefix) ---
+  const siteLocPrefix = "SITE LOCATION          :     ";
+  const siteLocPrefixWidth = doc.getTextWidth(siteLocPrefix);
+  const siteLocMaxWidth = 180 - siteLocPrefixWidth;
+  const siteLocLines = doc.splitTextToSize(details.siteLocation, siteLocMaxWidth);
+  
+  doc.text(siteLocPrefix + (siteLocLines[0] || ""), 14, Yalign += 15);
+  for (let i = 1; i < siteLocLines.length; i++) {
+    doc.text(siteLocLines[i], 14 + siteLocPrefixWidth, Yalign += 7);
+  }
+  // Add spacing after site location if wrapped
+  if (siteLocLines.length > 1) {
+    Yalign += 8;
+  }
+  
+  doc.text(`NEXT DUE DATE          :     ${details.nextCalibrationDate}`, 14, Yalign+=15);
+  doc.text(`CALIBRATION BY        :     YOGESH BHAI`, 14, Yalign+=15);
+  doc.setFontSize(12);
+  doc.text("FOR,SHREEJI INSTRUMENTS", 145, 230);
+  doc.text("PROPRIETOR", 170, 245);
+}
   </script>
 </body>
 </html>
