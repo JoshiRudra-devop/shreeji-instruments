@@ -113,69 +113,91 @@
       };
     }
     function addCertificateDetails(doc, details)
-     {
-      let Yalign=50;
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(25);
-      doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, Yalign, { align: 'center' });
+{
+  let Yalign = 50;
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(25);
+  doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, Yalign, { align: 'center' });
+  
+  // Spacing
+  doc.setFontSize(12);
+  doc.text(`DATE:-${details.calibrationDate}`, 155, Yalign += 10);
+  doc.text(`REF NO                        :-     SI-${details.certificateNumber}`, 14, Yalign);
+  
+  // --- Party Name with wrapping ---
+  const partyNamePrefix = "NAME OF PARTY        :-     ";
+  const prefixWidth = doc.getTextWidth(partyNamePrefix);
+  const maxWidth = 180 - prefixWidth;
+  const partyNameLines = doc.splitTextToSize(details.partyName, maxWidth);
+  
+  doc.text(partyNamePrefix + (partyNameLines[0] || ""), 14, Yalign += 10);
+  for (let i = 1; i < partyNameLines.length; i++) {
+    doc.text(partyNameLines[i], 14 + prefixWidth, Yalign += 5);
+  }
+ 
+  
+  doc.text(`EQUIPMENT NAME     :-     ELECTRICAL HOT AIR OVEN(${details.size})`, 14, Yalign += 10);
+  doc.text(`CAPACITY & MAKE    :-     ${details.capacity} & ${details.make}`, 14, Yalign += 10);
+  doc.text(`SR NO                          :-     SI-${details.certificateNumber}`, 14, Yalign += 10);
+  doc.text(`NEXT DUE DATE        :-     ${details.nextCalibrationDate}`, 14, Yalign += 10);
+  
+  // --- Site Location with wrapping ---
+  const siteLocPrefix = "SITE LOCATION          :-     ";
+  const siteLocPrefixWidth = doc.getTextWidth(siteLocPrefix);
+  const siteLocMaxWidth = 180 - siteLocPrefixWidth;
+  const siteLocLines = doc.splitTextToSize(details.siteLocation, siteLocMaxWidth);
+  
+  doc.text(siteLocPrefix + (siteLocLines[0] || ""), 14, Yalign += 10);
+  for (let i = 1; i < siteLocLines.length; i++) {
+    doc.text(siteLocLines[i], 14 + siteLocPrefixWidth, Yalign += 5);
+  }
 
-    // Spacing
-    doc.setFontSize(12);
-    doc.text(`DATE:-${details.calibrationDate}`, 155, Yalign+=10);
-    doc.text(`REF NO                        :-     SI-${details.certificateNumber}`, 14, Yalign);
-    doc.text(`NAME OF PARTY        :-     ${details.partyName}`, 14, Yalign+=10);
-    doc.text(`EQUIPMENT NAME     :-     ELECTRICAL HOT AIR OVEN(${details.size})`, 14, Yalign+=10);
-    doc.text(`CAPACITY & MAKE    :-     ${details.capacity} & ${details.make}`, 14, Yalign+=10);
-    doc.text(`SR NO                          :-     SI-${details.certificateNumber}`, 14, Yalign+=10);
-    doc.text(`NEXT DUE DATE        :-     ${details.nextCalibrationDate}`, 14, Yalign+=10);
-    doc.text(`SITE LOCATION          :-     ${details.siteLocation}`, 14, Yalign+=10);
-    const tableStartY =Yalign+=10;
-const data = [
-    [ "1", " 50","50"],
-    [ "2", " 100","100"],
-    [ "3", " 150","15O"],
-    [ "4", " 200","200"],
-    [ "5", " 250","25O"],
-
-];
-
-doc.autoTable({
-        head: [['SR.NO', 'STANDARD TEMPERATURE', 'STANDARD TEMPERATURE BY 1 St BUCKET “A”']],
-        body: data,
-        startY: tableStartY + 10,
-        styles: { 
-          fontSize: 12 ,
-          lineColor:[0,0,0],
-          textColor:[0,0,0],
-          lineWidth: 0.2,
-          halign: 'center',  // horizontal align to center
-          valign: 'middle',  // vertical align to middle
-        },
-        headStyles: {
-          fontSize: 15,
-          fillColor: [255, 255, 255],
-          textColor: [0,0,0],
-          lineColor: [0, 0, 0],
-          lineWidth: 0.2,
-          halign: 'center',  // horizontal align to center
-          valign: 'middle',  // vertical align to middle
-        },
-        alternateRowStyles: {
-          fillColor: [255, 255, 255]
-        }
-    });
-    let tableStartY2=doc.autoTable.previous.finalY;
-// Add calibrated by
-doc.setFontSize(12);
-doc.text("CALIBRATED BY: YOGESH B JOSHI", 14, tableStartY2+=10);
-
-// Add footer
-doc.setFont("helvetica", "bold"); 
-      doc.setFontSize(12); 
-      doc.text("FOR, SHREEJI INSTRUMENTS", 145, 230);
-      doc.text("PROPRIETOR", 170, 245);
-
+  
+  const tableStartY = Yalign += 10;
+  const data = [
+    ["1", " 50", "50"],
+    ["2", " 100", "100"],
+    ["3", " 150", "15O"],
+    ["4", " 200", "200"],
+    ["5", " 250", "25O"],
+  ];
+  
+  doc.autoTable({
+    head: [['SR.NO', 'STANDARD TEMPERATURE', 'STANDARD TEMPERATURE BY 1 St BUCKET "A"']],
+    body: data,
+    startY: tableStartY + 10,
+    styles: {
+      fontSize: 12,
+      lineColor: [0, 0, 0],
+      textColor: [0, 0, 0],
+      lineWidth: 0.2,
+      halign: 'center',
+      valign: 'middle',
+    },
+    headStyles: {
+      fontSize: 15,
+      fillColor: [255, 255, 255],
+      textColor: [0, 0, 0],
+      lineColor: [0, 0, 0],
+      lineWidth: 0.2,
+      halign: 'center',
+      valign: 'middle',
+    },
+    alternateRowStyles: {
+      fillColor: [255, 255, 255]
     }
+  });
+  
+  let tableStartY2 = doc.autoTable.previous.finalY;
+  // Add calibrated by
+  doc.setFontSize(12);
+  doc.text("CALIBRATED BY: YOGESH B JOSHI", 14, tableStartY2 += 10);
+  // Add footer
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(12);
+  doc.text("FOR, SHREEJI INSTRUMENTS", 145, 230);
+  doc.text("PROPRIETOR", 170, 245);
+}
 
      </script>
 </body>
