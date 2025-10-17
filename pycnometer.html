@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="img/png" href="logo.png" />
+  <link rel="stylesheet" href="general.css"/>
+  <title>PYCNOMETER   BOTTLE CERTIFICATE</title>
+</head>
+<body>
+  <nav>
+    <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
+      <img src="https://github.com/JoshiRudra-devop/shreeji-instruments/blob/main/logo.png?raw=true" alt="Company Logo" style="width: 40px; border-radius:30%; height: 40px; margin-right: 10px;">
+      <h1 style="color: white; margin: 0;">SHREEJI INSTRUMENTS</h1>
+    </a>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#footer">About</a></li>
+      <li><a href="contactUs.html">Contact Us</a></li>
+    </ul>
+  </nav>
+  <button class="back-button" onclick="window.history.back()"><< Back</button>
+     <button class="dock-toggle" onclick="toggleDock()">☰ Actions</button>
+  <div class="side-dock" id="sideDock">
+    <h3>Actions</h3>
+    <button class="dock-button" type="button" onclick="preview()">
+      📋 Preview Certificate
+    </button>
+    <button class="dock-button" type="button" onclick="generatePDF()">
+      📄 Download with Letterhead
+    </button>
+    <button class="dock-button" type="button" onclick="generatePDFblankpg()">
+      📝 Download without Letterhead
+    </button>
+    <button class="dock-button" type="button" onclick="printBlankCertificate()">
+      🖨️ Print without Letterhead
+    </button>
+    <button class="dock-button sticker-btn" type="button" onclick="generateInfoSticker()">
+      🏷️ Generate Info Sticker
+    </button>
+    <button class="dock-button" id="downloadStickerBtn" type="button" onclick="downloadSticker()" style="display: none;">
+      ⬇️ Download Sticker
+    </button>
+    <button class="dock-button" type="button" onclick="sharePDF()">
+      📤 Share PDF (With Letterhead)
+    </button>
+  </div>
+  <div class="container">
+    <h2 class="centered">PYCNOMETER   BOTTLE CALIBRATION CERTIFICATE</h2>
+    <form id="calibrationForm">
+      <div class="title_input_pair">
+        <label for="certificateNumber">Certificate No:</label>
+        <input type="text" id="certificateNumber" required>
+      </div>
+      <div class="date">
+          <div class="title_input_pair">
+              <label for="calibrationDate">Date of Calibration:</label>
+              <input type="date" id="calibrationDate"  onchange="calculateNextDate()" required>
+          </div>
+          <div class="title_input_pair">
+              <label for="nextCalibrationDate">Next Suggested Date:</label>
+              <input type="date" id="nextCalibrationDate" required>
+          </div>
+      </div>
+      <div class="title_input_pair">
+        <label for="partyname">Party Name :</label>
+        <input type="text" id="partyname" required>
+      </div>
+      <div class="title_input_pair">
+        <label for="size">SIZE:</label>
+        <select id="size">
+          <option value="750 ML">750 </option>
+           <option value="1000 ML">1000 </option>
+
+        </select>
+      </div>  
+      <div class="title_input_pair">
+        <label for="siteLocation">Site Location:</label>
+        <input type="text" id="siteLocation" required>
+      </div>
+      <div class="unsaved-reminder" id="unsavedReminder">
+        <span>⚠️ Please save your certificate before leaving this page.</span>
+      </div>
+      <div class="sticker-section">
+        <div class="sticker-preview-container">
+          <h3 style="color: #00796b; margin-top: 0;">Info Sticker Preview</h3>
+          <iframe id="stickerPreviewFrame"></iframe>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="general.js"></script>
+  <script>
+    let stickerPdfBlob = null;
+      
+    // Function to fetch form details
+    function getFormDetails() {
+      return {
+        certificateNumber: document.getElementById("certificateNumber").value,
+        calibrationDate: document.getElementById("calibrationDate").value.split("-").reverse().join("/"),
+        siteLocation: document.getElementById("siteLocation").value,
+        size: document.getElementById("size").value,
+        partyname: document.getElementById("partyname").value,
+        nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/"),
+      };
+    }
+
+function addCertificateDetails(doc, details)
+{
+  let Yalign = 50;
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(25);
+  doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, Yalign, { align: 'center' });
+  doc.setFontSize(12);
+  doc.text("SHREEJI INSTRUMENTS: Calibration laboratory certifies that the instrument has been inspected,", 12, Yalign+=10);
+  doc.text("tested,and calibrated in accordance with documented procedures using measuring and test", 12, Yalign+=7);
+  doc.text("equipment traceable to international standards.", 12, Yalign+=7);
+  doc.setFontSize(15);
+  
+  // Certificate Details
+  doc.text(`DATE: ${details.calibrationDate}`, 140, Yalign+=15);
+  doc.text(`REF NO                         :     SI-${details.certificateNumber}`, 14, Yalign);
+  
+  // --- Party Name with wrapping (only value, not prefix) ---
+  const partyNamePrefix = "NAME OF PARTY         :     ";
+  const prefixWidth = doc.getTextWidth(partyNamePrefix);
+  const maxWidth = 180 - prefixWidth;
+  const partyNameLines = doc.splitTextToSize(details.partyname, maxWidth);
+  
+  doc.text(partyNamePrefix + (partyNameLines[0] || ""), 14, Yalign += 15);
+  for (let i = 1; i < partyNameLines.length; i++) {
+    doc.text(partyNameLines[i], 14 + prefixWidth, Yalign += 7);
+  }
+  doc.text(`EQUIPMENT NAME      :     PYCNOMETER   BOTTLE   `, 14, Yalign+=15);
+  doc.text(`SIZE                               :    ${details.size} `, 14, Yalign+=15);
+  doc.text(`SERIAL NO                    :     ${details.certificateNumber}`, 14, Yalign+=15);
+  
+  // --- Site Location with wrapping (only value, not prefix) ---
+  const siteLocPrefix = "SITE LOCATION            :     ";
+  const siteLocPrefixWidth = doc.getTextWidth(siteLocPrefix);
+  const siteLocMaxWidth = 180 - siteLocPrefixWidth;
+  const siteLocLines = doc.splitTextToSize(details.siteLocation, siteLocMaxWidth);
+  
+  doc.text(siteLocPrefix + (siteLocLines[0] || ""), 14, Yalign += 15);
+  for (let i = 1; i < siteLocLines.length; i++) {
+    doc.text(siteLocLines[i], 14 + siteLocPrefixWidth, Yalign += 7);
+  }
+
+  doc.text(`NEXT DUE DATE          :     ${details.nextCalibrationDate}`, 14, Yalign+=15);
+  doc.text(`CALIBRATION BY        :     YOGESH BHAI`, 14, Yalign+=15);
+  doc.setFontSize(12);
+  doc.text("FOR,SHREEJI INSTRUMENTS", 145, 230);
+  doc.text("PROPRIETOR", 170, 245);
+}
+  </script>
+</body>
+</html>
