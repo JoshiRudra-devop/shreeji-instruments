@@ -143,7 +143,7 @@ function addCertificateDetails(doc, details)
     doc.text(partyNameLines[i], 14 + prefixWidth, Yalign += 7);
   }
   doc.text(`EQUIPMENT NAME      :     MEASURING CYLINDER`, 14, Yalign+=15);
-  doc.text(`SIZE                :     ${details.size} /   (${details.type})`, 14, Yalign+=15);
+  doc.text(`SIZE                        :     ${details.size} /   (${details.type})`, 14, Yalign+=15);
   doc.text(`SERIAL NO                  :     ${details.certificateNumber}`, 14, Yalign+=15);
   
   // --- Site Location with wrapping (only value, not prefix) ---
