@@ -69,8 +69,8 @@
       <div class="title_input_pair">
         <label for="type">TYPE:</label>
         <select id="type">
-          <option value="(PP)">PP</option>
-          <option value="(Glass)">GLASS</option>
+          <option value="PP">PP</option>
+          <option value="Glass">GLASS</option>
         </select>
       </div> 
       <div class="title_input_pair">
@@ -142,8 +142,8 @@ function addCertificateDetails(doc, details)
   for (let i = 1; i < partyNameLines.length; i++) {
     doc.text(partyNameLines[i], 14 + prefixWidth, Yalign += 7);
   }
-  doc.text(`EQUIPMENT NAME      :     MEASURING CYLINDER  (${details.type})`, 14, Yalign+=15);
-  doc.text(`SIZE      :     ${details.size}`, 14, Yalign+=15);
+  doc.text(`EQUIPMENT NAME      :     MEASURING CYLINDER`, 14, Yalign+=15);
+  doc.text(`SIZE                :     ${details.size} /   (${details.type})`, 14, Yalign+=15);
   doc.text(`SERIAL NO                  :     ${details.certificateNumber}`, 14, Yalign+=15);
   
   // --- Site Location with wrapping (only value, not prefix) ---
