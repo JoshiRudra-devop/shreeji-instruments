@@ -461,35 +461,6 @@
   </footer>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
   <script>
-    // 🔐 Protect the page
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        document.getElementById('user-info').innerText = "Logged in as: " + user.phoneNumber;
-      } else {
-        // Redirect back if not logged in
-        window.location.href = "index.html";
-      }
-    });
-
-    function logout() {
-      firebase.auth().signOut().then(() => {
-        window.location.href = "index.html";
-      });
-    }
-    
-    // Move Icon on Search Bar Focus
-    function moveIcon() {
-      const icon = document.getElementById('search-icon');
-      gsap.to(icon, {duration: 0.3, left: '20px', opacity: 0, onComplete: () => icon.style.display = 'none'});
-    }
-
-    // Reset Icon on Search Bar Blur
-    function resetIcon() {
-      const icon = document.getElementById('search-icon');
-      icon.style.display = 'flex';
-      gsap.to(icon, {duration: 0.3, left: 'calc(50% - 350px)', opacity: 1});
-    }
-
     // Search Filter
     const searchBar = document.querySelector('.search-bar');
     const cards = document.querySelectorAll('.card');
@@ -505,6 +476,35 @@
         }
       });
     });
+
+    // Move Icon on Search Bar Focus
+    function moveIcon() {
+      const icon = document.getElementById('search-icon');
+      gsap.to(icon, {duration: 0.3, left: '20px', opacity: 0, onComplete: () => icon.style.display = 'none'});
+    }
+
+    // Reset Icon on Search Bar Blur
+    function resetIcon() {
+      const icon = document.getElementById('search-icon');
+      icon.style.display = 'flex';
+      gsap.to(icon, {duration: 0.3, left: 'calc(50% - 350px)', opacity: 1});
+    }
+
+    // 🔐 Protect the page
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        document.getElementById('user-info').innerText = "Logged in as: " + user.phoneNumber;
+      } else {
+        // Redirect back if not logged in
+        window.location.href = "index.html";
+      }
+    });
+
+    function logout() {
+      firebase.auth().signOut().then(() => {
+        window.location.href = "index.html";
+      });
+    }
   </script>
 </body>
 </html>
