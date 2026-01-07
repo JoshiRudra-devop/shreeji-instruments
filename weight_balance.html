@@ -112,7 +112,13 @@
     
     // Table data for each capacity
     const capacityTables = {
-      "600 g": [],
+      "600 g": [
+        ["01", "50", "50.0 ", "±0.1 g"],
+        ["02", "100", "100.0", ' " '],
+        ["03", "200", "200.0", ' " '],
+        ["04", "400", "399.9", ' " '],
+        ["05", "600", "599.9", ' " ']
+      ],
       "5 KG": [
         ["01", "0.01", "10.0", "±0.12 g"],
         ["02", "0.05", "50.0", '"'],
@@ -220,7 +226,7 @@
       doc.text(`NAME OF PARTY        :-     ${details.partyName}`, 14, Yalign += 10);
       doc.text(`EQUIPMENT NAME     :-     WEIGHT BALANCE`, 14, Yalign += 10);
       doc.text(`CAPACITY & MAKE    :-     ${details.capacity} & ${details.make}`, 14, Yalign += 10);
-      doc.text(`SR NO                          :-     SI-${details.certificateNumber}`, 14, Yalign += 10);
+      doc.text(`SR NO                          :-     ${details.serialNo}`, 14, Yalign += 10);
       doc.text(`NEXT DUE DATE        :-     ${details.nextCalibrationDate}`, 14, Yalign += 10);
       doc.text(`SITE LOCATION          :-     ${details.siteLocation}`, 14, Yalign += 10);
 
@@ -229,8 +235,14 @@
       let tableStartY = Yalign + 10;
 
       if (data.length > 0) {
+        let tableHead;
+        if (details.capacity === "600 g") {
+          tableHead = [['SR.NO', 'APPLIED WEIGHT IN (g)', 'ACTUAL VALUE IN (g)', 'UNCERTANITY AT 95% C.L. (COVARAGE FACTOR k=2)']];
+        } else {
+          tableHead = [['SR.NO', 'APPLIED WEIGHT IN (KG)', 'ACTUAL VALUE IN (g/kg)', 'UNCERTANITY AT 95% C.L. (COVARAGE FACTOR k=2)']];
+        }
         doc.autoTable({
-          head: [['SR.NO', 'APPLIED WEIGHT IN (KG)', 'ACTUAL VALUE IN (g/kg)', 'UNCERTANITY AT 95% C.L. (COVARAGE FACTOR k=2)']],
+          head: tableHead,
           body: data,
           startY: tableStartY,
           styles: { 
@@ -349,3 +361,4 @@
  </script>
 </body>
 </html>
+
