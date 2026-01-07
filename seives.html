@@ -90,16 +90,31 @@
             </select> 
           </div>
         </div>
+        <div id="subSizes" style="display:none; border: 2px solid #00796b; border-radius: 10px; padding: 20px; margin: 10px 0; background-color: #f9f9f9; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+          <h3 style="margin-top: 0; color: #00796b;">Select Sub-Sizes:</h3>
+          <div id="checkBoxes" style="display: flex; flex-wrap: wrap; gap: 15px;"></div>
+          <button id="selectFullSetBtn" style="margin-top: 15px; padding: 10px 20px; background-color: #00796b; color: white; border: none; border-radius: 5px; cursor: pointer;">SELECT FULL SET</button>
+        </div>
         <div id="testResults">
           <h3>Test Results</h3>
-          <div class="test-result">
-            <input type="text" placeholder="Sieves NUMBER" required>
+          <table id="resultsTable" style="display:none;">
+            <thead>
+              <tr>
+                <th>SR NO.</th>
+                <th>MAKE</th>
+                <th>SEIVE</th>
+                <th>SEIVE SIZE</th>
+                <th>RESULT</th>
+              </tr>
+            </thead>
+            <tbody id="resultsBody">
+            </tbody>
+          </table>
+          <div id="selectedSizes" style="border: 2px solid #00796b; border-radius: 10px; padding: 20px; margin: 10px 0; background-color: #f9f9f9; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            <h3 style="margin-top: 0; color: #00796b;">Selected Sub-Sizes:</h3>
+            <div id="selectedList" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
           </div>
         </div>
-        
-        <div class="button-group">
-          <button class="dock-button" type="button" onclick="addTestResultRow()">Add SEIVES</button>
-          </div>
         <div class="unsaved-reminder" id="unsavedReminder">
           <span>⚠️ Please save your certificate before leaving this page.</span>
         </div>
@@ -128,106 +143,276 @@
         sieveSize: document.getElementById("sieveSize").value,
       };
     }
+
+    function parseSize(size) {
+      const match = size.match(/(\d+(?:\.\d+)?)/);
+      if (!match) return 0;
+      const num = parseFloat(match[1]);
+      if (size.includes('μm') || size.includes('MICRON') || size.includes('microns')) return num / 1000; // convert to mm for sorting
+      return num;
+    }
+
+    function getFullSet(size) {
+      const fullSets = {
+        'Brass 200 MM DIA': ['4.75 MM', '2.36 MM', '1.18 MM', '600 MICRON', '300 MICRON', '150 MICRON', '10 MICRON'],
+        'GI 300 MM DIA': ['125mm', '100mm', '80mm', '63mm', '50mm', '40mm', '25mm', '16mm'],
+        'GI 450 MM DIA': ['125mm', '100mm', '80mm', '63mm', '50mm', '40mm', '25mm', '16mm']
+      };
+      return fullSets[size] || [];
+    }
+
+    function getSubSizes(size) {
+      const sizes = {
+        'Brass 200 MM DIA': ['4.75 MM', '2.36 MM', '1.18 MM', '10 MM', '150 MICRON', '300 MICRON', '600 MICRON', '75 MICRON', '90 MICRON', '425 MICRON', '1 MM', '3.35 mm', '2.80 mm', '2.00 mm', '1.70 mm', '1.40 mm', '850 microns', '710 microns', '500 microns', '355 microns', '250 microns', '212 microns', '180 microns', '125 microns', '106 microns', '63 microns', '53 microns', '10 MICRON'],
+        'GI 300 MM DIA': ['125mm', '106mm', '100mm', '90mm', '80mm', '75mm', '63mm', '53mm', '50mm', '45mm', '40mm', '37.5mm', '31.5mm', '26.5mm', '25mm', '22.4mm', '20mm', '19mm', '16mm', '13.2mm', '12.5mm', '11.2mm', '10mm', '9.5mm', '8mm', '6.7mm', '6.3mm', '5.6mm', '4.75mm'],
+        'GI 450 MM DIA': ['125mm', '106mm', '100mm', '90mm', '80mm', '75mm', '63mm', '53mm', '50mm', '45mm', '40mm', '37.5mm', '31.5mm', '26.5mm', '25mm', '22.4mm', '20mm', '19mm', '16mm', '13.2mm', '12.5mm', '11.2mm', '10mm', '9.5mm', '8mm', '6.7mm', '6.3mm', '5.6mm', '4.75mm']
+      };
+      return sizes[size] || [];
+    }
+
+    function updateSelectedDisplay() {
+      const selectedList = document.getElementById('selectedList');
+      selectedList.innerHTML = '';
+      const tbody = document.getElementById('resultsBody');
+      for (let row of tbody.rows) {
+        const size = row.cells[3].textContent;
+        const item = document.createElement('span');
+        item.style.display = 'inline-flex';
+        item.style.alignItems = 'center';
+        item.style.padding = '5px 10px';
+        item.style.border = '1px solid #ccc';
+        item.style.borderRadius = '5px';
+        item.style.backgroundColor = '#fff';
+        item.innerHTML = '✓ ' + size;
+        selectedList.appendChild(item);
+      }
+    }
+
+    function updateSubSizes() {
+      const size = document.getElementById('sieveSize').value;
+      const subSizesDiv = document.getElementById('subSizes');
+      const checkBoxesDiv = document.getElementById('checkBoxes');
+      const tbody = document.getElementById('resultsBody');
+      if (!size) {
+        subSizesDiv.style.display = 'none';
+        tbody.innerHTML = '';
+        updateSelectedDisplay();
+        return;
+      }
+      // Auto-select MAKE based on sieve size
+      const makeSelect = document.getElementById('make');
+      if (size === 'Brass 200 MM DIA') {
+        makeSelect.value = 'STANDARD';
+      } else {
+        makeSelect.value = 'ASC';
+      }
+      updateMake(); // Update existing rows with new make
+      subSizesDiv.style.display = 'block';
+      tbody.innerHTML = '';
+      updateSelectedDisplay();
+      checkBoxesDiv.innerHTML = '';
+      const subSizes = getSubSizes(size);
+      subSizes.sort((a, b) => parseSize(b) - parseSize(a));
+      subSizes.forEach(sub => {
+        const label = document.createElement('label');
+        label.style.display = 'flex';
+        label.style.alignItems = 'center';
+        label.style.padding = '5px 10px';
+        label.style.border = '1px solid #ccc';
+        label.style.borderRadius = '5px';
+        label.style.backgroundColor = '#fff';
+        label.style.cursor = 'pointer';
+        label.style.transition = 'background-color 0.3s';
+        label.onmouseover = () => label.style.backgroundColor = '#e0f2f1';
+        label.onmouseout = () => label.style.backgroundColor = '#fff';
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = sub;
+        checkbox.style.marginRight = '5px';
+        checkbox.onchange = () => toggleRow(sub, checkbox.checked);
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(sub));
+        checkBoxesDiv.appendChild(label);
+      });
+      // Add onclick to SELECT FULL SET button
+      document.getElementById('selectFullSetBtn').onclick = () => {
+        const fullSet = getFullSet(size);
+        const checkboxes = document.querySelectorAll('#checkBoxes input[type="checkbox"]');
+        checkboxes.forEach(cb => {
+          if (fullSet.includes(cb.value)) {
+            cb.checked = true;
+            toggleRow(cb.value, true);
+          }
+        });
+      };
+    }
+
+    function toggleRow(subSize, checked) {
+      const tbody = document.getElementById('resultsBody');
+      const make = document.getElementById('make').value;
+      const seive = document.getElementById('sieveSize').value;
+      if (checked) {
+        const row = tbody.insertRow();
+        const srCell = row.insertCell();
+        srCell.textContent = tbody.rows.length;
+        const makeCell = row.insertCell();
+        makeCell.textContent = make;
+        const seiveCell = row.insertCell();
+        seiveCell.textContent = seive;
+        const sizeCell = row.insertCell();
+        sizeCell.textContent = subSize;
+        const resultCell = row.insertCell();
+        resultCell.textContent = 'OK';
+      } else {
+        for (let i = 0; i < tbody.rows.length; i++) {
+          if (tbody.rows[i].cells[3].textContent === subSize) {
+            tbody.deleteRow(i);
+            for (let j = i; j < tbody.rows.length; j++) {
+              tbody.rows[j].cells[0].textContent = j + 1;
+            }
+            break;
+          }
+        }
+      }
+      updateSelectedDisplay();
+    }
+
+    function updateMake() {
+      const make = document.getElementById('make').value;
+      document.querySelectorAll('#resultsBody tr').forEach(row => {
+        row.cells[1].textContent = make;
+      });
+    }
+
+    document.getElementById('sieveSize').addEventListener('change', updateSubSizes);
+    document.getElementById('make').addEventListener('change', updateMake);
   function addTestResultRow() {
       const testResults = document.getElementById('testResults');
       const currentRows = testResults.getElementsByClassName('test-result').length;
-      if (currentRows >= 9) {
-        alert("You can only add up to 9 rows.");
-        return;
-      }
       const row = document.createElement('div');
       row.className = 'test-result';
       row.innerHTML = `<input type="text" placeholder="Sieves NUMBER" required>`;
       testResults.appendChild(row);
     }
- function addCertificateDetails(doc, details)
+function addCertificateDetails(doc, details)
      {
-      let Yalign=50;
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(25);   
-      doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth()/2, Yalign, { align: 'center' });
-
-      doc.setFont("helvetica", "bold"); 
-      doc.setFontSize(12);  
-    
-      doc.text(`NAME OF PARTY           :-     ${details.partyName}`, 14, Yalign+=5);
-      doc.text(`REF NO:- SI-${details.certificateNumber}`, 140, Yalign+=5);
-      doc.text(`EQUIPMENT NAME        :-     TEST SEIVES`, 14, Yalign);
-      doc.text(`SITE LOCATION             :-     ${details.siteLocation}`, 14, Yalign+=5);
-      doc.text(`CALIBRATION DATE     :-     ${details.calibrationDate}`, 14, Yalign+=5);
-      doc.text(`NEXT DUE DATE            :-     ${details.nextCalibrationDate}`, 14, Yalign+=5);
-
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(14);   
-      doc.text("Test Results", doc.internal.pageSize.getWidth()/2, Yalign+=5, { align: 'center' });
-
       const testResults = [];
-      let sr_no = 1;
-      document.querySelectorAll('#testResults .test-result').forEach(row => {
-        const sieveNo = row.children[0].value;
-        testResults.push([`BS-${sr_no}`, details.make, details.sieveSize, sieveNo, 'OK']);
-        sr_no += 1;
+      document.querySelectorAll('#resultsBody tr').forEach(row => {
+        const cells = row.cells;
+        testResults.push([cells[0].textContent, cells[1].textContent, cells[2].textContent, cells[3].textContent, cells[4].textContent]);
       });
 
-      doc.autoTable({
-        head: [['SR NO.', 'MAKE', 'SEIVE', 'SEIVE SIZE', 'RESULT']],
-        body: testResults,
-        startY: Yalign+=3,
-        styles: { 
-          fontSize: 8 ,
-          textColor: [0,0,0],
-          fontStyle:"bold",  
-          lineColor:[87, 86, 85],
-          lineWidth: 0.2,
-          halign: 'center',  // horizontal align to center
-          valign: 'middle',  // vertical align to middle
-        },
-        headStyles: {
-          fontSize: 10,
-          fillColor: [255, 255, 255],
-          textColor: [0,0,0],
-          lineColor: [0, 0, 0],
-          lineWidth: 0.2,
-          halign: 'center',  // horizontal align to center
-          valign: 'middle',  // vertical align to middle
-        },
-        alternateRowStyles: {
-          fillColor: [255, 255, 255]
+      // Sort by size descending
+      testResults.sort((a, b) => parseSize(b[3]) - parseSize(a[3]));
+
+      // Reassign SR NO.
+      testResults.forEach((row, index) => {
+        row[0] = (index + 1).toString();
+      });
+
+      let isFirstPage = true;
+      let currentY = 50;
+      let currentCertNo = parseInt(details.certificateNumber) || 0;
+
+      while (testResults.length > 0) {
+        if (!isFirstPage) {
+          doc.addPage();
+          currentY = 50;
+          currentCertNo++;
         }
-      });
 
-      let yPosition = doc.autoTable.previous.finalY + 3;
-      doc.setFontSize(9);
-      doc.setFont("helvetica", "bold");
-      doc.text("*REMARKS:-", doc.internal.pageSize.getWidth()/2, yPosition+=2, { align: 'center' }); yPosition += 5;
-      doc.setFont("helvetica", "bold"); 
-      doc.setFontSize(8);
-      doc.text("•THESE RESULTS ARE OBTAINED AT THE TIME OF CALIBRATION.", 14, yPosition); yPosition += 5;
-      doc.text("•ANY HAND WRITTEN CORRECTION (EXCEPT @ OR PHOTOCOPIES OF THE REPORT INVALIDATES THIS CERTIFICATE).", 14, yPosition); yPosition += 5;
-      doc.text("•ENVIRONMENT CONDITION DURING CALIBRATION: 20 + 2.C, 40 TO 60% RH.", 14, yPosition); yPosition += 5;
-      doc.text("•THE UNCERTAINTIES ARE FOR A CONFIDENCE PROBABILITY OF NOT LESS THAN 95%. ", 14, yPosition); yPosition += 5;
-      doc.text("•REFERENCE CALIBRATION METHOD NO: NCQC/CM/102.", 14, yPosition); yPosition += 5;
-      doc.text("•REFERENCE STANDARD NO.IS-2-1960.", 14, yPosition); yPosition += 7;
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(25);   
+        doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth()/2, currentY, { align: 'center' });
 
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(9);
-      doc.text("*DETAILS OF OUR MASTER INSTRUMENT THROUGH WHICH SEIVES ARE CALIBRATED", doc.internal.pageSize.getWidth()/2, yPosition, { align: 'center' }); yPosition += 7;
-      doc.setFont("helvetica", "bold");       
-      doc.setFontSize(8);
+        doc.setFont("helvetica", "bold"); 
+        doc.setFontSize(12);  
 
-      doc.text("NAME :DIGITAL VERNIAR CALIPER", 14, yPosition); yPosition += 5;
-      doc.text(`SERIAL NO  :ACCUPLUS/13-200`, 124, yPosition);
-      doc.text('RANGE:0-200MM', 14, yPosition); yPosition += 5;
-      doc.text(`LEAST COUNT:0.001"(O.O1MM)`, 124, yPosition);
-      doc.text('VALID UP TO DATE:03/07/2026', 14, yPosition); yPosition += 5;
-      doc.text('OUR MASTER INSTRUMENT IS CALIBRATED AND TRACEABLE TO NATIONAL STANDARD THROUGH NABL ACCREDITED ', 14, yPosition); yPosition += 5;
-      doc.text('LABORATORY "IDEMI CALIBRATION LABORATORY."', 14, yPosition); yPosition += 5;
-      doc.text('CERTIFICATE NUMBER:-62', 14, yPosition); yPosition += 5;
-      
-      doc.setFont("helvetica", "bold"); 
-      doc.setFontSize(12); 
-      doc.text("FOR, SHREEJI INSTRUMENTS", 145, 230);
-      doc.text("PROPRIETOR", 170, 245);
+        currentY += 5;
+        doc.text(`NAME OF PARTY           :-     ${details.partyName}`, 14, currentY);
+        currentY += 5;
+        doc.text(`REF NO:- SI-${currentCertNo}`, 140, currentY);
+        doc.text(`EQUIPMENT NAME        :-     TEST SEIVES`, 14, currentY);
+        currentY += 5;
+        doc.text(`SITE LOCATION             :-     ${details.siteLocation}`, 14, currentY);
+        currentY += 5;
+        doc.text(`CALIBRATION DATE     :-     ${details.calibrationDate}`, 14, currentY);
+        currentY += 5;
+        doc.text(`NEXT DUE DATE            :-     ${details.nextCalibrationDate}`, 14, currentY);
+        currentY += 5;
+
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(14);   
+        doc.text("Test Results", doc.internal.pageSize.getWidth()/2, currentY, { align: 'center' });
+        currentY += 3;
+
+        const chunk = testResults.splice(0, 9);
+
+        doc.autoTable({
+          head: [['SR NO.', 'MAKE', 'SEIVE', 'SEIVE SIZE', 'RESULT']],
+          body: chunk,
+          startY: currentY,
+          styles: { 
+            fontSize: 8 ,
+            textColor: [0,0,0],
+            fontStyle:"bold",  
+            lineColor:[87, 86, 85],
+            lineWidth: 0.2,
+            halign: 'center',
+            valign: 'middle',
+          },
+          headStyles: {
+            fontSize: 10,
+            fillColor: [255, 255, 255],
+            textColor: [0,0,0],
+            lineColor: [0, 0, 0],
+            lineWidth: 0.2,
+            halign: 'center',
+            valign: 'middle',
+          },
+          alternateRowStyles: {
+            fillColor: [255, 255, 255]
+          }
+        });
+
+        currentY = doc.autoTable.previous.finalY + 3;
+        isFirstPage = false;
+
+        let yPosition = currentY;
+        doc.setFontSize(9);
+        doc.setFont("helvetica", "bold");
+        doc.text("*REMARKS:-", doc.internal.pageSize.getWidth()/2, yPosition+=2, { align: 'center' }); yPosition += 5;
+        doc.setFont("helvetica", "bold"); 
+        doc.setFontSize(8);
+        doc.text("•THESE RESULTS ARE OBTAINED AT THE TIME OF CALIBRATION.", 14, yPosition); yPosition += 5;
+        doc.text("•ANY HAND WRITTEN CORRECTION (EXCEPT @ OR PHOTOCOPIES OF THE REPORT INVALIDATES THIS CERTIFICATE).", 14, yPosition); yPosition += 5;
+        doc.text("•ENVIRONMENT CONDITION DURING CALIBRATION: 20 + 2.C, 40 TO 60% RH.", 14, yPosition); yPosition += 5;
+        doc.text("•THE UNCERTAINTIES ARE FOR A CONFIDENCE PROBABILITY OF NOT LESS THAN 95%. ", 14, yPosition); yPosition += 5;
+        doc.text("•REFERENCE CALIBRATION METHOD NO: NCQC/CM/102.", 14, yPosition); yPosition += 5;
+        doc.text("•REFERENCE STANDARD NO.IS-2-1960.", 14, yPosition); yPosition += 7;
+
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(9);
+        doc.text("*DETAILS OF OUR MASTER INSTRUMENT THROUGH WHICH SEIVES ARE CALIBRATED", doc.internal.pageSize.getWidth()/2, yPosition, { align: 'center' }); yPosition += 7;
+        doc.setFont("helvetica", "bold");       
+        doc.setFontSize(8);
+
+        doc.text("NAME :DIGITAL VERNIAR CALIPER", 14, yPosition); yPosition += 5;
+        doc.text(`SERIAL NO  :ACCUPLUS/13-200`, 124, yPosition);
+        doc.text('RANGE:0-200MM', 14, yPosition); yPosition += 5;
+        doc.text(`LEAST COUNT:0.001"(O.O1MM)`, 124, yPosition);
+        doc.text('VALID UP TO DATE:03/07/2026', 14, yPosition); yPosition += 5;
+        doc.text('OUR MASTER INSTRUMENT IS CALIBRATED AND TRACEABLE TO NATIONAL STANDARD THROUGH NABL ACCREDITED ', 14, yPosition); yPosition += 5;
+        doc.text('LABORATORY "IDEMI CALIBRATION LABORATORY."', 14, yPosition); yPosition += 5;
+        doc.text('CERTIFICATE NUMBER:-62', 14, yPosition); yPosition += 5;
+
+        doc.setFont("helvetica", "bold"); 
+        doc.setFontSize(12); 
+        doc.text("FOR, SHREEJI INSTRUMENTS", 145, 230);
+        doc.text("PROPRIETOR", 170, 245);
+      }
+
+      // No signature here anymore
     }
    async function generateInfoSticker() {
       const { jsPDF } = window.jspdf;
