@@ -80,6 +80,173 @@ async function generatePDFblankpg() {
   );
 }
 
+async function generateWord() {
+  if (!document.getElementById("calibrationForm").reportValidity()) return;
+  
+  showCustomLoader("Generating Word document...");
+  
+  try {
+    const details = getFormDetails();
+    
+    // Create a new Document
+    const docx = new window.docx.Document({
+      sections: [{
+        children: [
+          // Header
+          new window.docx.Paragraph({
+            text: "SHREEJI INSTRUMENTS",
+            bold: true,
+            fontSize: 28,
+            alignment: window.docx.AlignmentType.CENTER,
+            spacing: { after: 100 }
+          }),
+          new window.docx.Paragraph({
+            text: "SALES • SERVICE • REPAIRING • CALIBRATIONS",
+            fontSize: 12,
+            alignment: window.docx.AlignmentType.CENTER,
+            spacing: { after: 200 }
+          }),
+          
+          // Title
+          new window.docx.Paragraph({
+            text: "CALIBRATION CERTIFICATE",
+            bold: true,
+            fontSize: 24,
+            alignment: window.docx.AlignmentType.CENTER,
+            spacing: { after: 150 }
+          }),
+          
+          // Certificate Details Table
+          new window.docx.Table({
+            width: { size: 100, type: window.docx.WidthType.PERCENTAGE },
+            rows: [
+              new window.docx.TableRow({
+                children: [
+                  new window.docx.TableCell({
+                    children: [new window.docx.Paragraph({ text: "Certificate No:", bold: true })],
+                    shading: { fill: "E8E8E8" }
+                  }),
+                  new window.docx.TableCell({
+                    children: [new window.docx.Paragraph({ text: `SI-${details.certificateNumber}` })]
+                  })
+                ]
+              }),
+              new window.docx.TableRow({
+                children: [
+                  new window.docx.TableCell({
+                    children: [new window.docx.Paragraph({ text: "Date of Calibration:", bold: true })],
+                    shading: { fill: "E8E8E8" }
+                  }),
+                  new window.docx.TableCell({
+                    children: [new window.docx.Paragraph({ text: details.calibrationDate })]
+                  })
+                ]
+              }),
+              new window.docx.TableRow({
+                children: [
+                  new window.docx.TableCell({
+                    children: [new window.docx.Paragraph({ text: "Next Calibration Date:", bold: true })],
+                    shading: { fill: "E8E8E8" }
+                  }),
+                  new window.docx.TableCell({
+                    children: [new window.docx.Paragraph({ text: details.nextCalibrationDate })]
+                  })
+                ]
+              }),
+              new window.docx.TableRow({
+                children: [
+                  new window.docx.TableCell({
+                    children: [new window.docx.Paragraph({ text: "Name of Party:", bold: true })],
+                    shading: { fill: "E8E8E8" }
+                  }),
+                  new window.docx.TableCell({
+                    children: [new window.docx.Paragraph({ text: details.partyName })]
+                  })
+                ]
+              }),
+              new window.docx.TableRow({
+                children: [
+                  new window.docx.TableCell({
+                    children: [new window.docx.Paragraph({ text: "Equipment Name:", bold: true })],
+                    shading: { fill: "E8E8E8" }
+                  }),
+                  new window.docx.TableCell({
+                    children: [new window.docx.Paragraph({ text: details.instrumentType || "AUTO LEVEL" })]
+                  })
+                ]
+              }),
+              new window.docx.TableRow({
+                children: [
+                  new window.docx.TableCell({
+                    children: [new window.docx.Paragraph({ text: "Make:", bold: true })],
+                    shading: { fill: "E8E8E8" }
+                  }),
+                  new window.docx.TableCell({
+                    children: [new window.docx.Paragraph({ text: details.make })]
+                  })
+                ]
+              }),
+              new window.docx.TableRow({
+                children: [
+                  new window.docx.TableCell({
+                    children: [new window.docx.Paragraph({ text: "Model No:", bold: true })],
+                    shading: { fill: "E8E8E8" }
+                  }),
+                  new window.docx.TableCell({
+                    children: [new window.docx.Paragraph({ text: details.modelNo })]
+                  })
+                ]
+              }),
+              new window.docx.TableRow({
+                children: [
+                  new window.docx.TableCell({
+                    children: [new window.docx.Paragraph({ text: "Serial No:", bold: true })],
+                    shading: { fill: "E8E8E8" }
+                  }),
+                  new window.docx.TableCell({
+                    children: [new window.docx.Paragraph({ text: details.serialNo })]
+                  })
+                ]
+              })
+            ]
+          }),
+          
+          new window.docx.Paragraph({ text: "", spacing: { after: 200 } }),
+          
+          // Certificate Text
+          new window.docx.Paragraph({
+            text: `This is to certify that the above mentioned equipment has been calibrated as per our standard procedures and found to be in good working condition.`,
+            alignment: window.docx.AlignmentType.LEFT,
+            spacing: { after: 150 }
+          }),
+          
+          new window.docx.Paragraph({
+            text: "FOR, SHREEJI INSTRUMENTS",
+            alignment: window.docx.AlignmentType.RIGHT,
+            bold: true,
+            spacing: { after: 100 }
+          }),
+          
+          new window.docx.Paragraph({
+            text: "PROPRIETOR",
+            alignment: window.docx.AlignmentType.RIGHT,
+            spacing: { before: 200 }
+          })
+        ]
+      }]
+    });
+    
+    // Generate and save the document
+    window.docx.Packer.toBlob(docx).then(blob => {
+      saveDocWithLocation(blob, `${details.saveentry || "Unknown"}.docx`);
+    });
+  } catch (error) {
+    console.error("Error generating Word document:", error);
+    showCustomLoader("Failed to generate Word document 😞");
+    setTimeout(hideCustomLoader, 1400);
+  }
+}
+
 async function sharePDF() {
   if (!document.getElementById("calibrationForm").reportValidity()) return;
   const { jsPDF } = window.jspdf;
@@ -206,6 +373,45 @@ async function savePDFWithLocation(pdfDocument, defaultFileName) {
     setTimeout(hideCustomLoader, 1400);
   }
 }
+
+async function saveDocWithLocation(docBlob, defaultFileName) {
+  try {
+    if (window.showSaveFilePicker) {
+      const fileHandle = await window.showSaveFilePicker({
+        suggestedName: defaultFileName,
+        types: [
+          { description: "Word Files", accept: { "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"] } },
+        ],
+      });
+      const writableStream = await fileHandle.createWritable();
+      await writableStream.write(docBlob);
+      await writableStream.close();
+      pdfSaved = true;
+      updateUnsavedReminder();
+      showCustomTick("Word document saved successfully! ✨");
+      setTimeout(hideCustomLoader, 1500);
+    } else {
+      // Fallback for browsers that don't support File System Access API
+      const url = URL.createObjectURL(docBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = defaultFileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      pdfSaved = true;
+      updateUnsavedReminder();
+      showCustomTick("Word document downloaded successfully! ✨");
+      setTimeout(hideCustomLoader, 1500);
+    }
+  } catch (error) {
+    console.error("Error saving Word document:", error);
+    showCustomLoader("Save failed 😞");
+    setTimeout(hideCustomLoader, 1400);
+  }
+}
+
 function addImg(doc, details) {
   const img = new Image();
   img.src = "footer.jpeg";
