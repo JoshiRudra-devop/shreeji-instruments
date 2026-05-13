@@ -19,7 +19,7 @@
       <li><a href="contactUs.html">Contact Us</a></li>
     </ul>
   </nav>
-    <button class="back-button" onclick="window.history.back()"><< Back</button>
+    <button class="back-button" onclick="goBackOrPromptSave()">← Back</button>
       <button class="dock-toggle" onclick="toggleDock()">☰ Actions</button>
   <div class="side-dock" id="sideDock">
     <h3>Actions</h3>
@@ -27,22 +27,22 @@
       📋 Preview Certificate
     </button>
     <button class="dock-button" type="button" onclick="generatePDF()">
-      📄 Download with Letterhead
+      📄 Download PDF
     </button>
-    <button class="dock-button" type="button" onclick="generatePDFblankpg()">
-      📝 Download without Letterhead
+    <button class="dock-button" type="button" onclick="generateWord()">
+      📝 Download Word
     </button>
     <button class="dock-button" type="button" onclick="printBlankCertificate()">
-      🖨️ Print without Letterhead
+      🖨️ Print
     </button>
     <button class="dock-button sticker-btn" type="button" onclick="generateInfoSticker()">
-      🏷️ Generate Info Sticker
+      🏷️ Generate Sticker
     </button>
     <button class="dock-button" id="downloadStickerBtn" type="button" onclick="downloadSticker()" style="display: none;">
       ⬇️ Download Sticker
     </button>
     <button class="dock-button" type="button" onclick="sharePDF()">
-      📤 Share PDF (With Letterhead)
+      📤 Share PDF
     </button>
   </div>
   <div class="container">
@@ -95,21 +95,21 @@
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.min.js"></script>
     <script src="general.js"></script>
-      <script>
+       <script>
     
-    // Function to fetch form details
     function getFormDetails() {
       return {
         certificateNumber: document.getElementById("certificateNumber").value,
         calibrationDate: document.getElementById("calibrationDate").value.split("-").reverse().join("/"),
         siteLocation: document.getElementById("siteLocation").value,
         partyName: document.getElementById("partyName").value,
-        // equipmentType: document.getElementById("equipmentType").value,
         make: document.getElementById("make").value,
         size: document.getElementById("size").value,
         capacity: document.getElementById("capacity").value,
         nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/"),
+        saveentry: `${document.getElementById("make").value} ${document.getElementById("size").value} ${document.getElementById("certificateNumber").value || "Unknown"} `
       };
     }
     function addCertificateDetails(doc, details)
@@ -119,12 +119,10 @@
   doc.setFontSize(25);
   doc.text("CALIBRATION CERTIFICATE", doc.internal.pageSize.getWidth() / 2, Yalign, { align: 'center' });
   
-  // Spacing
   doc.setFontSize(12);
   doc.text(`DATE:-${details.calibrationDate}`, 155, Yalign += 10);
   doc.text(`REF NO                        :-     SI-${details.certificateNumber}`, 14, Yalign);
   
-  // --- Party Name with wrapping ---
   const partyNamePrefix = "NAME OF PARTY        :-     ";
   const prefixWidth = doc.getTextWidth(partyNamePrefix);
   const maxWidth = 180 - prefixWidth;
@@ -141,7 +139,6 @@
   doc.text(`SR NO                          :-     SI-${details.certificateNumber}`, 14, Yalign += 10);
   doc.text(`NEXT DUE DATE        :-     ${details.nextCalibrationDate}`, 14, Yalign += 10);
   
-  // --- Site Location with wrapping ---
   const siteLocPrefix = "SITE LOCATION          :-     ";
   const siteLocPrefixWidth = doc.getTextWidth(siteLocPrefix);
   const siteLocMaxWidth = 180 - siteLocPrefixWidth;
@@ -190,10 +187,8 @@
   });
   
   let tableStartY2 = doc.autoTable.previous.finalY;
-  // Add calibrated by
   doc.setFontSize(12);
   doc.text("CALIBRATED BY: YOGESH B JOSHI", 14, tableStartY2 += 10);
-  // Add footer
   doc.setFont("helvetica", "bold");
   doc.setFontSize(12);
   doc.text("FOR, SHREEJI INSTRUMENTS", 145, 230);

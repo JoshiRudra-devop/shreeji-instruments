@@ -27,10 +27,13 @@
     <div class="side-dock" id="sideDock">
     <h3>Actions</h3>
     <button class="dock-button" type="button" onclick="preview()">
-      📋 Preview 
+      📋 Preview Certificate
     </button>
-    <button class="dock-button" type="button" id="uploadBtn" >
-      📄 Save
+    <button class="dock-button" type="button" onclick="generatePDF()">
+      📄 Download PDF
+    </button>
+    <button class="dock-button" type="button" onclick="generateWord()">
+      📝 Download Word
     </button>
     <button class="dock-button" type="button" onclick="printBlankCertificate()">
       🖨️ Print
@@ -108,12 +111,13 @@
     </div>
    <script src="general.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.min.js"></script>
     <script>
       let stickerPdfBlob = null;
       function formatDateToWords(dateString) {
-  const date = new Date(dateString); // "YYYY-MM-DD" input
+  const date = new Date(dateString);
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  return date.toLocaleDateString('en-US', options); // "July 16, 2025"
+  return date.toLocaleDateString('en-US', options);
 }
 
 
@@ -131,13 +135,11 @@
         };
       }
       const details = getFormDetails();
-    //   const saveentry =`${details.make} ${details.modelNo || "Unknown"} ${details.serialNo || "Unknown"}`;
 
       function addCertificateDetails(doc, details) {     
         let Yalign=48;
         const saveentry =`${details.make} ${details.modelNo || "Unknown"} ${details.serialNo || "Unknown"}`;
 
-// Format the dates
 const formattedCalibrationDate = formatDateToWords(document.getElementById("calibrationDate").value);
 const formattedNextDate = formatDateToWords(document.getElementById("nextCalibrationDate").value);
 
@@ -172,7 +174,6 @@ const formattedNextDate = formatDateToWords(document.getElementById("nextCalibra
         doc.text("PROPRIETOR", 170, 245);
       }
      
-      // --- Sticker logic ---
       async function generateInfoSticker() {
         const { jsPDF } = window.jspdf;
         const width = 40 * 2.83465;

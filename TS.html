@@ -28,22 +28,22 @@
       📋 Preview Certificate
     </button>
     <button class="dock-button" type="button" onclick="generatePDF()">
-      📄 Download with Letterhead
+      📄 Download PDF
     </button>
-    <button class="dock-button" type="button" onclick="generatePDFblankpg()">
-      📝 Download without Letterhead
+    <button class="dock-button" type="button" onclick="generateWord()">
+      📝 Download Word
     </button>
     <button class="dock-button" type="button" onclick="printBlankCertificate()">
-      🖨️ Print without Letterhead
+      🖨️ Print
     </button>
     <button class="dock-button sticker-btn" type="button" onclick="generateInfoSticker()">
-      🏷️ Generate Info Sticker
+      🏷️ Generate Sticker
     </button>
     <button class="dock-button" id="downloadStickerBtn" type="button" onclick="downloadSticker()" style="display: none;">
       ⬇️ Download Sticker
     </button>
     <button class="dock-button" type="button" onclick="sharePDF()">
-      📤 Share PDF (With Letterhead)
+      📤 Share PDF
     </button>
   </div>
   <div class="container">
@@ -92,6 +92,7 @@
   </div>
     <script src="general.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.min.js"></script>
   <script>
     let stickerPdfBlob = null;
   
@@ -152,7 +153,6 @@
       doc.text("PROPRIETOR", 170, 245);
     }
     
-    // --- Sticker logic ---
     async function generateInfoSticker() {
       const { jsPDF } = window.jspdf;
       const width = 40 * 2.83465;

@@ -28,26 +28,23 @@
     <button class="dock-button" type="button" onclick="preview()">
       📋 Preview Certificate
     </button>
-    <button class="dock-button" type="button" id="uploadBtn">
-      📄 Upload PDF to Cloudinary & Firebase
-    </button>
     <button class="dock-button" type="button" onclick="generatePDF()">
-      📄 Download with Letterhead
+      📄 Download PDF
     </button>
-    <button class="dock-button" type="button" onclick="generatePDFblankpg()">
-      📝 Download without Letterhead
+    <button class="dock-button" type="button" onclick="generateWord()">
+      📝 Download Word
     </button>
     <button class="dock-button" type="button" onclick="printBlankCertificate()">
-      🖨️ Print without Letterhead
+      🖨️ Print
     </button>
     <button class="dock-button sticker-btn" type="button" onclick="generateInfoSticker()">
-      🏷️ Generate Info Sticker
+      🏷️ Generate Sticker
     </button>
     <button class="dock-button" id="downloadStickerBtn" type="button" onclick="downloadSticker()" style="display: none;">
       ⬇️ Download Sticker
     </button>
     <button class="dock-button" type="button" onclick="sharePDF()">
-      📤 Share PDF (With Letterhead)
+      📤 Share PDF
     </button>
   </div>
   <div class="container">
@@ -84,10 +81,6 @@
         <label for="serialNo">Serial No:</label>
         <input type="text" id="serialNo" required>
       </div>
-      <!-- <div class="title_input_pair">
-        <label for="siteLocation">Site Location:</label>
-        <input type="text" id="siteLocation" required>
-      </div> -->
       <div class="unsaved-reminder" id="unsavedReminder">
         <span>⚠️ Please save your certificate before leaving this page.</span>
       </div>
@@ -115,6 +108,7 @@
   <script src="general.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.min.js"></script>
   <script>
     let stickerPdfBlob = null;
 
@@ -127,6 +121,7 @@
         serialNo: document.getElementById("serialNo").value,
         instrumentType:document.getElementById("instrumentType").value ,
         nextCalibrationDate: document.getElementById("nextCalibrationDate").value.split("-").reverse().join("/"),
+        saveentry: `${document.getElementById("make").value} ${document.getElementById("serialNo").value} ${document.getElementById("certificateNumber").value || "Unknown"} `
       };
     }
 
