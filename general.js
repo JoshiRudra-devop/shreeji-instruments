@@ -34,6 +34,32 @@ function hideCustomLoader() {
   document.getElementById("customLoaderOverlay").style.display = "none";
 }
 
+// Function to generate short name from party name (first 3-4 characters)
+function generatePartyShortName(partyName) {
+  if (!partyName) return "UNKNOWN";
+  // Get first word and take first 3 characters, convert to uppercase
+  const words = partyName.trim().split(/\s+/);
+  const shortName = words[0].substring(0, 4).toUpperCase();
+  return shortName;
+}
+
+// Function to generate share filename: INSTRUMENT_NAME_PARTY_SHORT.pdf
+function generateSharePDFFileName(details) {
+  // Get instrument name from form details
+  const instrumentName = (details.instrumentType || details.equipmentName || "CERTIFICATE").replace(/\s+/g, "_").toUpperCase();
+  // Get party name short form
+  const partyShort = generatePartyShortName(details.partyName);
+  return `${instrumentName}_${partyShort}.pdf`;
+}
+
+// Function to generate share message
+function generateShareMessage(details) {
+  const instrumentName = details.instrumentType || details.equipmentName || "Calibration Certificate";
+  const partyName = details.partyName || "Client";
+  
+  return `Here is your "${instrumentName}" calibration report of "${partyName}" PDF.`;
+}
+
 async function preview() {
   if (!document.getElementById("calibrationForm").reportValidity()) return;
   const { jsPDF } = window.jspdf;
@@ -251,19 +277,27 @@ async function sharePDF() {
   if (!document.getElementById("calibrationForm").reportValidity()) return;
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
-  const details = getFormDetails(); // Fixed: Added missing details variable
+  const details = getFormDetails();
   addCertificateDetails(doc, details);
   addImg(doc, details);
   const pdfBlob = doc.output("blob");
-  const pdfFile = new File([pdfBlob], `${details.saveentry || "Unknown"}.pdf`, { // Fixed: Corrected File constructor syntax
+  
+  // Generate share filename: INSTRUMENT_NAME_PARTY_SHORT.pdf
+  const shareFileName = generateSharePDFFileName(details);
+  
+  // Generate custom share message with party name
+  const shareMessage = generateShareMessage(details);
+  
+  const pdfFile = new File([pdfBlob], shareFileName, {
     type: "application/pdf",
   });
+  
   if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
     try {
       await navigator.share({
         files: [pdfFile],
         title: "Calibration Certificate",
-        text: "Here is your calibration certificate PDF.",
+        text: shareMessage,
       });
     } catch (err) {
       alert("Sharing cancelled or not supported.");
